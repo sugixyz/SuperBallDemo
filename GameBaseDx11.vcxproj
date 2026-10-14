@@ -148,7 +148,7 @@
     <ClCompile Include="Engine\Text.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
-    <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="SourceCode\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Audio.h" />
@@ -174,7 +174,11 @@
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
-    <ClInclude Include="TestScene.h" />
+    <ClInclude Include="SourceCode\AutoController.h" />
+    <ClInclude Include="SourceCode\Character.h" />
+    <ClInclude Include="SourceCode\Fighter.h" />
+    <ClInclude Include="SourceCode\PlayerController.h" />
+    <ClInclude Include="SourceCode\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
