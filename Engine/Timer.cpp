@@ -2,19 +2,19 @@
 
 namespace Timer
 {
-	DWORD prevTime;
-	DWORD currentTime;
+	DWORD prevTime_;
+	DWORD currentTime_;
 
 	void Initialize()
 	{
-		prevTime = timeGetTime();
-		currentTime = timeGetTime();
+		prevTime_ = timeGetTime();
+		currentTime_ = timeGetTime();
 	}
 
 	void Update()
 	{
-		prevTime = currentTime;
-		currentTime = timeGetTime();
+		prevTime_ = currentTime_;
+		currentTime_ = timeGetTime();
 	}
 
 	void Release()
@@ -24,7 +24,7 @@ namespace Timer
 
 	float GetDeltaTime()
 	{
-		DWORD dt = currentTime - prevTime;
+		DWORD dt = currentTime_ - prevTime_;
 		return dt / 1000.0f;
 	}
 }
