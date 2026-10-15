@@ -101,6 +101,9 @@
     <ClCompile Include="SourceCode\TestScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Timer.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -179,6 +182,11 @@
     <ClInclude Include="SourceCode\AutoController.h" />
     <ClInclude Include="SourceCode\Fighter.h" />
     <ClInclude Include="SourceCode\Character.h" />
+    <ClInclude Include="SourceCode\Obstacle.h" />
+    <ClInclude Include="SourceCode\Controller.h" />
+    <ClInclude Include="Engine\Timer.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

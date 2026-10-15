@@ -18,6 +18,8 @@
 #include "Input.h"
 #include "Audio.h"
 #include "VFX.h"
+#include "Timer.h"
+#include"Debug.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -64,6 +66,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
 
+	//時間管理の初期化
+	Timer::Initialize();
+
 
 	//ルートオブジェクト準備
 	//すべてのゲームオブジェクトの親となるオブジェクト
@@ -105,6 +110,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					SetWindowText(GetActiveWindow(), string);
 					FPS = 0;
 					lastFpsResetTime = nowTime;
+
+					char str[30];
+					float dt = Timer::GetDeltaTime();
+					sprintf_s(str, sizeof(str), "dt:%f", dt);
+					Debug::Log(str, true);
 				}
 			}
 
@@ -132,6 +142,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//エフェクトの更新
 				VFX::Update();
 
+				//フレーム時間の更新
+				Timer::Update();
 
 				//このフレームの描画開始
 				Direct3D::BeginDraw();
@@ -146,8 +158,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//描画終了
 				Direct3D::EndDraw();
 
-
-
 				
 				//ちょっと休ませる
 				Sleep(1);
@@ -160,6 +170,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//いろいろ解放
 	VFX::Release();
+	Timer::Release();
 	Audio::AllRelease();
 	Model::AllRelease();
 	Image::AllRelease();
