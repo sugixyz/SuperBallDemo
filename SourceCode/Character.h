@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"../Engine/GameObject.h"
 
 //キャラクター用のインターフェース
@@ -6,10 +6,6 @@ class Character : public GameObject
 {
 public:
 	virtual ~Character() = default;
-	virtual void Initialize() override = 0;
-	virtual void Update() override = 0;
-	virtual void Draw() override = 0;
-	virtual void Release() override = 0;
 
 	/// <summary>
 	/// 速度を設定する関数
