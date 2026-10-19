@@ -178,9 +178,9 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="SourceCode\AutoController.h" />
-    <ClInclude Include="SourceCode\Character.h" />
     <ClInclude Include="SourceCode\Controller.h" />
     <ClInclude Include="SourceCode\Fighter.h" />
+    <ClInclude Include="SourceCode\FighterInput.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\PlayerController.h" />
     <ClInclude Include="SourceCode\TestScene.h" />

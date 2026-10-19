@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include"../Engine/GameObject.h"
 
+class Controller;
+
 class Fighter : public GameObject
 {
 public:
@@ -22,7 +24,14 @@ public:
 	/// <returns>現在の速度</returns>
 	XMFLOAT3 GetVelocity() { return velocity_; }
 
+	void SetController(Controller* controller) { controller_ = controller; }
+
 	//コントローラーからのリクエスト関数
+	/// <summary>
+	/// 移動をリクエスト
+	/// </summary>
+	/// <param name="move">X、Yを持つベクトル値</param>
+	void OnMove(XMFLOAT2 move);
 	/// <summary>
 	/// 弾の発射をリクエスト
 	/// </summary>
@@ -44,6 +53,8 @@ private:
 	XMFLOAT3 velocity_;
 	//モデルハンドル
 	int hModel_;
+	//コントローラーのポインタ
+	Controller* controller_;
 private:
 	void Move();
 	void Shoot();
