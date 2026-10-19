@@ -5,13 +5,6 @@ using namespace DirectX;
 
 struct FighterInput
 {
-	//移動用の2次元ベクトル
-	XMFLOAT2 moveInput;
-	//発射ボタンが押されたか
-	bool isShootPressed;
-	//カメラを操作する2次元ベクトル
-	XMFLOAT2 cameraInput;
-
 	/// <summary>
 	/// Inputの初期化
 	/// </summary>
@@ -20,4 +13,11 @@ struct FighterInput
 		isShootPressed(false),
 		cameraInput(0.0f, 0.0f)
 	{}
+
+	//移動用の2次元ベクトル
+	XMFLOAT2 moveInput;
+	//発射ボタンが押されたか
+	bool isShootPressed;
+	//カメラを操作する2次元ベクトル
+	XMFLOAT2 cameraInput;
 };

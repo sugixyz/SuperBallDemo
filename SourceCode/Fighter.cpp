@@ -1,6 +1,7 @@
 ﻿#include "Fighter.h"
 #include"../Engine/Model.h"
 #include"Controller.h"
+#include"../Engine/BoxCollider.h"
 
 Fighter::Fighter(GameObject* parent)
 	:GameObject(parent, "Fighter"),
@@ -11,18 +12,31 @@ Fighter::Fighter(GameObject* parent)
 
 Fighter::~Fighter()
 {
-
 }
 
 void Fighter::Initialize()
 {
 	hModel_ = Model::Load("PlayerDemo.fbx");
 	assert(hModel_ >= 0);
+
+	BoxCollider* col = new BoxCollider(COL_POS, COL_SIZE);
+	AddCollider(col);
 }
 
 void Fighter::Update()
 {
-	Move();
+	//コントローラーのポインタがなければスルー
+	if (controller_ == nullptr)return;
+
+	//コントローラーのアップデート
+	controller_->Update();
+	//入力情報を取得
+	FighterInput input = controller_->GetInput();
+
+	//入力情報をもとに処理を実行
+	Move(input);
+	Shoot(input);
+	UpdateCamera(input);
 }
 
 void Fighter::Draw()
@@ -32,34 +46,20 @@ void Fighter::Draw()
 }
 
 void Fighter::Release()
-{}
+{
+	delete controller_;
+	controller_ = nullptr;
+}
 
-void Fighter::OnMove(XMFLOAT2 move)
+void Fighter::Move(const FighterInput& input)
 {
 }
 
-void Fighter::OnShoot()
+void Fighter::Shoot(const FighterInput& input)
 {
-	//ボールを発射
-	Shoot();
 }
 
-void Fighter::OnRun()
-{}
-
-void Fighter::OnCrouch()
-{}
-
-void Fighter::OnReadyWeapon()
-{}
-
-void Fighter::Move()
+void Fighter::UpdateCamera(const FighterInput& input)
 {
 
 }
-
-void Fighter::Shoot()
-{}
-
-void Fighter::UpdateCamera()
-{}

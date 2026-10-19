@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include"../Engine/GameObject.h"
+#include"FighterInput.h"
 
 class Controller;
 
@@ -24,30 +25,15 @@ public:
 	/// <returns>現在の速度</returns>
 	XMFLOAT3 GetVelocity() { return velocity_; }
 
+	/// <summary>
+	/// ファイター用のコントローラーを設定する
+	/// </summary>
+	/// <param name="controller"></param>
 	void SetController(Controller* controller) { controller_ = controller; }
-
-	//コントローラーからのリクエスト関数
-	/// <summary>
-	/// 移動をリクエスト
-	/// </summary>
-	/// <param name="move">X、Yを持つベクトル値</param>
-	void OnMove(XMFLOAT2 move);
-	/// <summary>
-	/// 弾の発射をリクエスト
-	/// </summary>
-	void OnShoot();
-	/// <summary>
-	/// 走りをリクエスト
-	/// </summary>
-	void OnRun();
-	/// <summary>
-	/// しゃがみをリクエスト
-	/// </summary>
-	void OnCrouch();
-	/// <summary>
-	/// 構えをリクエスト
-	/// </summary>
-	void OnReadyWeapon();
+private:
+	void Move(const FighterInput& input);
+	void Shoot(const FighterInput& input);
+	void UpdateCamera(const FighterInput& input);
 private:
 	//速度
 	XMFLOAT3 velocity_;
@@ -56,7 +42,8 @@ private:
 	//コントローラーのポインタ
 	Controller* controller_;
 private:
-	void Move();
-	void Shoot();
-	void UpdateCamera();
+	//コライダーの中心位置
+	static constexpr XMFLOAT3 COL_POS = { 0.25f,0.5f,0.25f };
+	//コライダーのサイズ
+	static constexpr XMFLOAT3 COL_SIZE = { 0.5f,1.0f,0.5f };
 };
