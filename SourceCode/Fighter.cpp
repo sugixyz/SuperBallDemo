@@ -53,6 +53,11 @@ void Fighter::Release()
 
 void Fighter::Move(const FighterInput& input)
 {
+	velocity_ = XMFLOAT3(input.moveInput.x, 0.0f, input.moveInput.y);
+
+	transform_.position_.x += velocity_.x;
+	transform_.position_.y += velocity_.y;
+	transform_.position_.z += velocity_.z;
 }
 
 void Fighter::Shoot(const FighterInput& input)

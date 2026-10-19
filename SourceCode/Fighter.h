@@ -43,7 +43,7 @@ private:
 	Controller* controller_;
 private:
 	//コライダーの中心位置
-	static constexpr XMFLOAT3 COL_POS = { 0.25f,0.5f,0.25f };
+	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.5f,0.0f };
 	//コライダーのサイズ
 	static constexpr XMFLOAT3 COL_SIZE = { 0.5f,1.0f,0.5f };
 };

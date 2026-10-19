@@ -150,6 +150,7 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="SourceCode\Fighter.cpp" />
+    <ClCompile Include="SourceCode\PlayerController.cpp" />
     <ClCompile Include="SourceCode\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>

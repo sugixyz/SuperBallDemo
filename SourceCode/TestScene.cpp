@@ -1,5 +1,6 @@
 ﻿#include"TestScene.h"
 #include"../SourceCode/Fighter.h"
+#include"../SourceCode/PlayerController.h"
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -10,7 +11,8 @@ TestScene::TestScene(GameObject * parent)
 //初期化
 void TestScene::Initialize()
 {
-	Instantiate<Fighter>(this);
+	Fighter* fighter = Instantiate<Fighter>(this);
+	fighter->SetController(new PlayerController());
 }
 
 //更新
