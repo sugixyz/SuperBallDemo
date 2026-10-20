@@ -182,6 +182,9 @@
     <ClInclude Include="SourceCode\Controller.h" />
     <ClInclude Include="SourceCode\Fighter.h" />
     <ClInclude Include="SourceCode\FighterInput.h" />
+    <ClInclude Include="SourceCode\Gun.h" />
+    <ClInclude Include="SourceCode\HealthComponent.h" />
+    <ClInclude Include="SourceCode\MoveComponent.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\PlayerController.h" />
     <ClInclude Include="SourceCode\TestScene.h" />
