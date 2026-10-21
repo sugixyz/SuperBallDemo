@@ -25,10 +25,12 @@ void Fighter::Initialize()
 	BoxCollider* col = new BoxCollider(COL_POS, COL_SIZE);
 	AddCollider(col);
 
-	//health_ = new HealthComponent();
+	health_ = new HealthComponent();
+	assert(health_ != nullptr);
 	move_ = new MoveComponent();
 	assert(move_ != nullptr);
 
+	health_->Initialize(MAX_HP);
 	move_->SetSpeed(MOVE_SPEED);
 }
 
