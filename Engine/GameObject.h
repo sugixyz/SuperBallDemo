@@ -7,8 +7,8 @@
 #include "BoxCollider.h"
 #include "Transform.h"
 
-
-
+class MoveComponent;
+class HealthComponent;
 
 using namespace DirectX;
 
@@ -45,6 +45,18 @@ public:
 	virtual void Update(void) = 0;
 	virtual void Draw() = 0;
 	virtual void Release(void) = 0;
+
+	//コンポーネント取得用関数
+	/// <summary>
+	///	Healthコンポーネント取得用関数
+	/// </summary>
+	/// <returns>Healthコンポーネント</returns>
+	virtual HealthComponent* GetHealthComponent() { return nullptr; }
+	/// <summary>
+	/// Moveコンポーネント取得用関数
+	/// </summary>
+	/// <returns>Moveコンポーネント</returns>
+	virtual MoveComponent* GetMoveComponent() { return nullptr; }
 
 	//自分の該当関数を読んだ後、子供の関数も呼ぶ
 	void UpdateSub();

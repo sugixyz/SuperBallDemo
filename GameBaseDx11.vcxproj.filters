@@ -27,6 +27,15 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{4a4eb0a5-337a-491a-8020-5a5168c8b7df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{d3713a5f-5c4c-47a1-95dd-2b72b4377adb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{c0c8d49f-14e2-4286-90aa-7a385723c181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controller">
+      <UniqueIdentifier>{a8f7a42d-21d6-4217-b2b3-2e229798dae9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -104,7 +113,15 @@
     <ClCompile Include="Engine\Timer.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\Fighter.cpp" />
+    <ClCompile Include="SourceCode\PlayerController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Fighter.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\MoveComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -179,14 +196,36 @@
     <ClInclude Include="SourceCode\TestScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\PlayerController.h" />
-    <ClInclude Include="SourceCode\AutoController.h" />
-    <ClInclude Include="SourceCode\Fighter.h" />
-    <ClInclude Include="SourceCode\Character.h" />
-    <ClInclude Include="SourceCode\Obstacle.h" />
-    <ClInclude Include="SourceCode\Controller.h" />
     <ClInclude Include="Engine\Timer.h">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FighterInput.h" />
+    <ClInclude Include="SourceCode\AutoController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Controller.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\PlayerController.h">
+      <Filter>Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Fighter.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Gun.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Obstacle.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\HealthComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\MoveComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,12 +2,15 @@
 #include"../Engine/Model.h"
 #include"Controller.h"
 #include"../Engine/BoxCollider.h"
+#include"HealthComponent.h"
+#include"MoveComponent.h"
 
 Fighter::Fighter(GameObject* parent)
 	:GameObject(parent, "Fighter"),
 	hModel_(-1),
-	velocity_(0.0f, 0.0f, 0.0f),
-	controller_(nullptr)
+	controller_(nullptr),
+	health_(nullptr),
+	move_(nullptr)
 {}
 
 Fighter::~Fighter()
@@ -21,6 +24,12 @@ void Fighter::Initialize()
 
 	BoxCollider* col = new BoxCollider(COL_POS, COL_SIZE);
 	AddCollider(col);
+
+	//health_ = new HealthComponent();
+	move_ = new MoveComponent();
+	assert(move_ != nullptr);
+
+	move_->SetSpeed(MOVE_SPEED);
 }
 
 void Fighter::Update()
@@ -34,9 +43,9 @@ void Fighter::Update()
 	FighterInput input = controller_->GetInput();
 
 	//入力情報をもとに処理を実行
+	UpdateCamera(input);
 	Move(input);
 	Shoot(input);
-	UpdateCamera(input);
 }
 
 void Fighter::Draw()
@@ -48,16 +57,14 @@ void Fighter::Draw()
 void Fighter::Release()
 {
 	delete controller_;
-	controller_ = nullptr;
+	delete health_;
+	delete move_;
 }
 
 void Fighter::Move(const FighterInput& input)
 {
-	velocity_ = XMFLOAT3(input.moveInput.x, 0.0f, input.moveInput.y);
-
-	transform_.position_.x += velocity_.x;
-	transform_.position_.y += velocity_.y;
-	transform_.position_.z += velocity_.z;
+	move_->SetDirection(input.moveInput);
+	transform_.position_ = move_->Move(transform_);
 }
 
 void Fighter::Shoot(const FighterInput& input)
@@ -66,5 +73,7 @@ void Fighter::Shoot(const FighterInput& input)
 
 void Fighter::UpdateCamera(const FighterInput& input)
 {
-
+	XMFLOAT2 cameraInput = input.cameraInput;
+	if (cameraInput.x < 0)transform_.rotate_.y--;
+	else if (cameraInput.x > 0)transform_.rotate_.y++;
 }

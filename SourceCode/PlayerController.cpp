@@ -19,4 +19,7 @@ void PlayerController::Update()
 
 	if (Input::IsKey(DIK_A))fighterInput_.moveInput.x = -1.0f;
 	else if (Input::IsKey(DIK_D))fighterInput_.moveInput.x = 1.0f;
+
+	if (Input::IsKey(DIK_LEFT))fighterInput_.cameraInput.x = -1.0f;
+	else if (Input::IsKey(DIK_RIGHT))fighterInput_.cameraInput.x = 1.0f;
 }

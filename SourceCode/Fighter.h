@@ -15,17 +15,6 @@ public:
 	void Release() override;
 
 	/// <summary>
-	/// 速度を設定する関数
-	/// </summary>
-	/// <param name="velocity">設定したい速度</param>
-	void SetVelocity(XMFLOAT3 velocity) { velocity_ = velocity; }
-	/// <summary>
-	/// 速度を取得する関数
-	/// </summary>
-	/// <returns>現在の速度</returns>
-	XMFLOAT3 GetVelocity() { return velocity_; }
-
-	/// <summary>
 	/// ファイター用のコントローラーを設定する
 	/// </summary>
 	/// <param name="controller"></param>
@@ -35,15 +24,17 @@ private:
 	void Shoot(const FighterInput& input);
 	void UpdateCamera(const FighterInput& input);
 private:
-	//速度
-	XMFLOAT3 velocity_;
 	//モデルハンドル
 	int hModel_;
 	//コントローラーのポインタ
 	Controller* controller_;
+	HealthComponent* health_;
+	MoveComponent* move_;
 private:
 	//コライダーの中心位置
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.5f,0.0f };
 	//コライダーのサイズ
 	static constexpr XMFLOAT3 COL_SIZE = { 0.5f,1.0f,0.5f };
+	//移動速度
+	static constexpr float MOVE_SPEED = 0.5f;
 };
