@@ -45,5 +45,5 @@ void Bullet::Release()
 
 void Bullet::SetMoveDirection(XMVECTOR direction)
 {
-	move_->SetDirection3D(direction);
+	move_->SetDirection(direction);
 }

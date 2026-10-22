@@ -30,31 +30,17 @@ public:
 	/// <returns>現在の移動速度</returns>
 	float GetSpeed() { return speed_; }
 	/// <summary>
-	/// 2次元方向を設定する関数
-	/// </summary>
-	/// <param name="direction">移動方向（2次元）</param>
-	void SetDirection2D(XMFLOAT2 direction) { direction2D_ = direction; }
-	/// <summary>
 	/// 移動方向を設定する関数
 	/// </summary>
 	/// <param name="direction">移動方向（3次元）</param>
-	void SetDirection3D(XMVECTOR direction) { direction3D_ = direction; isSetDirection3D_ = true; }
+	void SetDirection(XMVECTOR direction) { direction_ = direction; }
 	/// <summary>
 	/// 現在の移動方向を取得する関数
 	/// </summary>
 	/// <returns>現在の移動方向</returns>
-	XMFLOAT2 GetDirection2D() { return direction2D_; }
-private:
-	//速度を計算する関数
-	XMVECTOR CalculateVelocity(XMVECTOR forward,XMVECTOR right);
-	//正面ベクトルを計算する関数
-	XMVECTOR CalculateForwardVector(float rotationY);
-	//右ベクトルを計算する関数
-	XMVECTOR CalculateRightVector(XMVECTOR forward);
+	XMVECTOR GetDirection() { return direction_; }
 private:
 	float speed_;
-	XMFLOAT2 direction2D_;
-	XMVECTOR direction3D_;
-	bool isSetDirection3D_;
+	XMVECTOR direction_;
 	XMVECTOR velocity_;
 };

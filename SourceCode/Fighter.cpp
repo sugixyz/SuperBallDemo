@@ -70,7 +70,12 @@ void Fighter::Release()
 
 void Fighter::Move(const FighterInput& input)
 {
-	move_->SetDirection2D(input.moveInput);
+	//前方ベクトル、右ベクトルから移動方向を計算
+	XMVECTOR forward = CalculateForwardVector(transform_.rotate_.y);
+	XMVECTOR right = CalculateRightVector(forward);
+	XMVECTOR moveDirection = CalculateMoveDirection(input.moveInput, forward, right);
+
+	move_->SetDirection(moveDirection);
 	transform_.position_ = move_->Move(transform_);
 }
 
@@ -118,4 +123,35 @@ void Fighter::UpdateTpsCam(XMMATRIX mRotY, XMVECTOR vPos, XMVECTOR vMove)
 
 void Fighter::UpdateFpsCam()
 {
+}
+
+XMVECTOR Fighter::CalculateMoveDirection(XMFLOAT2 moveInput,XMVECTOR forward, XMVECTOR right)
+{
+	//移動ベクトルを計算 
+	XMVECTOR moveDirection = (forward * moveInput.y) + (right * moveInput.x);
+	moveDirection = XMVector3Normalize(moveDirection);
+
+	return moveDirection;
+}
+
+XMVECTOR Fighter::CalculateForwardVector(float rotationY)
+{
+	float rad = XMConvertToRadians(rotationY);
+	float x = sinf(rad);
+	float y = 0.0f;
+	float z = cosf(rad);
+	float w = 0.0f;
+	XMVECTOR forward = XMVectorSet(x, y, z, w);
+	forward = XMVector3Normalize(forward);
+
+	return forward;
+}
+
+XMVECTOR Fighter::CalculateRightVector(XMVECTOR forward)
+{
+	XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR right = XMVector3Cross(up, forward);
+	right = XMVector3Normalize(right);
+
+	return right;
 }

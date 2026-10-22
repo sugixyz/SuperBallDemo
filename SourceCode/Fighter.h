@@ -40,6 +40,12 @@ private:
 	void UpdateTpsCam(XMMATRIX mRotY,XMVECTOR vPos,XMVECTOR vMove);
 	//TPSカメラの更新
 	void UpdateFpsCam();
+	//速度を計算する関数
+	XMVECTOR CalculateMoveDirection(XMFLOAT2 moveInput,XMVECTOR forward, XMVECTOR right);
+	//正面ベクトルを計算する関数
+	XMVECTOR CalculateForwardVector(float rotationY);
+	//右ベクトルを計算する関数
+	XMVECTOR CalculateRightVector(XMVECTOR forward);
 private:
 	//モデルハンドル
 	int hModel_;
