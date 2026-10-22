@@ -16,10 +16,8 @@ MoveComponent::~MoveComponent()
 
 XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
 {
-
-    XMVECTOR moveDirection = XMVector3Normalize(direction_);
     //水平方向の移動速度
-    XMVECTOR horizontalVelocity = moveDirection * speed_;
+    XMVECTOR horizontalVelocity = direction_ * speed_;
     
     //垂直方向の移動速度
     float verticalVelocity = XMVectorGetY(velocity_);

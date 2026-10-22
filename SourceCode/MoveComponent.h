@@ -33,12 +33,17 @@ public:
 	/// 移動方向を設定する関数
 	/// </summary>
 	/// <param name="direction">移動方向（3次元）</param>
-	void SetDirection(XMVECTOR direction) { direction_ = direction; }
+	void SetDirection(XMVECTOR direction) { direction_ = XMVector3Normalize(direction); }
 	/// <summary>
 	/// 現在の移動方向を取得する関数
 	/// </summary>
 	/// <returns>現在の移動方向</returns>
 	XMVECTOR GetDirection() { return direction_; }
+	/// <summary>
+	/// 現在の速度を取得する関数
+	/// </summary>
+	/// <returns>現在の移動速度</returns>
+	XMVECTOR GetVelocity() { return velocity_; }
 	/// <summary>
 	/// 重力を使用するかどうかを設定
 	/// </summary>

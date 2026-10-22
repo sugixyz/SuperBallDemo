@@ -21,6 +21,15 @@ public:
 
 	MoveComponent* GetMoveComponent() override { return move_; }
 private:
+	//障害物に接触したときの処理
+	void CollisionObstacle(GameObject* obstacle);
+	//プレイヤーに接触したときの処理
+	void CollisionPlayer(GameObject* player);
+	//ボックスの法線を計算する関数
+	XMVECTOR CalculateBoxCollsionNormal(XMVECTOR spherePos, XMVECTOR boxCenter, XMVECTOR boxMin, XMVECTOR boxMax);
+	//球の法線を計算する関数
+	XMVECTOR CalculateSphereCollisionNormal(XMVECTOR sphereAPos, XMVECTOR sphereBPos);
+private:
 	//モデルハンドル
 	int hModel_;
 	//移動のコンポーネントポインタ
@@ -32,4 +41,6 @@ private:
 	static constexpr float COL_RADIUS = 0.04f;
 	//移動速度
 	static constexpr float MOVE_SPEED = 10.0f;
+	//反発係数
+	static constexpr float RESTITUTION = 0.9f;
 };
