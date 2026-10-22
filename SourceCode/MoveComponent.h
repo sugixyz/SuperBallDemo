@@ -19,6 +19,8 @@ public:
 	/// <returns>最新座標</returns>
 	XMFLOAT3 Move(Transform ownerTransform);
 
+	XMFLOAT3 UpdatePhysics(Transform ownerTransform);
+
 	/// <summary>
 	/// 移動速度を設定する関数
 	/// </summary>
@@ -39,8 +41,29 @@ public:
 	/// </summary>
 	/// <returns>現在の移動方向</returns>
 	XMVECTOR GetDirection() { return direction_; }
+	/// <summary>
+	/// 重力を使用するかどうかを設定
+	/// </summary>
+	/// <param name="useGravity">重力を使用するかどうか</param>
+	void SetUseGravity(bool useGravity) { useGravity_ = useGravity; }
+	/// <summary>
+	/// 現在重力を使用しているかどうか
+	/// </summary>
+	/// <returns>使用していればtrueを返す</returns>
+	bool GetUseGravity() { return useGravity_; }
+	/// <summary>
+	/// 重力を有効化する関数
+	/// </summary>
+	void EnableGravity() { SetUseGravity(true); }
+	/// <summary>
+	/// 重力を無効化する関数
+	/// </summary>
+	void DisableGravity() { SetUseGravity(false); }
 private:
 	float speed_;
 	XMVECTOR direction_;
 	XMVECTOR velocity_;
+	bool useGravity_;
+private:
+	static constexpr XMVECTOR GRAVITY = { 0.0f ,-9.8f,0.0f,0.0f };
 };

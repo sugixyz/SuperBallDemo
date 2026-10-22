@@ -26,11 +26,13 @@ void Bullet::Initialize()
 	assert(move_ != nullptr);
 
 	move_->SetSpeed(MOVE_SPEED);
+	move_->EnableGravity();
+	move_->Move(transform_);
 }
 
 void Bullet::Update()
 {
-	transform_.position_ = move_->Move(transform_);
+	transform_.position_ = move_->UpdatePhysics(transform_);
 }
 
 void Bullet::Draw()
