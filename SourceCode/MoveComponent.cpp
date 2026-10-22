@@ -4,7 +4,9 @@
 
 MoveComponent::MoveComponent()
     :speed_(0.0f),
-    direction_(0.0f,0.0f),
+    direction2D_(0.0f,0.0f),
+    direction3D_(XMVectorSet(0.0f,0.0f,0.0f,0.0f)),
+    isSetDirection3D_(false),
     velocity_(XMVectorSet(0.0f,0.0f,0.0f,0.0f))
 {
 }
@@ -15,16 +17,21 @@ MoveComponent::~MoveComponent()
 
 XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
 {
-    //ToDo : 最終的には「座標、方向、前方ベクトル」を受け取り、「移動先の座標」を返す
-
     //現在座標取得
     XMVECTOR pos = XMLoadFloat3(&ownerTransform.position_);
-    //前方ベクトル、右ベクトルを計算
-    XMVECTOR forward = CalculateForwardVector(ownerTransform.rotate_.y);
-    XMVECTOR right = CalculateRightVector(forward);
 
-    //速度を計算
-    velocity_ = CalculateVelocity(forward, right);
+    if (isSetDirection3D_)
+    {
+        XMVECTOR moveDirection = XMVector3Normalize(direction3D_);
+        velocity_ = moveDirection * speed_ * Timer::GetDeltaTime();
+    }
+    else
+    {
+        //前方ベクトル、右ベクトルを計算
+        XMVECTOR forward = CalculateForwardVector(ownerTransform.rotate_.y);
+        XMVECTOR right = CalculateRightVector(forward);
+        velocity_ = CalculateVelocity(forward, right);
+    }
 
     pos += velocity_;
     XMFLOAT3 newPos;
@@ -35,7 +42,7 @@ XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
 XMVECTOR MoveComponent::CalculateVelocity(XMVECTOR forward, XMVECTOR right)
 {
     //移動ベクトルを計算 
-    XMVECTOR moveDirection = (forward * direction_.y) + (right * direction_.x);
+    XMVECTOR moveDirection = (forward * direction2D_.y) + (right * direction2D_.x);
     moveDirection = XMVector3Normalize(moveDirection);
 
     //速度を適応

@@ -4,13 +4,16 @@
 #include"../Engine/BoxCollider.h"
 #include"HealthComponent.h"
 #include"MoveComponent.h"
+#include"../Engine/Camera.h"
+#include"Gun.h"
 
 Fighter::Fighter(GameObject* parent)
 	:GameObject(parent, "Fighter"),
 	hModel_(-1),
 	controller_(nullptr),
 	health_(nullptr),
-	move_(nullptr)
+	move_(nullptr),
+	camType_(CamType::TPS)
 {}
 
 Fighter::~Fighter()
@@ -32,6 +35,8 @@ void Fighter::Initialize()
 
 	health_->Initialize(MAX_HP);
 	move_->SetSpeed(MOVE_SPEED);
+
+	gun_ = Instantiate<Gun>(this);
 }
 
 void Fighter::Update()
@@ -65,17 +70,52 @@ void Fighter::Release()
 
 void Fighter::Move(const FighterInput& input)
 {
-	move_->SetDirection(input.moveInput);
+	move_->SetDirection2D(input.moveInput);
 	transform_.position_ = move_->Move(transform_);
 }
 
 void Fighter::Shoot(const FighterInput& input)
 {
+	bool isShoot = input.isShootPressed;
+
+	if (isShoot)gun_->ShootBullet();
 }
 
 void Fighter::UpdateCamera(const FighterInput& input)
 {
-	XMFLOAT2 cameraInput = input.cameraInput;
-	if (cameraInput.x < 0)transform_.rotate_.y--;
-	else if (cameraInput.x > 0)transform_.rotate_.y++;
+	XMVECTOR vPos = XMLoadFloat3(&transform_.position_); //ロード：読み込み
+	XMMATRIX mRotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
+	XMMATRIX mRotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	XMMATRIX mRotZ = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
+	XMVECTOR vMove = XMVector3TransformCoord(FRONT, mRotZ * mRotX * mRotY);
+
+	switch (camType_)
+	{
+	case CamType::FPS:
+		UpdateFpsCam();
+		break;
+	case CamType::TPS:
+		XMFLOAT2 cameraInput = input.cameraInput;
+		if (cameraInput.x < 0)transform_.rotate_.y--;
+		else if (cameraInput.x > 0)transform_.rotate_.y++;
+		UpdateTpsCam(mRotY, vPos, vMove);
+		break;
+	}
+}
+
+void Fighter::UpdateTpsCam(XMMATRIX mRotY, XMVECTOR vPos, XMVECTOR vMove)
+{
+	//自分の位置に
+	XMFLOAT3 camPos;
+	XMVECTOR vCam = { 0.0f,TPS_HEIGHT_BIAS,-TPS_FRONT_BIAS,0.0f };
+	vCam = XMVector3TransformCoord(vCam, mRotY);
+	XMStoreFloat3(&camPos, vPos + vCam);
+	Camera::SetPosition(camPos);
+	XMFLOAT3 camTarget;
+	XMStoreFloat3(&camTarget, vPos + vMove);
+	Camera::SetTarget(camTarget);
+}
+
+void Fighter::UpdateFpsCam()
+{
 }

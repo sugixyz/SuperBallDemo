@@ -22,4 +22,6 @@ void PlayerController::Update()
 
 	if (Input::IsKey(DIK_LEFT))fighterInput_.cameraInput.x = -1.0f;
 	else if (Input::IsKey(DIK_RIGHT))fighterInput_.cameraInput.x = 1.0f;
+
+	if (Input::IsKeyDown(DIK_SPACE))fighterInput_.isShootPressed = true;
 }
