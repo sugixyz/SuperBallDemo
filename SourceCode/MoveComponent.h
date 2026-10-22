@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"Component.h"
 #include<DirectXMath.h>
 
@@ -18,8 +18,6 @@ public:
 	/// <param name="ownerTransform">所有者の座標情報</param>
 	/// <returns>最新座標</returns>
 	XMFLOAT3 Move(Transform ownerTransform);
-
-	XMFLOAT3 UpdatePhysics(Transform ownerTransform);
 
 	/// <summary>
 	/// 移動速度を設定する関数
@@ -65,5 +63,5 @@ private:
 	XMVECTOR velocity_;
 	bool useGravity_;
 private:
-	static constexpr XMVECTOR GRAVITY = { 0.0f ,-9.8f,0.0f,0.0f };
+	static constexpr float GRAVITY = -9.8f / 2.0f;
 };

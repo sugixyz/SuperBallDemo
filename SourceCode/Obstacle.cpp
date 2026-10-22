@@ -1,4 +1,4 @@
-#include "Obstacle.h"
+﻿#include "Obstacle.h"
 #include"../Engine/BoxCollider.h"
 #include"../Engine/SphereCollider.h"
 #include"../Engine/Model.h"
@@ -26,7 +26,7 @@ void Obstacle::Update()
 void Obstacle::Draw()
 {
 	Model::SetTransform(hModel_,transform_);
-	Model::Draw(hModel_);
+	//Model::Draw(hModel_);
 }
 
 void Obstacle::Release()

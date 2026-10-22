@@ -1,22 +1,22 @@
-#include "Bullet.h"
+﻿#include "Ball.h"
 #include"../Engine/Model.h"
 #include"MoveComponent.h"
 #include"../Engine/SphereCollider.h"
 
-Bullet::Bullet(GameObject* parent)
-	:GameObject(parent,"Bullet"),
+Ball::Ball(GameObject* parent)
+	:GameObject(parent,"Ball"),
 	hModel_(-1),
 	move_(nullptr)
 {
 }
 
-Bullet::~Bullet()
+Ball::~Ball()
 {
 }
 
-void Bullet::Initialize()
+void Ball::Initialize()
 {
-	hModel_ = Model::Load("BulletDemo.fbx");
+	hModel_ = Model::Load("BallDemo.fbx");
 	assert(hModel_ >= 0);
 
 	SphereCollider* col = new SphereCollider(COL_POS, COL_RADIUS);
@@ -27,25 +27,29 @@ void Bullet::Initialize()
 
 	move_->SetSpeed(MOVE_SPEED);
 	move_->EnableGravity();
-	move_->Move(transform_);
-}
+}	
 
-void Bullet::Update()
+void Ball::Update()
 {
-	transform_.position_ = move_->UpdatePhysics(transform_);
+	transform_.position_ = move_->Move(transform_);
 }
 
-void Bullet::Draw()
+void Ball::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 }
 
-void Bullet::Release()
+void Ball::Release()
 {
 }
 
-void Bullet::SetMoveDirection(XMVECTOR direction)
+void Ball::OnCollision(GameObject* other)
+{
+
+}
+
+void Ball::SetMoveDirection(XMVECTOR direction)
 {
 	move_->SetDirection(direction);
 }

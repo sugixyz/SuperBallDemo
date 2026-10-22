@@ -1,15 +1,17 @@
-#pragma once
+﻿#pragma once
 #include"../Engine/GameObject.h"
 
-class Bullet : public GameObject
+class Ball : public GameObject
 {
 public:
-	Bullet(GameObject* parent);
-	~Bullet();
+	Ball(GameObject* parent);
+	~Ball();
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
+	void OnCollision(GameObject* other)override;
 
 	/// <summary>
 	/// 移動方向を設定
@@ -27,7 +29,7 @@ private:
 	//コライダーの中心位置
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.0f,0.0f };
 	//コライダーのサイズ
-	static constexpr float COL_RADIUS = 0.1f;
+	static constexpr float COL_RADIUS = 0.04f;
 	//移動速度
-	static constexpr float MOVE_SPEED = 1.5f;
+	static constexpr float MOVE_SPEED = 10.0f;
 };

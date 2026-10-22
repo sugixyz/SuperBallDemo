@@ -21,6 +21,8 @@ public:
 	void Draw() override;
 	void Release() override;
 
+	void OnCollision(GameObject* other) override;
+
 	/// <summary>
 	/// ファイター用のコントローラーを設定する
 	/// </summary>
@@ -71,6 +73,6 @@ private:
 	//前方ベクトル
 	static constexpr XMVECTOR FRONT = { 0.0f,0.0f,1.0f,0.0f };
 	//カメラの定数
-	static constexpr float TPS_HEIGHT_BIAS = 5.0f;
-	static constexpr float TPS_FRONT_BIAS = 8.0f;
+	static constexpr float TPS_HEIGHT_BIAS = 2.0f;
+	static constexpr float TPS_FRONT_BIAS = 4.0f;
 };

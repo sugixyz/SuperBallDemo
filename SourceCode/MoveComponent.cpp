@@ -1,4 +1,4 @@
-#include "MoveComponent.h"
+﻿#include "MoveComponent.h"
 #include"../Engine/Timer.h"
 #include"../Engine/Transform.h"
 
@@ -16,29 +16,29 @@ MoveComponent::~MoveComponent()
 
 XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
 {
-    //現在座標取得
-    XMVECTOR pos = XMLoadFloat3(&ownerTransform.position_);
 
     XMVECTOR moveDirection = XMVector3Normalize(direction_);
-    velocity_ = moveDirection * speed_ * Timer::GetDeltaTime();
+    //水平方向の移動速度
+    XMVECTOR horizontalVelocity = moveDirection * speed_;
     
-    pos += velocity_;
-    XMFLOAT3 newPos;
-    XMStoreFloat3(&newPos, pos);
-    return newPos;
-}
-
-XMFLOAT3 MoveComponent::UpdatePhysics(Transform ownerTransform)
-{
-    //現在座標取得
-    XMVECTOR pos = XMLoadFloat3(&ownerTransform.position_);
-
+    //垂直方向の移動速度
+    float verticalVelocity = XMVectorGetY(velocity_);
     if (useGravity_)
     {
-        velocity_ += GRAVITY * Timer::GetDeltaTime();
+        //重力を適応
+        verticalVelocity += GRAVITY * Timer::GetDeltaTime();
     }
 
-    pos += velocity_;
+    velocity_ = XMVectorSet(
+        XMVectorGetX(horizontalVelocity),
+        verticalVelocity,
+        XMVectorGetZ(horizontalVelocity),
+        0.0f
+    );
+
+    //現在座標取得
+    XMVECTOR pos = XMLoadFloat3(&ownerTransform.position_);
+    pos += velocity_ * Timer::GetDeltaTime();
     XMFLOAT3 newPos;
     XMStoreFloat3(&newPos, pos);
     return newPos;

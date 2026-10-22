@@ -13,6 +13,7 @@ Fighter::Fighter(GameObject* parent)
 	controller_(nullptr),
 	health_(nullptr),
 	move_(nullptr),
+	gun_(nullptr),
 	camType_(CamType::TPS)
 {}
 
@@ -68,6 +69,9 @@ void Fighter::Release()
 	delete move_;
 }
 
+void Fighter::OnCollision(GameObject* other)
+{}
+
 void Fighter::Move(const FighterInput& input)
 {
 	//前方ベクトル、右ベクトルから移動方向を計算
@@ -81,6 +85,8 @@ void Fighter::Move(const FighterInput& input)
 
 void Fighter::Shoot(const FighterInput& input)
 {
+	if (gun_ == nullptr)return;
+
 	bool isShoot = input.isShootPressed;
 
 	if (isShoot)gun_->ShootBullet();

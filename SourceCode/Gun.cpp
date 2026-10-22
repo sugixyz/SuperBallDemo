@@ -1,6 +1,6 @@
-#include "Gun.h"
+﻿#include "Gun.h"
 #include"../Engine/Model.h"
-#include"Bullet.h"
+#include"Ball.h"
 
 Gun::Gun(GameObject* parent)
 	:GameObject(parent,"Gun"),
@@ -45,7 +45,7 @@ void Gun::ShootBullet()
 	XMVECTOR vMove = muzzle - barrel;
 	
 	//弾生成
-	Bullet* bullet = Instantiate<Bullet>(this->GetParent()->GetParent());
-	bullet->SetPosition(gunMuzzle);
-	bullet->SetMoveDirection(vMove);
+	Ball* ball = Instantiate<Ball>(this->GetParent()->GetParent());
+	ball->SetPosition(gunMuzzle);
+	ball->SetMoveDirection(vMove);
 }
