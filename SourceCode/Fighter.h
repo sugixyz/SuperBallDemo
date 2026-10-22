@@ -26,11 +26,19 @@ public:
 	/// </summary>
 	/// <param name="controller"></param>
 	void SetController(Controller* controller) { controller_ = controller; }
+
+	MoveComponent* GetMoveComponent() override { return move_; }
+	HealthComponent* GetHealthComponent() override { return health_; }
 private:
+	//移動
 	void Move(const FighterInput& input);
+	//攻撃
 	void Shoot(const FighterInput& input);
+	//カメラの移動
 	void UpdateCamera(const FighterInput& input);
+	//FPSカメラの更新
 	void UpdateTpsCam(XMMATRIX mRotY,XMVECTOR vPos,XMVECTOR vMove);
+	//TPSカメラの更新
 	void UpdateFpsCam();
 private:
 	//モデルハンドル

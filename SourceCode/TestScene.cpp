@@ -16,15 +16,15 @@ void TestScene::Initialize()
 	fighter->SetController(new PlayerController());
 
 	const int OBSTACLE_COUNT = 5;
-	XMFLOAT3 position[OBSTACLE_COUNT] =
+	XMFLOAT3 positions[OBSTACLE_COUNT] =
 	{
 		{0,0,0},
-		{-4,0,0},
-		{4,0,0},
-		{0,0,4},
-		{0,0,-4}
+		{-4,1,0},
+		{4,1,0},
+		{0,1,4},
+		{0,1,-4}
 	};
-	XMFLOAT3 scale[OBSTACLE_COUNT]
+	XMFLOAT3 scales[OBSTACLE_COUNT]
 	{
 		{8,0.1f,8},
 		{0.1f,4,8},
@@ -35,9 +35,8 @@ void TestScene::Initialize()
 
 	for (int i = 0;i < OBSTACLE_COUNT;i++)
 	{
-		GameObject* obs = Instantiate<Obstacle>(this);
-		obs->SetPosition(position[i]);
-		obs->SetScale(scale[i]);
+		Obstacle* obs = Instantiate<Obstacle>(this);
+		obs->SetObject(positions[i], scales[i]);
 	}
 }
 

@@ -1,11 +1,11 @@
 #include "Obstacle.h"
 #include"../Engine/BoxCollider.h"
+#include"../Engine/SphereCollider.h"
 #include"../Engine/Model.h"
 
 Obstacle::Obstacle(GameObject* parent)
 	:GameObject(parent,"Obstacle"),
-	hModel_(-1),
-	col_(nullptr)
+	hModel_(-1)
 {
 }
 
@@ -17,9 +17,6 @@ void Obstacle::Initialize()
 {
 	hModel_ = Model::Load("WallPrefabDemo.fbx");
 	assert(hModel_ >= 0);
-
-	col_ = new BoxCollider(transform_.position_, transform_.scale_);
-	AddCollider(col_);
 }
 
 void Obstacle::Update()
@@ -38,9 +35,9 @@ void Obstacle::Release()
 
 void Obstacle::SetObject(XMFLOAT3 position, XMFLOAT3 scale)
 {
-	this->SetPosition(position);
-	this->SetScale(scale);
+	transform_.position_ = position;
+	transform_.scale_ = scale;
 
-	BoxCollider* col = new BoxCollider(transform_.position_, XMFLOAT3(1.0f,1.0f,1.0f));
+	BoxCollider* col = new BoxCollider(XMFLOAT3(0.0f,0.0f,0.0f), transform_.scale_);
 	AddCollider(col);
 }

@@ -1,8 +1,6 @@
 #pragma once
 #include"../Engine/GameObject.h"
 
-class BoxCollider;
-
 class Obstacle : public GameObject
 {
 public:
@@ -13,8 +11,12 @@ public:
 	void Draw() override;
 	void Release() override;
 
+	/// <summary>
+	/// オブジェクトの初期設定
+	/// </summary>
+	/// <param name="position">座標</param>
+	/// <param name="scale">スケール</param>
 	void SetObject(XMFLOAT3 position, XMFLOAT3 scale);
 private:
 	int hModel_;
-	BoxCollider* col_;
 };
