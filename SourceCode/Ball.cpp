@@ -65,65 +65,34 @@ void Ball::SetMoveDirection(XMVECTOR direction)
 
 void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 {
-    // 1. ボックスの座標、サイズを取得してAABBのMin/Maxを計算
-    XMFLOAT3 obsPos = obstacle->GetPosition();
-    XMFLOAT3 obsSize = col->GetSize(); // 相手のコライダーサイズ
-    XMVECTOR boxPos = XMLoadFloat3(&obsPos);
-    XMVECTOR boxSize = XMLoadFloat3(&obsSize);
-    XMVECTOR boxMin = boxPos - (boxSize / 2.0f);
-    XMVECTOR boxMax = boxPos + (boxSize / 2.0f);
+	//ボックスの座標、サイズを取得
+	XMFLOAT3 obsPos = obstacle->GetPosition();
+	XMFLOAT3 obsSize = col->GetSize();
+	XMVECTOR boxPos = XMLoadFloat3(&obsPos);
+	XMVECTOR boxSize = XMLoadFloat3(&obsSize);
+	XMVECTOR boxMin = boxPos - (boxSize / 2.0f);
+	XMVECTOR boxMax = boxPos + (boxSize / 2.0f);
 
-    // 2. ボールの現在位置と半径を取得
-    XMVECTOR pos = XMLoadFloat3(&transform_.position_);
-    float radius = COL_RADIUS; // 定義している半径
+	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
 
-    // 3. 最も近い点と距離を計算
-    XMVECTOR closestPoint = XMVectorClamp(pos, boxMin, boxMax);
-    XMVECTOR diff = pos - closestPoint;
-    float distance = 0.0f;
-    XMStoreFloat(&distance, XMVector3Length(diff));
+	//法線を取得
+	XMVECTOR normal = CalculateBoxCollsionNormal(pos, boxPos, boxMin, boxMax);
+	XMVECTOR velocity = move_->GetVelocity();
 
-    // 4. 確実に衝突している場合の処理
-    if (distance < radius)
-    {
-        XMVECTOR normal;
-        float penetrationDepth = 0.0f;
+	//反射速度の計算
+	XMVECTOR dotVal = XMVector3Dot(velocity, normal);
+	XMVECTOR reflectionVelocity = velocity - (1.0f + RESTITUTION) * dotVal * normal;
 
-        if (distance > 0.0001f)
-        {
-            normal = XMVector3Normalize(diff);
-            penetrationDepth = radius - distance;
-        }
-        else
-        {
-            // 完全に内部に入り込んでしまった場合の安全保障
-            normal = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-            penetrationDepth = radius;
-        }
+	XMVECTOR speedVec = XMVector3Length(reflectionVelocity);
+	float speed;
+	XMStoreFloat(&speed, speedVec);
 
-        // --- ① 【最重要】めり込みの押し戻し（これがないと壁に張り付きます） ---
-        pos += normal * penetrationDepth;
-        XMFLOAT3 newPos;
-        XMStoreFloat3(&newPos, pos);
-        transform_.position_ = newPos; // ボール自身の位置を更新
+	move_->SetDirection(reflectionVelocity);
+	move_->SetSpeed(speed);
 
-        // --- ② 速度の反射計算 ---
-        XMVECTOR velocity = move_->GetVelocity(); // 現在の速度を取得（※MoveComponentにGetVelocity()がない場合は direction * speed で代用）
-
-        // 反射速度の計算: v' = v - (1 + e) * (v · n) * n
-        XMVECTOR dotVal = XMVector3Dot(velocity, normal);
-        XMVECTOR reflectionVelocity = velocity - (1.0f + RESTITUTION) * dotVal * normal;
-
-        // --- ③ スピードと方向に分解してセット ---
-        XMVECTOR speedVec = XMVector3Length(reflectionVelocity);
-        float speed = 0.0f;
-        XMStoreFloat(&speed, speedVec);
-
-        XMVECTOR direction = (speed > 0.0001f) ? XMVector3Normalize(reflectionVelocity) : XMVectorZero();
-
-        move_->SetSpeed(speed);
-        move_->SetDirection(direction); // 綺麗な単位ベクトルだけを渡す
-    }
+	//埋まりこみ防止
+	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.05f;
+	XMStoreFloat3(&transform_.position_, pushOutPos);
 }
 
 void Ball::CollisionPlayer(GameObject * player, Collider* col)
