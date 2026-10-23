@@ -38,7 +38,7 @@ private:
 	//コライダーの中心位置
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.0f,0.0f };
 	//コライダーのサイズ
-	static constexpr float COL_RADIUS = 0.04f;
+	static constexpr float COL_RADIUS = 0.2f;
 	//移動速度
 	static constexpr float MOVE_SPEED = 10.0f;
 	//反発係数
