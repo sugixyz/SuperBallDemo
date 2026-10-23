@@ -35,19 +35,19 @@ void Obstacle::Release()
 
 void Obstacle::OnCollision(GameObject* other,Collider* col)
 {
-	BoxCollider* bCol = dynamic_cast<BoxCollider*>(col);
-	if (bCol != nullptr)
-	{
-		CollisionBox(other, bCol);
-		return;
-	}
+	//BoxCollider* bCol = dynamic_cast<BoxCollider*>(col);
+	//if (bCol != nullptr)
+	//{
+	//	CollisionBox(other, bCol);
+	//	return;
+	//}
 
-	SphereCollider* sCol = dynamic_cast<SphereCollider*>(col);
-	if (sCol != nullptr)
-	{
-		CollisionSphere(other, sCol);
-		return;
-	}
+	//SphereCollider* sCol = dynamic_cast<SphereCollider*>(col);
+	//if (sCol != nullptr)
+	//{
+	//	CollisionSphere(other, sCol);
+	//	return;
+	//}
 
 	return;
 

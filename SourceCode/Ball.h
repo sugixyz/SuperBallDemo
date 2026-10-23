@@ -11,7 +11,7 @@ public:
 	void Draw() override;
 	void Release() override;
 
-	void OnCollision(GameObject* other)override;
+	void OnCollision(GameObject* other, Collider* col)override;
 
 	/// <summary>
 	/// 移動方向を設定
@@ -22,9 +22,9 @@ public:
 	MoveComponent* GetMoveComponent() override { return move_; }
 private:
 	//障害物に接触したときの処理
-	void CollisionObstacle(GameObject* obstacle);
+	void CollisionObstacle(GameObject* obstacle, Collider* col);
 	//プレイヤーに接触したときの処理
-	void CollisionPlayer(GameObject* player);
+	void CollisionPlayer(GameObject* player, Collider* col);
 	//ボックスの法線を計算する関数
 	XMVECTOR CalculateBoxCollsionNormal(XMVECTOR spherePos, XMVECTOR boxCenter, XMVECTOR boxMin, XMVECTOR boxMax);
 	//球の法線を計算する関数

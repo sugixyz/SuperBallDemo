@@ -26,7 +26,7 @@ void Ball::Initialize()
 	assert(move_ != nullptr);
 
 	move_->SetSpeed(MOVE_SPEED);
-	move_->EnableGravity();
+	//move_->EnableGravity();
 }	
 
 void Ball::Update()
@@ -44,17 +44,17 @@ void Ball::Release()
 {
 }
 
-void Ball::OnCollision(GameObject* other)
+void Ball::OnCollision(GameObject* other, Collider* col)
 {
 	std::string name = other->GetObjectName();
 
 	if (name == "Obstacle")
 	{
-		CollisionObstacle(other);
+		CollisionObstacle(other,col);
 	}
 	else if (name == "Player")
 	{
-		CollisionPlayer(other);
+		CollisionPlayer(other,col);
 	}
 }
 
@@ -63,11 +63,11 @@ void Ball::SetMoveDirection(XMVECTOR direction)
 	move_->SetDirection(direction);
 }
 
-void Ball::CollisionObstacle(GameObject* obstacle)
+void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 {
 	//ボックスの座標、サイズを取得
 	XMFLOAT3 obsPos = obstacle->GetPosition();
-	XMFLOAT3 obsSize = obstacle->GetScale();
+	XMFLOAT3 obsSize = col->GetSize();
 	XMVECTOR boxPos = XMLoadFloat3(&obsPos);
 	XMVECTOR boxSize = XMLoadFloat3(&obsSize);
 	XMVECTOR boxMin = boxPos - (boxSize / 2.0f);
@@ -89,13 +89,9 @@ void Ball::CollisionObstacle(GameObject* obstacle)
 
 	move_->SetDirection(reflectionVelocity);
 	move_->SetSpeed(speed);
-
-	//埋まりこみ防止
-	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.05f;
-	XMStoreFloat3(&transform_.position_, pushOutPos);
 }
 
-void Ball::CollisionPlayer(GameObject * player)
+void Ball::CollisionPlayer(GameObject * player, Collider* col)
 {
 
 }
