@@ -83,7 +83,7 @@ void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 
 	//反射速度の計算
 	XMVECTOR dotVal = XMVector3Dot(velocity, normal);
-	XMVECTOR reflectionVelocity = velocity - (1.0f + RESTITUTION) * dotVal * normal;
+	XMVECTOR reflectionVelocity = velocity - 2.0f * dotVal * normal;
 
 	XMVECTOR speedVec = XMVector3Length(reflectionVelocity);
 	float speed;
@@ -93,7 +93,7 @@ void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 	move_->SetSpeed(speed * RESTITUTION);
 
 	//埋まりこみ防止
-	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.05f;
+	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.04f;
 	XMStoreFloat3(&transform_.position_, pushOutPos);
 }
 
@@ -105,10 +105,10 @@ void Ball::CollisionPlayer(GameObject * player, Collider* col)
 XMVECTOR Ball::CalculateBoxCollsionNormal(XMVECTOR spherePos, XMVECTOR boxCenter, XMVECTOR boxMin, XMVECTOR boxMax)
 {
 	//ボックス表面上の、球の中心の最近点を計算
-	XMVECTOR colosestPoint = XMVectorClamp(spherePos, boxMin, boxMax);
+	XMVECTOR closestPoint = XMVectorClamp(spherePos, boxMin, boxMax);
 
 	//法線
-	XMVECTOR normal = spherePos - colosestPoint;
+	XMVECTOR normal = spherePos - closestPoint;
 
 	return XMVector3Normalize(normal);
 }

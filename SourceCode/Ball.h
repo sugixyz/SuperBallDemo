@@ -42,5 +42,5 @@ private:
 	//移動速度
 	static constexpr float MOVE_SPEED = 8.0f;
 	//反発係数
-	static constexpr float RESTITUTION = 0.9f;
+	static constexpr float RESTITUTION = 0.95f;
 };
