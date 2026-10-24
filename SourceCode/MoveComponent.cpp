@@ -41,3 +41,10 @@ XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
     XMStoreFloat3(&newPos, pos);
     return newPos;
 }
+
+void MoveComponent::ResetGravity()
+{
+    if (!useGravity_)return;
+
+    velocity_ = direction_ * speed_;
+}

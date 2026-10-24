@@ -56,6 +56,8 @@ void Ball::OnCollision(GameObject* other, Collider* col)
 	{
 		CollisionPlayer(other,col);
 	}
+
+	move_->ResetGravity();
 }
 
 void Ball::SetMoveDirection(XMVECTOR direction)
@@ -88,7 +90,7 @@ void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 	XMStoreFloat(&speed, speedVec);
 
 	move_->SetDirection(reflectionVelocity);
-	move_->SetSpeed(speed);
+	move_->SetSpeed(speed * RESTITUTION);
 
 	//埋まりこみ防止
 	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.05f;

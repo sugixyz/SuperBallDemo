@@ -62,11 +62,15 @@ public:
 	/// 重力を無効化する関数
 	/// </summary>
 	void DisableGravity() { SetUseGravity(false); }
+	/// <summary>
+	/// 重力による影響をリセットする
+	/// </summary>
+	void ResetGravity();
 private:
 	float speed_;
 	XMVECTOR direction_;
 	XMVECTOR velocity_;
 	bool useGravity_;
 private:
-	static constexpr float GRAVITY = -9.8f / 2.0f;
+	static constexpr float GRAVITY = -9.8f;
 };

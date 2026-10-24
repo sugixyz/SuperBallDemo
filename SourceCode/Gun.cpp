@@ -19,6 +19,8 @@ void Gun::Initialize()
 
 	transform_.position_.x -= 0.1f;
 	transform_.position_.z += 0.2f;
+
+	transform_.rotate_.x -= 30;
 }
 
 void Gun::Update()
