@@ -71,7 +71,7 @@ void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 
 	//ボックスの座標、サイズを取得
 	XMFLOAT3 obsPos = obstacle->GetPosition();
-	XMFLOAT3 obsSize = col->GetSize();
+ 	XMFLOAT3 obsSize = col->GetSize();
 	XMVECTOR boxPos = XMLoadFloat3(&obsPos);
 	XMVECTOR boxSize = XMLoadFloat3(&obsSize);
 	XMVECTOR boxMin = boxPos - (boxSize / 2.0f);

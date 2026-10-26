@@ -34,7 +34,7 @@ void TestScene::Initialize()
 		{16,4,0.1f},
 		{16,4,0.1f},
 		{16,0.1f,16},
-		{2,3,2}
+		{1,1,1}
 	};
 
 	for (int i = 0;i < OBSTACLE_COUNT;i++)
