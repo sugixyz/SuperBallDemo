@@ -24,7 +24,7 @@ void TestScene::Initialize()
 		{0,2,8},
 		{0,2,-8},
 		{0,4,0},
-		{0,1,0}
+		{0,1,4}
 	};
 	XMFLOAT3 scales[OBSTACLE_COUNT]
 	{
