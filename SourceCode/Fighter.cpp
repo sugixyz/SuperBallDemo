@@ -36,6 +36,7 @@ void Fighter::Initialize()
 
 	health_->Initialize(MAX_HP);
 	move_->SetSpeed(MOVE_SPEED);
+	move_->ResetVelocity();
 
 	gun_ = Instantiate<Gun>(this);
 }

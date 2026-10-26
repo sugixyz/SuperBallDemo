@@ -26,7 +26,7 @@ void Obstacle::Update()
 void Obstacle::Draw()
 {
 	Model::SetTransform(hModel_,transform_);
-	//Model::Draw(hModel_);
+	Model::Draw(hModel_);
 }
 
 void Obstacle::Release()
@@ -38,14 +38,14 @@ void Obstacle::OnCollision(GameObject* other,Collider* col)
 	BoxCollider* bCol = dynamic_cast<BoxCollider*>(col);
 	if (bCol != nullptr)
 	{
-		CollisionBox(other, bCol);
+		//CollisionBox(other, bCol);
 		return;
 	}
 	
 	SphereCollider* sCol = dynamic_cast<SphereCollider*>(col);
 	if (sCol != nullptr)
 	{
-		CollisionSphere(other, sCol);
+		//CollisionSphere(other, sCol);
 		return;
 	}
 

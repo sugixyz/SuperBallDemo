@@ -48,25 +48,27 @@ void Ball::OnCollision(GameObject* other, Collider* col)
 {
 	std::string name = other->GetObjectName();
 
-	if (name == "Obstacle")
+	if (other->GetObjectName() == "Obstacle")
 	{
 		CollisionObstacle(other,col);
+		move_->ResetGravity();
 	}
-	else if (name == "Player")
+	else if (other->GetObjectName() == "Fighter")
 	{
 		CollisionPlayer(other,col);
 	}
-
-	move_->ResetGravity();
 }
 
 void Ball::SetMoveDirection(XMVECTOR direction)
 {
 	move_->SetDirection(direction);
+	move_->ResetVelocity();
 }
 
 void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 {
+	if (obstacle->GetObjectName() != "Obstacle")return;
+
 	//ボックスの座標、サイズを取得
 	XMFLOAT3 obsPos = obstacle->GetPosition();
 	XMFLOAT3 obsSize = col->GetSize();
@@ -93,7 +95,7 @@ void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 	move_->SetSpeed(speed * RESTITUTION);
 
 	//埋まりこみ防止
-	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.04f;
+	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.02f;
 	XMStoreFloat3(&transform_.position_, pushOutPos);
 }
 

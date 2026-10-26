@@ -65,7 +65,7 @@ private:
 	//コライダーの中心位置
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.5f,0.0f };
 	//コライダーのサイズ
-	static constexpr XMFLOAT3 COL_SIZE = { 0.5f,1.0f,0.5f };
+	static constexpr XMFLOAT3 COL_SIZE = { 0.4f,1.0f,0.4f };
 	//移動速度
 	static constexpr float MOVE_SPEED = 1.5f;
 	//最大HP

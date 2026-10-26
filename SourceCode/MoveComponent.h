@@ -66,6 +66,10 @@ public:
 	/// 重力による影響をリセットする
 	/// </summary>
 	void ResetGravity();
+	/// <summary>
+	/// 速度をリセットする
+	/// </summary>
+	void ResetVelocity();
 private:
 	float speed_;
 	XMVECTOR direction_;

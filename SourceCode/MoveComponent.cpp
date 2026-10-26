@@ -48,3 +48,8 @@ void MoveComponent::ResetGravity()
 
     velocity_ = direction_ * speed_;
 }
+
+void MoveComponent::ResetVelocity()
+{
+    velocity_ = direction_ * speed_;
+}
