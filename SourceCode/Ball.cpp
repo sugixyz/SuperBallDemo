@@ -53,6 +53,8 @@ void Ball::OnCollision(GameObject* other, Collider* col)
 	{
 		CollisionObstacle(other,col);
 		move_->ResetGravity();
+		//move_->SetSpeed(0.0f);
+		//move_->DisableGravity();
 	}
 	else if (other->GetObjectName() == "Fighter")
 	{

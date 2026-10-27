@@ -82,7 +82,23 @@ void Obstacle::CollisionBall(GameObject* ball, Collider* col)
 	if (distance < radius)
 	{
 		XMVECTOR normal = XMVector3Normalize(diff);
-		float penertrationDepth = radius - distance;
+		float penertrationDepth = 0.0f;
+		
+		if (distance > 0.0001f)
+		{
+			normal = XMVector3Normalize(diff);
+			penertrationDepth = radius - distance;
+		}
+		else
+		{
+			XMVECTOR boxCenterToSpehre = spherePos - boxPos;
+
+			XMVECTOR distToMin = spherePos - boxMin;
+			XMVECTOR distToMax = spherePos - boxMax;
+
+			normal = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+			penertrationDepth = radius + 0.1f;
+		}
 
 		spherePos += normal * penertrationDepth;
 
@@ -100,8 +116,11 @@ void Obstacle::CollisionPlayer(GameObject* player, Collider* col)
 	
 	//プレイヤーの座標、サイズ
 	XMFLOAT3 pos = player->GetPosition();
+	XMFLOAT3 colCenter = col->GetCenter();
 	XMFLOAT3 colSize = col->GetSize();
-	XMVECTOR otherPos = XMLoadFloat3(&pos);
+	XMVECTOR otherCenter = XMLoadFloat3(&colCenter);
+	XMVECTOR playerPos = XMLoadFloat3(&pos);
+	XMVECTOR otherPos = playerPos + otherCenter;
 	XMVECTOR otherSize = XMLoadFloat3(&colSize);
 	
 	XMVECTOR diff = otherPos - obsPos;
@@ -134,8 +153,8 @@ void Obstacle::CollisionPlayer(GameObject* player, Collider* col)
 		pushVector = XMVectorSet(0.0f, 0.0f, overlapZ * dir, 0.0f);
 	}
 
-	otherPos += pushVector;
+	playerPos += pushVector;
 	XMFLOAT3 newPos;
-	XMStoreFloat3(&newPos, otherPos);
+	XMStoreFloat3(&newPos, playerPos);
 	player->SetPosition(newPos);
 }
