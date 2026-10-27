@@ -156,6 +156,7 @@
     <ClCompile Include="SourceCode\MoveComponent.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
     <ClCompile Include="SourceCode\PlayerController.cpp" />
+    <ClCompile Include="SourceCode\TargetObject.cpp" />
     <ClCompile Include="SourceCode\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +195,7 @@
     <ClInclude Include="SourceCode\MoveComponent.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\PlayerController.h" />
+    <ClInclude Include="SourceCode\TargetObject.h" />
     <ClInclude Include="SourceCode\TestScene.h" />
   </ItemGroup>
   <ItemGroup>

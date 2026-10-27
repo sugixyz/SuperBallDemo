@@ -122,6 +122,19 @@
     <ClCompile Include="SourceCode\MoveComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Ball.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Gun.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Obstacle.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\HealthComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TargetObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -226,6 +239,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Component.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Ball.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TargetObject.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

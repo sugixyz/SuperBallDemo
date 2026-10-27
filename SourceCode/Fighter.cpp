@@ -35,7 +35,9 @@ void Fighter::Initialize()
 	assert(move_ != nullptr);
 
 	health_->Initialize(MAX_HP);
+
 	move_->SetSpeed(MOVE_SPEED);
+	//move_->EnableGravity();
 	move_->ResetVelocity();
 
 	gun_ = Instantiate<Gun>(this);
@@ -70,8 +72,10 @@ void Fighter::Release()
 	delete move_;
 }
 
-void Fighter::OnCollision(GameObject* other)
-{}
+void Fighter::OnCollision(GameObject* other, Collider* col)
+{
+	//move_->ResetGravity();
+}
 
 void Fighter::Move(const FighterInput& input)
 {

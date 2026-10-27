@@ -21,7 +21,7 @@ public:
 	void Draw() override;
 	void Release() override;
 
-	void OnCollision(GameObject* other) override;
+	void OnCollision(GameObject* other,Collider* col) override;
 
 	/// <summary>
 	/// ファイター用のコントローラーを設定する
@@ -67,7 +67,7 @@ private:
 	//コライダーのサイズ
 	static constexpr XMFLOAT3 COL_SIZE = { 0.4f,1.0f,0.4f };
 	//移動速度
-	static constexpr float MOVE_SPEED = 1.5f;
+	static constexpr float MOVE_SPEED = 4.5f;
 	//最大HP
 	static constexpr float MAX_HP = 100.0f;
 	//前方ベクトル

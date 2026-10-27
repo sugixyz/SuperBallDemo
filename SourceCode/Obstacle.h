@@ -23,10 +23,10 @@ public:
 	/// <param name="scale">スケール</param>
 	void SetObject(XMFLOAT3 position, XMFLOAT3 scale);
 private:
-	//球に接触したときの処理
-	void CollisionSphere(GameObject* other,SphereCollider* col);
-	//ボックスに接触したときの処理
-	void CollisionBox(GameObject* other,BoxCollider* col);
+	//障害物に接触したときの処理
+	void CollisionBall(GameObject* ball, Collider* col);
+	//プレイヤーに接触したときの処理
+	void CollisionPlayer(GameObject* player, Collider* col);
 private:
 	int hModel_;
 };

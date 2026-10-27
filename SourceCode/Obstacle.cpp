@@ -36,17 +36,15 @@ void Obstacle::Release()
 void Obstacle::OnCollision(GameObject* other,Collider* col)
 {
 	BoxCollider* bCol = dynamic_cast<BoxCollider*>(col);
-	if (bCol != nullptr)
+
+	std::string name = other->GetObjectName();
+	if (name == "Ball")
 	{
-		//CollisionBox(other, bCol);
-		return;
+		CollisionBall(other, col);
 	}
-	
-	SphereCollider* sCol = dynamic_cast<SphereCollider*>(col);
-	if (sCol != nullptr)
+	else if (name == "Fighter")
 	{
-		//CollisionSphere(other, sCol);
-		return;
+		CollisionPlayer(other, col);
 	}
 
 	return;
@@ -61,7 +59,7 @@ void Obstacle::SetObject(XMFLOAT3 position, XMFLOAT3 scale)
 	AddCollider(col);
 }
 
-void Obstacle::CollisionSphere(GameObject* other, SphereCollider* col)
+void Obstacle::CollisionBall(GameObject* ball, Collider* col)
 {
 	//ボックスの座標、サイズを取得
 	XMFLOAT3 obsPos = transform_.position_;
@@ -71,7 +69,7 @@ void Obstacle::CollisionSphere(GameObject* other, SphereCollider* col)
 	XMVECTOR boxMin = boxPos - (boxSize / 2.0f);
 	XMVECTOR boxMax = boxPos + (boxSize / 2.0f);
 
-	XMFLOAT3 sPos = other->GetPosition();
+	XMFLOAT3 sPos = ball->GetPosition();
 	float radius = col->GetSize().x;
 	XMVECTOR spherePos = XMLoadFloat3(&sPos);
 
@@ -90,9 +88,54 @@ void Obstacle::CollisionSphere(GameObject* other, SphereCollider* col)
 
 		XMFLOAT3 newPos;
 		XMStoreFloat3(&newPos, spherePos);
-		other->SetPosition(newPos);
+		ball->SetPosition(newPos);
 	}
 }
 
-void Obstacle::CollisionBox(GameObject * other, BoxCollider * col)
-{}
+void Obstacle::CollisionPlayer(GameObject* player, Collider* col)
+{
+	//障害物側の座標、サイズ
+	XMVECTOR obsPos = XMLoadFloat3(&transform_.position_);
+	XMVECTOR obsSize = XMLoadFloat3(&transform_.scale_);
+	
+	//プレイヤーの座標、サイズ
+	XMFLOAT3 pos = player->GetPosition();
+	XMFLOAT3 colSize = col->GetSize();
+	XMVECTOR otherPos = XMLoadFloat3(&pos);
+	XMVECTOR otherSize = XMLoadFloat3(&colSize);
+	
+	XMVECTOR diff = otherPos - obsPos;
+	XMVECTOR overlap = (obsSize / 2.0f + otherSize / 2.0f) - XMVectorAbs(diff);
+
+	float overlapX = XMVectorGetX(overlap);
+	float overlapY = XMVectorGetY(overlap);
+	float overlapZ = XMVectorGetZ(overlap);
+
+	if (overlapX <= 0.0f)return;
+	if (overlapY <= 0.0f)return;
+	if (overlapZ <= 0.0f)return;
+
+	XMVECTOR pushVector = XMVectorZero();
+	float dir = 0.0f;
+
+	if (overlapX < overlapY && overlapX < overlapZ)
+	{
+		dir = (XMVectorGetX(diff) < 0.0f) ? -1.0f : 1.0f;
+		pushVector = XMVectorSet(overlapX * dir, 0.0f, 0.0f, 0.0f);
+	}
+	else if (overlapY < overlapZ)
+	{
+		dir = (XMVectorGetY(diff) < 0.0f) ? -1.0f : 1.0f;
+		pushVector = XMVectorSet(0.0f, overlapY * dir, 0.0f, 0.0f);
+	}
+	else
+	{
+		dir = (XMVectorGetZ(diff) < 0.0f) ? -1.0f : 1.0f;
+		pushVector = XMVectorSet(0.0f, 0.0f, overlapZ * dir, 0.0f);
+	}
+
+	otherPos += pushVector;
+	XMFLOAT3 newPos;
+	XMStoreFloat3(&newPos, otherPos);
+	player->SetPosition(newPos);
+}

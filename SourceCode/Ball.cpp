@@ -67,8 +67,6 @@ void Ball::SetMoveDirection(XMVECTOR direction)
 
 void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 {
-	if (obstacle->GetObjectName() != "Obstacle")return;
-
 	//ボックスの座標、サイズを取得
 	XMFLOAT3 obsPos = obstacle->GetPosition();
  	XMFLOAT3 obsSize = col->GetSize();
