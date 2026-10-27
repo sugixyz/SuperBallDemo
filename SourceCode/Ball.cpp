@@ -2,6 +2,7 @@
 #include"../Engine/Model.h"
 #include"MoveComponent.h"
 #include"../Engine/SphereCollider.h"
+#include"../Engine/BoxCollider.h"
 
 Ball::Ball(GameObject* parent)
 	:GameObject(parent,"Ball"),

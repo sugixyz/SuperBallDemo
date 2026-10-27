@@ -134,7 +134,9 @@
     <ClCompile Include="SourceCode\HealthComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\TargetObject.cpp" />
+    <ClCompile Include="SourceCode\TargetObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">

@@ -25,14 +25,18 @@ XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
     {
         //重力を適応
         verticalVelocity += GRAVITY * Timer::GetDeltaTime();
-    }
 
-    velocity_ = XMVectorSet(
-        XMVectorGetX(horizontalVelocity),
-        verticalVelocity,
-        XMVectorGetZ(horizontalVelocity),
-        0.0f
-    );
+        velocity_ = XMVectorSet(
+            XMVectorGetX(horizontalVelocity),
+            verticalVelocity,
+            XMVectorGetZ(horizontalVelocity),
+            0.0f
+        );
+    }
+    else
+    {
+        velocity_ = horizontalVelocity;
+    }
 
     //現在座標取得
     XMVECTOR pos = XMLoadFloat3(&ownerTransform.position_);
