@@ -40,9 +40,9 @@ private:
 	void Shoot(const FighterInput& input);
 	//カメラの移動
 	void UpdateCamera(const FighterInput& input);
-	//FPSカメラの更新
-	void UpdateTpsCam(XMMATRIX mRotY,XMVECTOR vPos,XMVECTOR vMove);
 	//TPSカメラの更新
+	void UpdateTpsCam(XMFLOAT3 camRot, float dist,XMVECTOR pos, XMVECTOR offset);
+	//FPSカメラの更新
 	void UpdateFpsCam();
 	//速度を計算する関数
 	XMVECTOR CalculateMoveDirection(XMFLOAT2 moveInput,XMVECTOR forward, XMVECTOR right);
@@ -50,6 +50,8 @@ private:
 	XMVECTOR CalculateForwardVector(float rotationY);
 	//右ベクトルを計算する関数
 	XMVECTOR CalculateRightVector(XMVECTOR forward);
+	//クランプ関数
+	void Clamp(float& current, float min, float max);
 private:
 	//モデルハンドル
 	int hModel_;
@@ -63,6 +65,8 @@ private:
 	Gun* gun_;
 	//カメラの種類
 	CamType camType_;
+	//カメラのピッチ
+	float camPitch_;
 private:
 	//コライダーの中心位置
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.5f,0.0f };
@@ -76,8 +80,12 @@ private:
 	//前方ベクトル
 	static constexpr XMVECTOR FRONT = { 0.0f,0.0f,1.0f,0.0f };
 
-	//カメラの定数
-	static constexpr float TPS_HEIGHT_BIAS = 2.0f;
-	static constexpr float TPS_FRONT_BIAS = 4.0f;
-	static constexpr float TPS_CAM_BIAS = 1.0f;
+	//カメラのズレ（距離）
+	static constexpr float TPS_CAM_DISTANCE = 4.0f;
+	static constexpr XMVECTOR TPS_CAM_POS_OFFSET = { 0.0f,0.5f,0.0f,0.0f };
+	//カメラのX軸角度（ピッチ）
+	static constexpr float TPS_CAM_PITCH = 30.0f;
+	//カメラのX軸角度の制限
+	static constexpr float TPS_CAM_PITCH_MIN = 0.0f;
+	static constexpr float TPS_CAM_PITCH_MAX = 60.0f;
 };

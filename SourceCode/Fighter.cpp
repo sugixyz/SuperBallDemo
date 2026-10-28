@@ -14,7 +14,8 @@ Fighter::Fighter(GameObject* parent)
 	health_(nullptr),
 	move_(nullptr),
 	gun_(nullptr),
-	camType_(CamType::TPS)
+	camType_(CamType::TPS),
+	camPitch_(0.0f)
 {}
 
 Fighter::~Fighter()
@@ -40,6 +41,8 @@ void Fighter::Initialize()
 	move_->ResetVelocity();
 
 	gun_ = Instantiate<Gun>(this);
+
+	camPitch_ = TPS_CAM_PITCH;
 }
 
 void Fighter::Update()
@@ -95,8 +98,8 @@ void Fighter::Move(const FighterInput& input)
 void Fighter::Rotate(const FighterInput& input)
 {
 	XMFLOAT2 rotateInput = input.rotateInput;
-	if (rotateInput.x < 0)transform_.rotate_.y--;
-	else if (rotateInput.x > 0)transform_.rotate_.y++;
+	if (rotateInput.x < 0.0f)transform_.rotate_.y--;
+	else if (rotateInput.x > 0.0f)transform_.rotate_.y++;
 }
 
 void Fighter::Shoot(const FighterInput& input)
@@ -111,35 +114,44 @@ void Fighter::Shoot(const FighterInput& input)
 void Fighter::UpdateCamera(const FighterInput& input)
 {
 	if (!input.isCameraOwner)return;
+	//カメラのピッチ変更
+	XMFLOAT2 cameraInput = input.cameraInput;
+	if (cameraInput.y < 0.0f)camPitch_--;
+	else if (cameraInput.y > 0.0f)camPitch_++;
+	Clamp(camPitch_, TPS_CAM_PITCH_MIN, TPS_CAM_PITCH_MAX);
 
-	XMVECTOR vPos = XMLoadFloat3(&transform_.position_); //ロード：読み込み
-	XMMATRIX mRotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
-	XMMATRIX mRotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
-	XMMATRIX mRotZ = XMMatrixRotationZ(XMConvertToRadians(transform_.rotate_.z));
-	XMVECTOR vMove = XMVector3TransformCoord(FRONT, mRotZ * mRotX * mRotY);
-
+	XMVECTOR pos = XMLoadFloat3(&transform_.position_); // プレイヤーの位置
+	XMFLOAT3 camRot = XMFLOAT3(camPitch_, transform_.rotate_.y, transform_.rotate_.z);
+	
 	switch (camType_)
 	{
 	case CamType::FPS:
 		UpdateFpsCam();
 		break;
 	case CamType::TPS:
-		UpdateTpsCam(mRotY, vPos, vMove);
+		UpdateTpsCam(camRot, TPS_CAM_DISTANCE, pos, TPS_CAM_POS_OFFSET);
 		break;
 	}
 }
 
-void Fighter::UpdateTpsCam(XMMATRIX mRotY, XMVECTOR vPos, XMVECTOR vMove)
+void Fighter::UpdateTpsCam(XMFLOAT3 camRot, float dist, XMVECTOR pos, XMVECTOR offset)
 {
-	//自分の位置に
-	XMFLOAT3 camPos;
-	XMVECTOR vCam = { 0.0f,TPS_HEIGHT_BIAS,-TPS_FRONT_BIAS,0.0f };
-	vCam = XMVector3TransformCoord(vCam, mRotY);
-	XMStoreFloat3(&camPos, vPos + vCam);
-	Camera::SetPosition(camPos);
+	XMMATRIX mRotX = XMMatrixRotationX(XMConvertToRadians(camRot.x));
+	XMMATRIX mRotY = XMMatrixRotationY(XMConvertToRadians(camRot.y));
+	XMMATRIX mRotZ = XMMatrixRotationZ(XMConvertToRadians(camRot.z));
+
+	XMVECTOR vMove = XMVector3TransformCoord(FRONT, mRotZ * mRotX * mRotY);
+
 	XMFLOAT3 camTarget;
-	XMStoreFloat3(&camTarget, vPos + vMove);
+	XMStoreFloat3(&camTarget, pos + offset + vMove);
 	Camera::SetTarget(camTarget);
+
+	XMVECTOR vCam = XMVectorSet(0.0f, 0.0f, -dist, 0.0f);
+	vCam = XMVector3TransformCoord(vCam, mRotX * mRotY);
+
+	XMFLOAT3 camPos;
+	XMStoreFloat3(&camPos, pos + offset + vCam);
+	Camera::SetPosition(camPos);
 }
 
 void Fighter::UpdateFpsCam()
@@ -175,4 +187,10 @@ XMVECTOR Fighter::CalculateRightVector(XMVECTOR forward)
 	right = XMVector3Normalize(right);
 
 	return right;
+}
+
+void Fighter::Clamp(float& current, float min, float max)
+{
+	if (current < min)current = min;
+	if (current > max)current = max;
 }
