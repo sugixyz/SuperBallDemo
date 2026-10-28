@@ -46,9 +46,6 @@ void Obstacle::OnCollision(GameObject* other,Collider* col)
 	{
 		CollisionPlayer(other, col);
 	}
-
-	return;
-
 }
 void Obstacle::SetObject(XMFLOAT3 position, XMFLOAT3 scale)
 {

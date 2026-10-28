@@ -1,6 +1,7 @@
 ﻿#include "Ball.h"
 #include"../Engine/Model.h"
 #include"MoveComponent.h"
+#include"HealthComponent.h"
 #include"../Engine/SphereCollider.h"
 #include"../Engine/BoxCollider.h"
 
@@ -35,6 +36,7 @@ void Ball::Update()
 {
 	transform_.position_ = move_->Move(transform_);
 
+	//何にも当たっていなかければ自動敵に重力を有効化
 	if (!isColliding_)move_->EnableGravity();
 	isColliding_ = false;
 }
@@ -122,7 +124,13 @@ void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 
 void Ball::CollisionPlayer(GameObject * player, Collider* col)
 {
+	HealthComponent* health = player->GetHealthComponent();
+	if (health != nullptr)
+	{
+		health->TakeDamage(DAMAGE);
+	}
 
+	KillMe();
 }
 
 void Ball::CollisionBall(GameObject* ball, Collider* col)
@@ -138,6 +146,7 @@ void Ball::CollisionBall(GameObject* ball, Collider* col)
 
 	XMVECTOR directionA = XMVector3Normalize(move_->GetVelocity());
 	MoveComponent* moveB = ball->GetMoveComponent();
+	if (moveB == nullptr)return;
 	XMVECTOR directionB = XMVector3Normalize(moveB->GetVelocity());
 
 	XMVECTOR nA = XMVector3Dot(directionA, normal);

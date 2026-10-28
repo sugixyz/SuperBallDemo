@@ -49,6 +49,8 @@ private:
 	static constexpr float MOVE_SPEED = 8.0f;
 	//反発係数
 	static constexpr float RESTITUTION = 0.95f;
+	//与えるダメージ
+	static constexpr int DAMAGE = 10;
 	//ワールド座標上の上ベクトル
 	static constexpr XMVECTOR UP = { 0.0f,0.0f,1.0f,0.0f };
 };

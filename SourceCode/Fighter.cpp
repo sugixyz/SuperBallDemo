@@ -57,6 +57,11 @@ void Fighter::Update()
 	UpdateCamera(input);
 	Move(input);
 	Shoot(input);
+
+	if (health_->isDead())
+	{
+		KillMe();
+	}
 }
 
 void Fighter::Draw()
