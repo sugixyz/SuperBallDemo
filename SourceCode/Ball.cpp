@@ -53,8 +53,6 @@ void Ball::OnCollision(GameObject* other, Collider* col)
 	{
 		CollisionObstacle(other,col);
 		move_->ResetGravity();
-		//move_->SetSpeed(0.0f);
-		//move_->DisableGravity();
 	}
 	else if (other->GetObjectName() == "Fighter")
 	{
@@ -70,6 +68,11 @@ void Ball::SetMoveDirection(XMVECTOR direction)
 
 void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 {
+	//現在の速度
+	float speed = move_->GetSpeed();
+	//もし速度が0以下だったら処理をスルー
+	if (speed <= 0.0f)return;
+
 	//ボックスの座標、サイズを取得
 	XMFLOAT3 obsPos = obstacle->GetPosition();
  	XMFLOAT3 obsSize = col->GetSize();
@@ -87,17 +90,21 @@ void Ball::CollisionObstacle(GameObject* obstacle, Collider* col)
 	//反射速度の計算
 	XMVECTOR dotVal = XMVector3Dot(velocity, normal);
 	XMVECTOR reflectionVelocity = velocity - 2.0f * dotVal * normal;
-
-	XMVECTOR speedVec = XMVector3Length(reflectionVelocity);
-	float speed;
-	XMStoreFloat(&speed, speedVec);
-
 	move_->SetDirection(reflectionVelocity);
-	move_->SetSpeed(speed * RESTITUTION);
 
-	//埋まりこみ防止
-	XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.02f;
-	XMStoreFloat3(&transform_.position_, pushOutPos);
+	if (speed < 0.1f)
+	{
+		move_->SetSpeed(0.0f);
+		move_->DisableGravity();
+	}
+	else
+	{
+		move_->SetSpeed(speed * RESTITUTION);
+
+		//埋まりこみ防止
+		XMVECTOR pushOutPos = XMLoadFloat3(&transform_.position_) + normal * 0.02f;
+		XMStoreFloat3(&transform_.position_, pushOutPos);
+	}
 }
 
 void Ball::CollisionPlayer(GameObject * player, Collider* col)

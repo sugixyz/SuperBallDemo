@@ -16,6 +16,9 @@ MoveComponent::~MoveComponent()
 
 XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
 {
+    //もしスピードが0以下ならそのまま返す
+    if (speed_ < 0.0f)return ownerTransform.position_;
+
     //水平方向の移動速度
     XMVECTOR horizontalVelocity = direction_ * speed_;
     

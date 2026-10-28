@@ -20,5 +20,5 @@ private:
 	Text* text_;
 	int score_;
 private:
-	static constexpr XMFLOAT3 COL_SIZE = { 1.0f,1.0f,0.01f };
+	static constexpr XMFLOAT3 COL_SIZE = { 1.0f,1.0f,0.05f };
 };
