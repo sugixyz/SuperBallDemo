@@ -11,20 +11,24 @@ struct FighterInput
 	FighterInput()
 		:moveInput(0.0f, 0.0f),
 		isShootPressed(false),
-		cameraInput(0.0f, 0.0f)
+		rotateInput(0.0f, 0.0f),
+		isCameraOwner(false)
 	{}
 
 	void Initialize()
 	{
 		moveInput = XMFLOAT2(0.0f, 0.0f);
 		isShootPressed = false;
-		cameraInput = XMFLOAT2(0.0f, 0.0f);
+		rotateInput = XMFLOAT2(0.0f, 0.0f);
+		isCameraOwner = false;
 	}
 
 	//移動用の2次元ベクトル
 	XMFLOAT2 moveInput;
 	//発射ボタンが押されたか
 	bool isShootPressed;
-	//カメラを操作する2次元ベクトル
-	XMFLOAT2 cameraInput;
+	//プレイヤーを回転させる2次元ベクトル
+	XMFLOAT2 rotateInput;
+	//カメラのオーナーかどうか
+	bool isCameraOwner;
 };

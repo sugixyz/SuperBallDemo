@@ -37,7 +37,6 @@ void Fighter::Initialize()
 	health_->Initialize(MAX_HP);
 
 	move_->SetSpeed(MOVE_SPEED);
-	//move_->EnableGravity();
 	move_->ResetVelocity();
 
 	gun_ = Instantiate<Gun>(this);
@@ -56,6 +55,7 @@ void Fighter::Update()
 	//入力情報をもとに処理を実行
 	UpdateCamera(input);
 	Move(input);
+	Rotate(input);
 	Shoot(input);
 
 	if (health_->isDead())
@@ -79,7 +79,6 @@ void Fighter::Release()
 
 void Fighter::OnCollision(GameObject* other, Collider* col)
 {
-	//move_->ResetGravity();
 }
 
 void Fighter::Move(const FighterInput& input)
@@ -93,6 +92,13 @@ void Fighter::Move(const FighterInput& input)
 	transform_.position_ = move_->Move(transform_);
 }
 
+void Fighter::Rotate(const FighterInput& input)
+{
+	XMFLOAT2 rotateInput = input.rotateInput;
+	if (rotateInput.x < 0)transform_.rotate_.y--;
+	else if (rotateInput.x > 0)transform_.rotate_.y++;
+}
+
 void Fighter::Shoot(const FighterInput& input)
 {
 	if (gun_ == nullptr)return;
@@ -104,6 +110,8 @@ void Fighter::Shoot(const FighterInput& input)
 
 void Fighter::UpdateCamera(const FighterInput& input)
 {
+	if (!input.isCameraOwner)return;
+
 	XMVECTOR vPos = XMLoadFloat3(&transform_.position_); //ロード：読み込み
 	XMMATRIX mRotX = XMMatrixRotationX(XMConvertToRadians(transform_.rotate_.x));
 	XMMATRIX mRotY = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
@@ -116,9 +124,6 @@ void Fighter::UpdateCamera(const FighterInput& input)
 		UpdateFpsCam();
 		break;
 	case CamType::TPS:
-		XMFLOAT2 cameraInput = input.cameraInput;
-		if (cameraInput.x < 0)transform_.rotate_.y--;
-		else if (cameraInput.x > 0)transform_.rotate_.y++;
 		UpdateTpsCam(mRotY, vPos, vMove);
 		break;
 	}

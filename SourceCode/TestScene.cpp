@@ -1,6 +1,7 @@
 ﻿#include"TestScene.h"
 #include"Fighter.h"
 #include"PlayerController.h"
+#include"AutoController.h"
 #include"TargetObject.h"
 #include"Obstacle.h"
 
@@ -15,6 +16,10 @@ void TestScene::Initialize()
 {
 	Fighter* fighter = Instantiate<Fighter>(this);
 	fighter->SetController(new PlayerController());
+
+	Fighter* ai = Instantiate<Fighter>(this);
+	ai->SetController(new AutoController());
+
 
 	TargetObject* target = Instantiate<TargetObject>(this);
 	target->SetPosition(XMFLOAT3(0.0f, 2.0f, 3.49f));

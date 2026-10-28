@@ -137,6 +137,9 @@
     <ClCompile Include="SourceCode\TargetObject.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\AutoController.cpp">
+      <Filter>Controller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">

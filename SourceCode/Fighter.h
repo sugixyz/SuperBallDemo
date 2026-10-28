@@ -34,6 +34,8 @@ public:
 private:
 	//移動
 	void Move(const FighterInput& input);
+	//回転
+	void Rotate(const FighterInput& input);
 	//攻撃
 	void Shoot(const FighterInput& input);
 	//カメラの移動
