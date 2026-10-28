@@ -1,6 +1,7 @@
 ﻿#include"TestScene.h"
-#include"../SourceCode/Fighter.h"
-#include"../SourceCode/PlayerController.h"
+#include"Fighter.h"
+#include"PlayerController.h"
+#include"TargetObject.h"
 #include"Obstacle.h"
 
 //コンストラクタ
@@ -14,6 +15,9 @@ void TestScene::Initialize()
 {
 	Fighter* fighter = Instantiate<Fighter>(this);
 	fighter->SetController(new PlayerController());
+
+	TargetObject* target = Instantiate<TargetObject>(this);
+	target->SetPosition(XMFLOAT3(0.0f, 2.0f, 3.49f));
 
 	const int OBSTACLE_COUNT = 6;
 	XMFLOAT3 positions[OBSTACLE_COUNT] =

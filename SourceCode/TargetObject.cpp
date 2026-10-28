@@ -6,7 +6,8 @@
 TargetObject::TargetObject(GameObject* parent)
 	:GameObject(parent,"TargetObject"),
 	hModel_(-1),
-	text_(nullptr)
+	text_(nullptr),
+	score_(0)
 {
 }
 
@@ -21,6 +22,11 @@ void TargetObject::Initialize()
 
 	hModel_ = Model::Load("Target.fbx");
 	assert(hModel_ >= 0);
+
+	transform_.rotate_.x = -90;
+
+	text_ = new Text();
+	text_->Initialize();
 }
 
 void TargetObject::Update()
@@ -31,6 +37,10 @@ void TargetObject::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
+	char score[20];
+	sprintf_s(score, sizeof(score), "SCORE : %4d", score_);
+	text_->Draw(50, 50, score);
 }
 
 void TargetObject::Release()
@@ -39,5 +49,30 @@ void TargetObject::Release()
 
 void TargetObject::OnCollision(GameObject* other, Collider* col)
 {
+	std::string name = other->GetObjectName();
 
+	if (name == "Ball")
+	{
+		OnCollisionBall(other, col);
+	}
+}
+
+void TargetObject::OnCollisionBall(GameObject* ball, Collider* col)
+{
+	XMFLOAT3 pos = transform_.position_;
+	XMVECTOR boxPos = XMLoadFloat3(&pos);
+	XMVECTOR boxMin = boxPos - (XMLoadFloat3(&COL_SIZE) * 2.0f);
+	XMVECTOR boxMax = boxPos + (XMLoadFloat3(&COL_SIZE) * 2.0f);
+
+	XMFLOAT3 sPos = ball->GetPosition();
+	float radius = col->GetSize().x;
+	XMVECTOR spherePos = XMLoadFloat3(&sPos);
+
+	XMVECTOR closestPoint = XMVectorClamp(spherePos, boxMin, boxMax);
+	XMVECTOR diff = boxPos - closestPoint;
+	float distance = 0.0f;
+
+	XMStoreFloat(&distance, XMVector3Length(diff));
+
+	score_ = 100 - static_cast<int>(distance * 100);
 }

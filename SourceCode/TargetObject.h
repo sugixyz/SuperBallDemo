@@ -14,8 +14,11 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* other, Collider* col) override;
 private:
+	void OnCollisionBall(GameObject* ball, Collider* col);
+private:
 	int hModel_;
 	Text* text_;
+	int score_;
 private:
-	static constexpr XMFLOAT3 COL_SIZE = { 1.0f,1.0f,0.1f };
+	static constexpr XMFLOAT3 COL_SIZE = { 1.0f,1.0f,0.01f };
 };
