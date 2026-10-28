@@ -7,7 +7,8 @@
 Ball::Ball(GameObject* parent)
 	:GameObject(parent,"Ball"),
 	hModel_(-1),
-	move_(nullptr)
+	move_(nullptr),
+	isColliding_(false)
 {
 }
 
@@ -33,6 +34,9 @@ void Ball::Initialize()
 void Ball::Update()
 {
 	transform_.position_ = move_->Move(transform_);
+
+	if (!isColliding_)move_->EnableGravity();
+	isColliding_ = false;
 }
 
 void Ball::Draw()
@@ -48,16 +52,25 @@ void Ball::Release()
 void Ball::OnCollision(GameObject* other, Collider* col)
 {
 	std::string name = other->GetObjectName();
+	isColliding_ = true;
 
-	if (other->GetObjectName() == "Obstacle")
+	if (name == "Obstacle")
 	{
 		CollisionObstacle(other,col);
 		move_->ResetGravity();
+		return;
 	}
-	else if (other->GetObjectName() == "Fighter")
+	else if (name == "Fighter")
 	{
 		CollisionPlayer(other,col);
+		return;
 	}
+	else if (name == "Ball")
+	{
+		CollisionBall(other, col);
+		return;
+	}
+
 }
 
 void Ball::SetMoveDirection(XMVECTOR direction)
@@ -112,6 +125,34 @@ void Ball::CollisionPlayer(GameObject * player, Collider* col)
 
 }
 
+void Ball::CollisionBall(GameObject* ball, Collider* col)
+{
+	XMFLOAT3 ballAPos = transform_.position_;
+	XMVECTOR sphereAPos = XMLoadFloat3(&ballAPos);
+
+	XMFLOAT3 ballBPos = ball->GetPosition();
+	XMVECTOR sphereBPos = XMLoadFloat3(&ballBPos);
+
+	XMVECTOR normal = CalculateSphereCollisionNormal(sphereAPos, sphereBPos);
+	XMVECTOR tangentLine = CalculateSphereCollisionTangentLine(normal);
+
+	XMVECTOR directionA = XMVector3Normalize(move_->GetVelocity());
+	MoveComponent* moveB = ball->GetMoveComponent();
+	XMVECTOR directionB = XMVector3Normalize(moveB->GetVelocity());
+
+	XMVECTOR nA = XMVector3Dot(directionA, normal);
+	XMVECTOR nB = XMVector3Dot(directionB, normal);
+
+	XMVECTOR tA = directionA - nA;
+	XMVECTOR tB = directionB - nB;
+
+	XMVECTOR direction = nB * normal + tA;
+	move_->SetDirection(direction);
+
+	float speed = moveB->GetSpeed();
+	move_->SetSpeed(speed);
+}
+
 XMVECTOR Ball::CalculateBoxCollsionNormal(XMVECTOR spherePos, XMVECTOR boxCenter, XMVECTOR boxMin, XMVECTOR boxMax)
 {
 	//ボックス表面上の、球の中心の最近点を計算
@@ -125,7 +166,14 @@ XMVECTOR Ball::CalculateBoxCollsionNormal(XMVECTOR spherePos, XMVECTOR boxCenter
 
 XMVECTOR Ball::CalculateSphereCollisionNormal(XMVECTOR sphereAPos, XMVECTOR sphereBPos)
 {
-	XMVECTOR direction = sphereBPos - sphereAPos;
+	XMVECTOR direction = sphereAPos - sphereBPos;
 
 	return XMVector3Normalize(direction);
+}
+
+XMVECTOR Ball::CalculateSphereCollisionTangentLine(XMVECTOR normal)
+{
+	XMVECTOR tangentLine = XMVector3Cross(normal, UP);
+
+	return XMVector3Normalize(tangentLine);
 }

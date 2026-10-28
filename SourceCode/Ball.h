@@ -25,15 +25,21 @@ private:
 	void CollisionObstacle(GameObject* obstacle, Collider* col);
 	//プレイヤーに接触したときの処理
 	void CollisionPlayer(GameObject* player, Collider* col);
-	//ボックスの法線を計算する関数
+	//ボールに接触したときの処理
+	void CollisionBall(GameObject* ball, Collider* col);
+	//ボックスとの法線を計算する関数
 	XMVECTOR CalculateBoxCollsionNormal(XMVECTOR spherePos, XMVECTOR boxCenter, XMVECTOR boxMin, XMVECTOR boxMax);
-	//球の法線を計算する関数
+	//球との法線を計算する関数
 	XMVECTOR CalculateSphereCollisionNormal(XMVECTOR sphereAPos, XMVECTOR sphereBPos);
+	//球との接線を計算する関数
+	XMVECTOR CalculateSphereCollisionTangentLine(XMVECTOR normal);
 private:
 	//モデルハンドル
 	int hModel_;
 	//移動のコンポーネントポインタ
 	MoveComponent* move_;
+	//何かに接触したかどうか
+	bool isColliding_;
 private:
 	//コライダーの中心位置
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.0f,0.0f };
@@ -43,4 +49,6 @@ private:
 	static constexpr float MOVE_SPEED = 8.0f;
 	//反発係数
 	static constexpr float RESTITUTION = 0.95f;
+	//ワールド座標上の上ベクトル
+	static constexpr XMVECTOR UP = { 0.0f,0.0f,1.0f,0.0f };
 };

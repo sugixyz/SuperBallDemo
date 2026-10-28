@@ -18,7 +18,7 @@ void Gun::Initialize()
 	assert(hModel_ >= 0);
 
 	transform_.position_.x -= 0.1f;
-	transform_.position_.z += 0.2f;
+	transform_.position_.z += 0.4f;
 
 	transform_.rotate_.x -= 30;
 }
