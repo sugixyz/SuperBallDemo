@@ -7,8 +7,8 @@ class Gun;
 
 enum class CamType
 {
-	TPS,
-	FPS
+	TPS,	//三人称視点
+	FPS		//一人称視点
 };
 
 class Fighter : public GameObject
@@ -68,13 +68,16 @@ private:
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.5f,0.0f };
 	//コライダーのサイズ
 	static constexpr XMFLOAT3 COL_SIZE = { 0.4f,1.0f,0.4f };
+
 	//移動速度
 	static constexpr float MOVE_SPEED = 4.5f;
 	//最大HP
 	static constexpr float MAX_HP = 100.0f;
 	//前方ベクトル
 	static constexpr XMVECTOR FRONT = { 0.0f,0.0f,1.0f,0.0f };
+
 	//カメラの定数
 	static constexpr float TPS_HEIGHT_BIAS = 2.0f;
 	static constexpr float TPS_FRONT_BIAS = 4.0f;
+	static constexpr float TPS_CAM_BIAS = 1.0f;
 };
