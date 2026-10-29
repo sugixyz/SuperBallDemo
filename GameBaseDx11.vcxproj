@@ -140,6 +140,7 @@
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
+    <ClCompile Include="Engine\OBBCollider.cpp" />
     <ClCompile Include="Engine\Timer.cpp" />
     <ClCompile Include="Engine\VFX.cpp" />
     <ClCompile Include="Engine\RootObject.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Model.h" />
+    <ClInclude Include="Engine\OBBCollider.h" />
     <ClInclude Include="Engine\Timer.h" />
     <ClInclude Include="Engine\VFX.h" />
     <ClInclude Include="Engine\RootObject.h" />

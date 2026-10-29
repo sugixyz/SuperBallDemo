@@ -7,12 +7,13 @@ using namespace DirectX;
 class GameObject;
 class BoxCollider;
 class SphereCollider;
-
+class OBBCollider;
 
 //あたり判定のタイプ
 enum ColliderType
 {
 	COLLIDER_BOX,		//箱型
+	COLLIDER_OBB,		//OBB
 	COLLIDER_CIRCLE		//球体
 };
 
@@ -24,6 +25,7 @@ class Collider
 	//それぞれのクラスのprivateメンバにアクセスできるようにする
 	friend class BoxCollider;
 	friend class SphereCollider;
+	friend class OBBCollider;
 
 protected:
 	GameObject*		pGameObject_;	//この判定をつけたゲームオブジェクト
@@ -52,7 +54,7 @@ public:
 
 	//箱型と球体の衝突判定
 	//引数：box	箱型判定
-	//引数：sphere	２つ目の箱型判定
+	//引数：sphere	球体型判定
 	//戻値：接触していればtrue
 	bool IsHitBoxVsCircle(BoxCollider* box, SphereCollider* sphere);
 
@@ -61,6 +63,16 @@ public:
 	//引数：circleB	２つ目の球体判定
 	//戻値：接触していればtrue
 	bool IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circleB);
+
+	//OBBと球体の衝突判定
+	//引数：obb	OBB判定
+	//引数：sphere	２つ目の箱型判定
+	//戻値：接触していればtrue
+	bool IsHitOBBVsCircle(OBBCollider* obb, SphereCollider* sphere);
+
+	bool IsHitOBBVsBox(OBBCollider* obb, BoxCollider* box);
+
+	bool IsHitOBBVsOBB(OBBCollider* obbA, OBBCollider* obbB);
 
 	//テスト表示用の枠を描画
 	//引数：position	オブジェクトの位置

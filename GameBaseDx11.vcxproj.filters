@@ -140,6 +140,7 @@
     <ClCompile Include="SourceCode\AutoController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OBBCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -250,6 +251,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\TargetObject.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OBBCollider.h">
+      <Filter>01Engine\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
