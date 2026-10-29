@@ -64,7 +64,8 @@ public:
 
 	//テスト表示用の枠を描画
 	//引数：position	オブジェクトの位置
-	void Draw(XMFLOAT3 position);
+	//引数：rotation	オブジェクトの回転
+	void Draw(XMFLOAT3 position,XMFLOAT3 rotation);
 
 	//セッター
 	void SetGameObject(GameObject* gameObject) { pGameObject_ = gameObject; }
