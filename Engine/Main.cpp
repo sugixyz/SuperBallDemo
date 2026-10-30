@@ -20,6 +20,7 @@
 #include "VFX.h"
 #include "Timer.h"
 #include"Debug.h"
+#include"Collision.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -68,6 +69,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//時間管理の初期化
 	Timer::Initialize();
+
+	//コライダー管理の初期化
+	Collision::Initialize();
 
 
 	//ルートオブジェクト準備
@@ -130,6 +134,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//全オブジェクトの更新処理
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->UpdateSub();
+				//当たり判定実行
+				Collision::UpdateCollisions();
 
 				//カメラを更新
 				Camera::Update();
@@ -146,6 +152,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//全オブジェクトを描画
 				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->DrawSub();
+				//コライダーを描画
+				Collision::DrawColliders();
 
 				//エフェクトの描画
 				VFX::Draw();
@@ -170,6 +178,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Model::AllRelease();
 	Image::AllRelease();
 	pRootObject->ReleaseSub();
+	Collision::ReleaseColliiders();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();
 

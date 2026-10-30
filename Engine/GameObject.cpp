@@ -1,6 +1,7 @@
 ﻿#include "gameObject.h"
 #include <assert.h>
 #include "global.h"
+#include"Collision.h"
 
 //コンストラクタ（親も名前もなし）
 GameObject::GameObject(void) :
@@ -36,6 +37,7 @@ GameObject::~GameObject()
 {
 	for (auto it = colliderList_.begin(); it != colliderList_.end(); it++)
 	{
+		Collision::ClearCollider(*it);
 		SAFE_DELETE(*it);
 	}
 	colliderList_.clear();
@@ -218,6 +220,7 @@ void GameObject::AddCollider(Collider* collider)
 {
 	collider->SetGameObject(this);
 	colliderList_.push_back(collider);
+	Collision::AddCollider(collider);
 }
 
 //コライダー（衝突判定）を削除
@@ -225,58 +228,10 @@ void GameObject::ClearCollider()
 {
 	for (auto it = colliderList_.begin(); it != colliderList_.end(); it++)
 	{
+		Collision::ClearCollider(*it);
 		SAFE_DELETE(*it);
 	}
 	colliderList_.clear();
-}
-
-//衝突判定
-void GameObject::Collision(GameObject * pTarget)
-{
-	//自分同士の当たり判定はしない
-	if (pTarget == nullptr || this == pTarget)
-	{
-		return;
-	}
-
-	//自分とpTargetのコリジョン情報を使って当たり判定
-	//1つのオブジェクトが複数のコリジョン情報を持ってる場合もあるので二重ループ
-	for (auto i = this->colliderList_.begin(); i != this->colliderList_.end(); i++)
-	{
-		for (auto j = pTarget->colliderList_.begin(); j != pTarget->colliderList_.end(); j++)
-		{
-			if ((*i)->IsHit(*j))
-			{
-				Collider* col = *j;
-				//当たった
-				this->OnCollision(pTarget,col);
-			}
-		}
-	}
-
-	//子供がいないなら終わり
-	if (pTarget->childList_.empty())
-		return;
-
-	//子供も当たり判定
-	for (auto i = pTarget->childList_.begin(); i != pTarget->childList_.end(); i++)
-	{
-		Collision(*i);
-	}
-}
-
-
-//テスト用の衝突判定枠を表示
-void GameObject::CollisionDraw()
-{
-	Direct3D::SetShader(Direct3D::SHADER_UNLIT);
-
-	for (auto i = this->colliderList_.begin(); i != this->colliderList_.end(); i++)
-	{
-		(*i)->Draw(this->GetWorldPosition(),this->GetWorldRotate());
-	}
-
-	Direct3D::SetShader(Direct3D::SHADER_3D);
 }
 
 //RootJobを取得
@@ -312,8 +267,6 @@ void GameObject::UpdateSub()
 		}
 		else
 		{
-			//当たり判定
-			(*it)->Collision(GetParent());
 			it++;
 		}
 	}
@@ -326,11 +279,7 @@ void GameObject::DrawSub()
 
 	//リリース時は削除
 #ifdef _DEBUG
-		//コリジョンの描画
-	if (Direct3D::isDrawCollision_)
-	{
-		CollisionDraw();
-	}
+	
 #endif
 
 	//その子オブジェクトの描画処理

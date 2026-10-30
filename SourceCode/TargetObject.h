@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"../Engine/GameObject.h"
 
 class Text;
@@ -20,5 +20,5 @@ private:
 	Text* text_;
 	int score_;
 private:
-	static constexpr XMFLOAT3 COL_SIZE = { 1.0f,1.0f,0.05f };
+	static constexpr XMFLOAT3 COL_SIZE = { 1.0f,0.05f,1.0f };
 };

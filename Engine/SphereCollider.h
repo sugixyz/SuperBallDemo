@@ -1,25 +1,17 @@
-#pragma once
+ï»¿#pragma once
 #include "Collider.h"
 
 
 //-----------------------------------------------------------
-//‹…‘Ì‚Ì“–‚½‚è”»’è
+//çƒä½“ã®å½“ãŸã‚Šåˆ¤å®š
 //-----------------------------------------------------------
 class SphereCollider : public Collider
 {
-	//ColliderƒNƒ‰ƒX‚Ìprivateƒƒ“ƒo‚ÉƒAƒNƒZƒX‚Å‚«‚é‚æ‚¤‚É‚·‚é
-	friend class Collider;
-
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^i“–‚½‚è”»’è‚Ìì¬j
-	//ˆø”FbasePos	“–‚½‚è”»’è‚Ì’†SˆÊ’uiƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ÌŒ´“_‚©‚çŒ©‚½ˆÊ’uj
-	//ˆø”Fradius	“–‚½‚è”»’è‚ÌƒTƒCƒYi”¼Œaj
-	SphereCollider(XMFLOAT3 center, float radius);
-
-private:
-	//ÚG”»’è
-	//ˆø”Ftarget	‘Šè‚Ì“–‚½‚è”»’è
-	//–ß’lFÚG‚µ‚Ä‚ê‚Îtrue
-	bool IsHit(Collider* target) override;
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆå½“ãŸã‚Šåˆ¤å®šã®ä½œæˆï¼‰
+	//å¼•æ•°ï¼šbasePos	å½“ãŸã‚Šåˆ¤å®šã®ä¸­å¿ƒä½ç½®ï¼ˆã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åŸç‚¹ã‹ã‚‰è¦‹ãŸä½ç½®ï¼‰
+	//å¼•æ•°ï¼šradius	å½“ãŸã‚Šåˆ¤å®šã®ã‚µã‚¤ã‚ºï¼ˆåŠå¾„ï¼‰
+	//å¼•æ•°ï¼šfilter	å½“ãŸã‚Šåˆ¤å®šç”¨ã®ãƒ•ã‚£ãƒ«ã‚¿
+	SphereCollider(XMFLOAT3 center, float radius, CollisionFilter filter = CollisionFilter());
 };
 

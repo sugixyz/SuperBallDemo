@@ -5,6 +5,7 @@
 #include <assert.h>
 #include "SphereCollider.h"
 #include "BoxCollider.h"
+#include"OBBCollider.h"
 #include "Transform.h"
 
 class MoveComponent;
@@ -126,20 +127,12 @@ public:
 	void AddCollider(Collider * collider);
 
 	//何かと衝突した場合に呼ばれる（オーバーライド用）
-	//引数：pTarget	衝突した相手
-	virtual void OnCollision(GameObject* pTarget) {};
-
+	//引数：other	衝突した相手
+	//引数：col		衝突した相手のコライダー
 	virtual void OnCollision(GameObject* other, Collider* col) {};
 
 	//コライダー（衝突判定）を削除
 	void ClearCollider();
-
-	//衝突判定
-	//引数：pTarget	衝突してるか調べる相手
-	void Collision(GameObject* pTarget);
-
-	//テスト用の衝突判定枠を表示
-	void CollisionDraw();
 
 	//RootJobを取得
 	GameObject* GetRootJob();
@@ -162,7 +155,7 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
-	auto GetCollider() { return colliderList_; }
+	//auto GetCollider() { return colliderList_; }
 private:
 
 	//オブジェクト削除（再帰）

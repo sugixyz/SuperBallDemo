@@ -27,7 +27,9 @@ void Fighter::Initialize()
 	hModel_ = Model::Load("PlayerDemo.fbx");
 	assert(hModel_ >= 0);
 
-	BoxCollider* col = new BoxCollider(COL_POS, COL_SIZE);
+	uint32_t mask = LayerBit(CollisionLayer::DEFAULT);
+	CollisionFilter filter = CollisionFilter(CollisionLayer::FIGHTER,mask);
+	BoxCollider* col = new BoxCollider(COL_POS, COL_SIZE,filter);
 	AddCollider(col);
 
 	health_ = new HealthComponent();
