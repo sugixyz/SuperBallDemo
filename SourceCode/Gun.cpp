@@ -1,6 +1,13 @@
 ﻿#include "Gun.h"
 #include"../Engine/Model.h"
 #include"Ball.h"
+#include"../Engine/Text.h"
+
+namespace
+{
+	Text* text = new Text();
+	int count = 0;
+}
 
 Gun::Gun(GameObject* parent)
 	:GameObject(parent,"Gun"),
@@ -21,6 +28,8 @@ void Gun::Initialize()
 	transform_.position_.z += 0.4f;
 
 	transform_.rotate_.x -= 30;
+
+	text->Initialize();
 }
 
 void Gun::Update()
@@ -31,6 +40,8 @@ void Gun::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
+
+	text->Draw(500, 100, count);
 }
 
 void Gun::Release()
@@ -50,4 +61,6 @@ void Gun::ShootBullet()
 	Ball* ball = Instantiate<Ball>(this->GetParent()->GetParent());
 	ball->SetPosition(gunMuzzle);
 	ball->SetMoveDirection(vMove);
+
+	count++;
 }

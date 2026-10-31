@@ -59,6 +59,12 @@ private:
 	//コンストラクタ
 	CollisionManager();
 
+	//ブロードフェーズ
+	bool IsHitBroadPhase(Collider* a, Collider* b);
+
+	//大雑把な衝突チェック
+	bool CheckCollisionRough(Collider* a, Collider* b);
+
 	//接触判定を行う
 	bool IsHit(Collider* a, Collider* b);
 

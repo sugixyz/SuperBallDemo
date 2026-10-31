@@ -1,5 +1,6 @@
-#include "PlayerController.h"
+﻿#include "PlayerController.h"
 #include"../Engine/Input.h"
+#include"../Engine/Timer.h"
 
 PlayerController::PlayerController()
 {
@@ -29,4 +30,14 @@ void PlayerController::Update()
 	else if (Input::IsKey(DIK_DOWN))fighterInput_.cameraInput.y = -1.0f;
 
 	if (Input::IsKeyDown(DIK_SPACE))fighterInput_.isShootPressed = true;
+	else if (Input::IsKey(DIK_SPACE))
+	{
+		static float timer = 0.0f;
+		timer += Timer::GetDeltaTime();
+		if (timer >= 0.1f)
+		{
+			fighterInput_.isShootPressed = true;
+			timer = 0.0f;
+		}
+	}
 }

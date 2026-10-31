@@ -13,5 +13,7 @@ public:
 	//引数：radius	当たり判定のサイズ（半径）
 	//引数：filter	当たり判定用のフィルタ
 	SphereCollider(XMFLOAT3 center, float radius, CollisionFilter filter = CollisionFilter());
+private:
+	float CalculateBoundingRadius(const XMFLOAT3& size) override;
 };
 

@@ -9,7 +9,7 @@
 OBBCollider::OBBCollider(XMFLOAT3 basePos, XMFLOAT3 size, CollisionFilter filter)
 {
 	center_ = basePos;
-	size_ = size;
+	SetSize(size);
 	type_ = COLLIDER_OBB;
 	filter_ = filter;
 
@@ -18,4 +18,10 @@ OBBCollider::OBBCollider(XMFLOAT3 basePos, XMFLOAT3 size, CollisionFilter filter
 	//テスト表示用判定枠
 	hDebugModel_ = Model::Load("DebugCollision/boxCollider.fbx");
 #endif
+}
+
+float OBBCollider::CalculateBoundingRadius(const XMFLOAT3& size)
+{
+	//各軸のサイズから対角線の半分の長さを計算
+	return sqrtf((size.x * size.x + size.y * size.y + size.z * size.z) / 4.0f);
 }

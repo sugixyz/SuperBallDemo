@@ -8,7 +8,7 @@
 SphereCollider::SphereCollider(XMFLOAT3 center, float radius, CollisionFilter filter)
 {
 	center_ = center;
-	size_ = XMFLOAT3(radius, radius, radius);
+	SetSize(XMFLOAT3(radius, radius, radius));
 	type_ = COLLIDER_CIRCLE;
 	filter_ = filter;
 
@@ -17,4 +17,10 @@ SphereCollider::SphereCollider(XMFLOAT3 center, float radius, CollisionFilter fi
 	//テスト表示用判定枠
 	hDebugModel_ = Model::Load("DebugCollision/sphereCollider.fbx");
 #endif
+}
+
+float SphereCollider::CalculateBoundingRadius(const XMFLOAT3& size)
+{
+	//球は半径を返す
+	return  size.x;
 }

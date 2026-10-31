@@ -42,14 +42,14 @@ void CollisionManager::UpdateCollisions()
             CollisionFilter filterB = colB->GetCollisionFilter();
 
             //グローバルマトリックスのチェック
-            if (collisionMatrix_.ShouldCollide(filterA.layer, filterB.layer) == false)
-            {
-                continue;
-            }
+            if (collisionMatrix_.ShouldCollide(filterA.layer, filterB.layer) == false)continue;
 
             //個別のマスクのチェック
             if ((filterA.mask & LayerBit(filterB.layer)) == 0)continue;
             if ((filterB.mask & LayerBit(filterA.layer)) == 0)continue;
+
+            //ブロードフェーズ
+            if (IsHitBroadPhase(colA, colB) == false)continue;
 
             //接触判定
             if (IsHit(colA, colB))
@@ -100,6 +100,24 @@ CollisionManager::CollisionManager()
 {
     collisionMatrix_ = CollisionMatrix();
     colliders_.clear();
+}
+
+bool CollisionManager::IsHitBroadPhase(Collider* a, Collider* b)
+{
+    //それぞれの最大半径を取得
+    float boundingRadiusA = a->GetBoundingRadius();
+    float boundingRadiusB = b->GetBoundingRadius();
+    float boundingRadius = boundingRadiusA + boundingRadiusB;
+
+    //２つの距離の２乗を計算
+    XMFLOAT3 aPos = a->GetGameObject()->GetWorldPosition();
+    XMFLOAT3 bPos = b->GetGameObject()->GetWorldPosition();
+    XMVECTOR diff = XMLoadFloat3(&aPos) - XMLoadFloat3(&bPos);
+    float distSq;
+    XMStoreFloat(&distSq, XMVector3LengthSq(diff));
+
+    //距離の２乗が半径の２乗より小さければtrue
+    return (distSq < boundingRadius * boundingRadius);
 }
 
 bool CollisionManager::IsHit(Collider* a, Collider* b)
@@ -171,20 +189,22 @@ bool CollisionManager::IsHitBoxVsCircle(BoxCollider* box, SphereCollider* sphere
 
 bool CollisionManager::IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circleB)
 {
-    XMFLOAT3 centerA = circleA->GetCenter();
-    XMFLOAT3 positionA = circleA->GetGameObject()->GetWorldPosition();
-    XMFLOAT3 centerB = circleB->GetCenter();
-    XMFLOAT3 positionB = circleB->GetGameObject()->GetWorldPosition();
+    //XMFLOAT3 centerA = circleA->GetCenter();
+    //XMFLOAT3 positionA = circleA->GetGameObject()->GetWorldPosition();
+    //XMFLOAT3 centerB = circleB->GetCenter();
+    //XMFLOAT3 positionB = circleB->GetGameObject()->GetWorldPosition();
 
-    XMVECTOR v = (XMLoadFloat3(&centerA) + XMLoadFloat3(&positionA))
-        - (XMLoadFloat3(&centerB) + XMLoadFloat3(&positionB));
+    //XMVECTOR v = (XMLoadFloat3(&centerA) + XMLoadFloat3(&positionA))
+    //    - (XMLoadFloat3(&centerB) + XMLoadFloat3(&positionB));
 
-    if (XMVector3Length(v).m128_f32[0] <= circleA->GetSize().x + circleB->GetSize().x)
-    {
-        return true;
-    }
+    //if (XMVector3Length(v).m128_f32[0] <= circleA->GetSize().x + circleB->GetSize().x)
+    //{
+    //    return true;
+    //}
 
-    return false;
+    //return false;
+
+    return true;
 }
 
 bool CollisionManager::IsHitOBBVsCircle(OBBCollider* obb, SphereCollider* sphere)

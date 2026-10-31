@@ -140,7 +140,15 @@
     <ClCompile Include="SourceCode\AutoController.cpp">
       <Filter>Controller</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\OBBCollider.cpp" />
+    <ClCompile Include="Engine\OBBCollider.cpp">
+      <Filter>01Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionManager.cpp">
+      <Filter>01Engine\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionMatrix.cpp">
+      <Filter>01Engine\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -253,6 +261,21 @@
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Engine\OBBCollider.h">
+      <Filter>01Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Collision.h">
+      <Filter>01Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionFilter.h">
+      <Filter>01Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionLayer.h">
+      <Filter>01Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionManager.h">
+      <Filter>01Engine\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\CollisionMatrix.h">
       <Filter>01Engine\Collider</Filter>
     </ClInclude>
   </ItemGroup>

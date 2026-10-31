@@ -64,7 +64,7 @@ void Ball::OnCollision(GameObject* other, Collider* col)
 	}
 	else if (name == "Fighter")
 	{
-		CollisionPlayer(other,col);
+		//CollisionPlayer(other,col);
 		return;
 	}
 	else if (name == "Ball")
