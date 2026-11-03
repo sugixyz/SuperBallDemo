@@ -278,6 +278,9 @@
     <ClInclude Include="Engine\CollisionMatrix.h">
       <Filter>01Engine\Collider</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\CollisionData.h">
+      <Filter>01Engine\Collider</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

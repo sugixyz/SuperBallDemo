@@ -1,6 +1,5 @@
 ﻿#include "Obstacle.h"
 #include"../Engine/BoxCollider.h"
-#include"../Engine/SphereCollider.h"
 #include"../Engine/Model.h"
 
 Obstacle::Obstacle(GameObject* parent)

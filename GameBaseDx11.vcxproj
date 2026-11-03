@@ -170,6 +170,7 @@
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\Collider.h" />
     <ClInclude Include="Engine\Collision.h" />
+    <ClInclude Include="Engine\CollisionData.h" />
     <ClInclude Include="Engine\CollisionFilter.h" />
     <ClInclude Include="Engine\CollisionLayer.h" />
     <ClInclude Include="Engine\CollisionManager.h" />

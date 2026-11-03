@@ -2,6 +2,7 @@
 #include"../Engine/Model.h"
 #include"Controller.h"
 #include"../Engine/BoxCollider.h"
+#include"../Engine/OBBCollider.h"
 #include"HealthComponent.h"
 #include"MoveComponent.h"
 #include"../Engine/Camera.h"
@@ -29,7 +30,7 @@ void Fighter::Initialize()
 
 	uint32_t mask = LayerBit(CollisionLayer::DEFAULT);
 	CollisionFilter filter = CollisionFilter(CollisionLayer::FIGHTER,mask);
-	BoxCollider* col = new BoxCollider(COL_POS, COL_SIZE,filter);
+	OBBCollider* col = new OBBCollider(COL_POS, COL_SIZE,filter);
 	AddCollider(col);
 
 	health_ = new HealthComponent();

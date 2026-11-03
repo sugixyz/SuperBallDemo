@@ -72,37 +72,37 @@ private:
 	//引数：boxA	１つ目の箱型判定
 	//引数：boxB	２つ目の箱型判定
 	//戻値：接触していればtrue
-	bool IsHitBoxVsBox(BoxCollider* boxA, BoxCollider* boxB);
+	bool IsHitBoxVsBox(Collider* boxA, Collider* boxB);
 
 	//箱型と球体の衝突判定
 	//引数：box	箱型判定
 	//引数：sphere	球体型判定
 	//戻値：接触していればtrue
-	bool IsHitBoxVsCircle(BoxCollider* box, SphereCollider* sphere);
+	bool IsHitBoxVsSphere(Collider* box, Collider* sphere);
 
 	//球体同士の衝突判定
-	//引数：circleA	１つ目の球体判定
-	//引数：circleB	２つ目の球体判定
+	//引数：sphereA	１つ目の球体判定
+	//引数：sphereB	２つ目の球体判定
 	//戻値：接触していればtrue
-	bool IsHitCircleVsCircle(SphereCollider* circleA, SphereCollider* circleB);
+	bool IsHitSphereVsSphere(Collider* sphereA, Collider* sphereB);
 
 	//OBBと球体の衝突判定
 	//引数：obb	OBB判定
 	//引数：sphere	球体型判定
 	//戻値：接触していればtrue
-	bool IsHitOBBVsCircle(OBBCollider* obb, SphereCollider* sphere);
+	bool IsHitOBBVsSphere(Collider* obb, Collider* sphere);
 
 	//OBBと箱型の衝突判定
 	//引数：obb	OBB判定
 	//引数：box	箱型判定
 	//戻値：接触していればtrue
-	bool IsHitOBBVsBox(OBBCollider* obb, BoxCollider* box);
+	bool IsHitOBBVsBox(Collider* obb, Collider* box);
 
 	//OBB同士の衝突判定
 	//引数：obbA	１つ目のOBB判定
 	//引数：obbB	２つ目のOBB判定
 	//戻値：接触していればtrue
-	bool IsHitOBBVsOBB(OBBCollider* obbA, OBBCollider* obbB);
+	bool IsHitOBBVsOBB(Collider* obbA, Collider* obbB);
 private:
 	//コライダーマトリックス
 	CollisionMatrix collisionMatrix_;
