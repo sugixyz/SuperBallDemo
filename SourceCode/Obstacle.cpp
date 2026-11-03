@@ -1,5 +1,6 @@
 ﻿#include "Obstacle.h"
 #include"../Engine/BoxCollider.h"
+#include"../Engine/OBBCollider.h"
 #include"../Engine/Model.h"
 
 Obstacle::Obstacle(GameObject* parent)
@@ -32,14 +33,17 @@ void Obstacle::Release()
 {
 }
 
-void Obstacle::OnCollision(GameObject* other,Collider* col)
+void Obstacle::OnCollision(const CollisionData& data)
 {
+	GameObject* other = data.other;
+	Collider* col = data.otherCollider;
+
 	BoxCollider* bCol = dynamic_cast<BoxCollider*>(col);
 
 	std::string name = other->GetObjectName();
 	if (name == "Ball")
 	{
-		CollisionBall(other, col);
+		//CollisionBall(other, col);
 	}
 	else if (name == "Fighter")
 	{
@@ -51,7 +55,8 @@ void Obstacle::SetObject(XMFLOAT3 position, XMFLOAT3 scale)
 	transform_.position_ = position;
 	transform_.scale_ = scale;
 
-	BoxCollider* col = new BoxCollider(XMFLOAT3(0.0f,0.0f,0.0f), transform_.scale_);
+	//BoxCollider* col = new BoxCollider(XMFLOAT3(0.0f,0.0f,0.0f), transform_.scale_);
+	OBBCollider* col = new OBBCollider(XMFLOAT3(0.0f,0.0f,0.0f), transform_.scale_);
 	AddCollider(col);
 }
 

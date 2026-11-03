@@ -21,7 +21,7 @@ public:
 	void Draw() override;
 	void Release() override;
 
-	void OnCollision(GameObject* other,Collider* col) override;
+	void OnCollision(const CollisionData& data) override;
 
 	/// <summary>
 	/// ファイター用のコントローラーを設定する

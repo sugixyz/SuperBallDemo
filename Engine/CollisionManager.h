@@ -1,12 +1,10 @@
 ﻿#pragma once
 #include"CollisionMatrix.h"
+#include"CollisionData.h"
 #include<vector>
 
 class CollisionFilter;
 class Collider;
-class BoxCollider;
-class SphereCollider;
-class OBBCollider;
 
 class CollisionManager
 {
@@ -66,43 +64,37 @@ private:
 	bool CheckCollisionRough(Collider* a, Collider* b);
 
 	//接触判定を行う
-	bool IsHit(Collider* a, Collider* b);
+	CollisionData IsHit(Collider* a, Collider* b);
 
 	//箱型同士の衝突判定
 	//引数：boxA	１つ目の箱型判定
 	//引数：boxB	２つ目の箱型判定
-	//戻値：接触していればtrue
-	bool IsHitBoxVsBox(Collider* boxA, Collider* boxB);
+	void IsHitBoxVsBox(Collider* boxA, Collider* boxB,CollisionData& data);
 
 	//箱型と球体の衝突判定
 	//引数：box	箱型判定
 	//引数：sphere	球体型判定
-	//戻値：接触していればtrue
-	bool IsHitBoxVsSphere(Collider* box, Collider* sphere);
+	void IsHitBoxVsSphere(Collider* box, Collider* sphere, CollisionData& data);
 
 	//球体同士の衝突判定
 	//引数：sphereA	１つ目の球体判定
 	//引数：sphereB	２つ目の球体判定
-	//戻値：接触していればtrue
-	bool IsHitSphereVsSphere(Collider* sphereA, Collider* sphereB);
+	void IsHitSphereVsSphere(Collider* sphereA, Collider* sphereB, CollisionData& data);
 
 	//OBBと球体の衝突判定
 	//引数：obb	OBB判定
 	//引数：sphere	球体型判定
-	//戻値：接触していればtrue
-	bool IsHitOBBVsSphere(Collider* obb, Collider* sphere);
+	void IsHitOBBVsSphere(Collider* obb, Collider* sphere, CollisionData& data);
 
 	//OBBと箱型の衝突判定
 	//引数：obb	OBB判定
 	//引数：box	箱型判定
-	//戻値：接触していればtrue
-	bool IsHitOBBVsBox(Collider* obb, Collider* box);
+	void IsHitOBBVsBox(Collider* obb, Collider* box, CollisionData& data);
 
 	//OBB同士の衝突判定
 	//引数：obbA	１つ目のOBB判定
 	//引数：obbB	２つ目のOBB判定
-	//戻値：接触していればtrue
-	bool IsHitOBBVsOBB(Collider* obbA, Collider* obbB);
+	void IsHitOBBVsOBB(Collider* obbA, Collider* obbB, CollisionData& data);
 private:
 	//コライダーマトリックス
 	CollisionMatrix collisionMatrix_;

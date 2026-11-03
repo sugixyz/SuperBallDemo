@@ -83,9 +83,8 @@ void Fighter::Release()
 	delete move_;
 }
 
-void Fighter::OnCollision(GameObject* other, Collider* col)
-{
-}
+void Fighter::OnCollision(const CollisionData& data)
+{}
 
 void Fighter::Move(const FighterInput& input)
 {

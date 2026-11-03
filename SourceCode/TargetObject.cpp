@@ -1,4 +1,4 @@
-#include "TargetObject.h"
+﻿#include "TargetObject.h"
 #include"../Engine/Model.h";
 #include"../Engine/BoxCollider.h"
 #include"../Engine/Text.h"
@@ -47,8 +47,11 @@ void TargetObject::Release()
 {
 }
 
-void TargetObject::OnCollision(GameObject* other, Collider* col)
+void TargetObject::OnCollision(const CollisionData& data)
 {
+	GameObject* other = data.other;
+	Collider* col = data.otherCollider;
+
 	std::string name = other->GetObjectName();
 
 	if (name == "Ball")

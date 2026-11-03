@@ -6,6 +6,7 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 #include"OBBCollider.h"
+#include"CollisionData.h"
 #include "Transform.h"
 
 class MoveComponent;
@@ -127,9 +128,8 @@ public:
 	void AddCollider(Collider * collider);
 
 	//何かと衝突した場合に呼ばれる（オーバーライド用）
-	//引数：other	衝突した相手
-	//引数：col		衝突した相手のコライダー
-	virtual void OnCollision(GameObject* other, Collider* col) {};
+	//接触情報
+	virtual void OnCollision(const CollisionData& data) {};
 
 	//コライダー（衝突判定）を削除
 	void ClearCollider();

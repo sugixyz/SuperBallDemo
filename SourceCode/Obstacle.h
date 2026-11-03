@@ -14,7 +14,7 @@ public:
 	void Draw() override;
 	void Release() override;
 
-	void OnCollision(GameObject* other,Collider* col);
+	void OnCollision(const CollisionData& data);
 
 	/// <summary>
 	/// オブジェクトの初期設定

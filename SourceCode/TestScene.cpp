@@ -32,7 +32,7 @@ void TestScene::Initialize()
 		{8,2,0},
 		{0,2,8},
 		{0,2,-8},
-		{0,2.0f,4}
+		{0,2,4}
 	};
 	XMFLOAT3 scales[OBSTACLE_COUNT]
 	{
@@ -41,13 +41,17 @@ void TestScene::Initialize()
 		{1,4,16},
 		{16,4,1},
 		{16,4,1},
-		{1,3,1}
+		{1,1,1}
 	};
 
 	for (int i = 0;i < OBSTACLE_COUNT;i++)
 	{
 		Obstacle* obs = Instantiate<Obstacle>(this);
 		obs->SetObject(positions[i], scales[i]);
+		if (i + 1 == OBSTACLE_COUNT)
+		{
+			obs->SetRotate(XMFLOAT3(45, 0, 45));
+		}
 	}
 }
 

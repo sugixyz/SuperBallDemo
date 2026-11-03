@@ -1,9 +1,6 @@
 ﻿#include "CollisionManager.h"
 #include"CollisionFilter.h"
 #include"Collider.h"
-#include"BoxCollider.h"
-#include"SphereCollider.h"
-#include"OBBCollider.h"
 #include"GameObject.h"
 #include"Direct3D.h"
 #include"Global.h"
@@ -52,13 +49,25 @@ void CollisionManager::UpdateCollisions()
             if (IsHitBroadPhase(colA, colB) == false)continue;
 
             //接触判定
-            if (IsHit(colA, colB))
+            CollisionData data = IsHit(colA, colB);
+            if (data.isHit)
             {
                 //各オブジェクトのコールバック
                 GameObject* objA = colA->GetGameObject();
                 GameObject* objB = colB->GetGameObject();
-                objA->OnCollision(objB, colB);
-                objB->OnCollision(objA, colA);
+
+                CollisionData dataForA = data;
+                CollisionData dataForB = data;
+
+                dataForA.other = objB;
+                dataForA.otherCollider = colB;
+
+                dataForB.normal = XMFLOAT3(-data.normal.x, -data.normal.y, -data.normal.z);
+                dataForB.other = objA;
+                dataForB.otherCollider = colA;
+
+                objA->OnCollision(dataForA);
+                objB->OnCollision(dataForB);
             }
         }
     }
@@ -120,36 +129,38 @@ bool CollisionManager::IsHitBroadPhase(Collider* a, Collider* b)
     return (distSq < boundingRadius * boundingRadius);
 }
 
-bool CollisionManager::IsHit(Collider* a, Collider* b)
+CollisionData CollisionManager::IsHit(Collider* a, Collider* b)
 {
     ColliderType typeA = a->GetColliderType();
     ColliderType typeB = b->GetColliderType();
 
+    CollisionData data;
+
     if (typeA == COLLIDER_BOX)
     {
-        if (typeB == COLLIDER_BOX)return IsHitBoxVsBox(a, b);
-        else if (typeB == COLLIDER_CIRCLE)return IsHitBoxVsSphere(a, b);
-        else return IsHitOBBVsBox(b, a);
+        if (typeB == COLLIDER_BOX)IsHitBoxVsBox(a, b,data);
+        else if (typeB == COLLIDER_CIRCLE)IsHitBoxVsSphere(a, b, data);
+        else
+        { IsHitOBBVsBox(b, a, data); data.normal = XMFLOAT3(-data.normal.x, -data.normal.y, -data.normal.z); }
     }
     else if (typeA == COLLIDER_CIRCLE)
     {
-        if (typeB == COLLIDER_BOX)return IsHitBoxVsSphere(b, a);
-        else if (typeB == COLLIDER_CIRCLE)return IsHitSphereVsSphere(a, b);
-        else return IsHitOBBVsSphere(b, a);
+        if (typeB == COLLIDER_BOX) { IsHitBoxVsSphere(b, a, data); data.normal = XMFLOAT3(-data.normal.x, -data.normal.y, -data.normal.z); }
+        else if (typeB == COLLIDER_CIRCLE)IsHitSphereVsSphere(a, b, data);
+        else { IsHitOBBVsSphere(b, a, data); data.normal = XMFLOAT3(-data.normal.x, -data.normal.y, -data.normal.z); }
     }
     else
     {
-        if (typeB == COLLIDER_BOX)return IsHitOBBVsBox(a, b);
-        else if (typeB == COLLIDER_CIRCLE)return IsHitOBBVsSphere(a, b);
-        else return IsHitOBBVsOBB(a, b);
+        if (typeB == COLLIDER_BOX)IsHitOBBVsBox(a, b,data);
+        else if (typeB == COLLIDER_CIRCLE)IsHitOBBVsSphere(a, b, data);
+        else IsHitOBBVsOBB(a, b, data);
     }
 
-    return false;
+    return data;
 }
 
-bool CollisionManager::IsHitBoxVsBox(Collider* boxA, Collider* boxB)
+void CollisionManager::IsHitBoxVsBox(Collider* boxA, Collider* boxB, CollisionData& data)
 {
-
     XMFLOAT3 boxPosA = Transform::Float3Add(boxA->GetGameObject()->GetWorldPosition(), boxA->GetCenter());
     XMFLOAT3 boxPosB = Transform::Float3Add(boxB->GetGameObject()->GetWorldPosition(), boxB->GetCenter());
     XMFLOAT3 boxSizeA = boxA->GetSize();
@@ -162,53 +173,106 @@ bool CollisionManager::IsHitBoxVsBox(Collider* boxA, Collider* boxB)
         (boxPosA.z + boxSizeA.z / 2) > (boxPosB.z - boxSizeB.z / 2) &&
         (boxPosA.z - boxSizeA.z / 2) < (boxPosB.z + boxSizeB.z / 2))
     {
-        return true;
+        data.isHit = true;
     }
-    return false;
 }
 
-bool CollisionManager::IsHitBoxVsSphere(Collider* box, Collider* sphere)
+void CollisionManager::IsHitBoxVsSphere(Collider* box, Collider* sphere, CollisionData& data)
 {
     XMFLOAT3 spherePos = Transform::Float3Add(sphere->GetGameObject()->GetWorldPosition(), sphere->GetCenter());
     XMFLOAT3 boxPos = Transform::Float3Add(box->GetGameObject()->GetWorldPosition(), box->GetCenter());
-    XMFLOAT3 sphereSize = sphere->GetSize();
+    
+    float radius = sphere->GetSize().x;
     XMFLOAT3 boxSize = box->GetSize();
 
-    if (spherePos.x > boxPos.x - boxSize.x / 1.7f - sphereSize.x &&
-        spherePos.x < boxPos.x + boxSize.x / 1.7f + sphereSize.x &&
-        spherePos.y > boxPos.y - boxSize.y / 1.7f - sphereSize.x &&
-        spherePos.y < boxPos.y + boxSize.y / 1.7f + sphereSize.x &&
-        spherePos.z > boxPos.z - boxSize.z / 1.7f - sphereSize.x &&
-        spherePos.z < boxPos.z + boxSize.z / 1.7f + sphereSize.x)
+    XMVECTOR cBox = XMLoadFloat3(&boxPos);
+    XMVECTOR wideHalfSize = XMLoadFloat3(&boxSize) / 1.8f;
+
+    XMVECTOR wideMin = cBox - wideHalfSize;
+    XMVECTOR wideMax = cBox + wideHalfSize;
+
+    XMVECTOR cSphere = XMLoadFloat3(&spherePos);
+    
+    XMVECTOR wideClosestPoint = XMVectorClamp(cSphere, wideMin, wideMax);
+
+    XMVECTOR wideDiff = cSphere - wideClosestPoint;
+    float wideDistanceSq = 0.0f;
+    XMStoreFloat(&wideDistanceSq, XMVector3LengthSq(wideDiff));
+
+    if (wideDistanceSq <= (radius * radius))
     {
-        return true;
+        data.isHit = true;
+
+        XMVECTOR trueHalfSize = XMLoadFloat3(&boxSize) * 0.5f;
+        XMVECTOR trueMin = cBox - trueHalfSize;
+        XMVECTOR trueMax = cBox + trueHalfSize;
+
+        XMVECTOR trueClosestPoint = XMVectorClamp(cSphere, trueMin, trueMax);
+        XMVECTOR trueDiff = cSphere - trueClosestPoint;
+        float trueDistSq = 0.0f;
+        XMStoreFloat(&trueDistSq, XMVector3LengthSq(trueDiff));
+        float distance = sqrtf(trueDistSq);
+
+        XMVECTOR normalVec = XMVectorZero();
+        if (distance > 0.0001f)
+        {
+            normalVec = XMVector3Normalize(trueDiff);
+            data.penetrationDepth = radius - distance;
+        }
+        else
+        {
+            normalVec = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+            data.penetrationDepth = radius;
+        }
+
+        normalVec = XMVector3Normalize(trueDiff);
+        data.penetrationDepth = radius - distance;
+
+        XMStoreFloat3(&data.normal, normalVec);
+        XMStoreFloat3(&data.contactPoint, trueClosestPoint);
     }
-
-    return false;
 }
 
-bool CollisionManager::IsHitSphereVsSphere(Collider* sphereA, Collider* sphereB)
+void CollisionManager::IsHitSphereVsSphere(Collider* sphereA, Collider* sphereB, CollisionData& data)
 {
-    //XMFLOAT3 centerA = sphereA->GetCenter();
-    //XMFLOAT3 positionA = sphereA->GetGameObject()->GetWorldPosition();
-    //XMFLOAT3 centerB = sphereB->GetCenter();
-    //XMFLOAT3 positionB = sphereB->GetGameObject()->GetWorldPosition();
+    XMFLOAT3 spherePosA = Transform::Float3Add(sphereA->GetGameObject()->GetWorldPosition(), sphereA->GetCenter());
+    XMFLOAT3 spherePosB = Transform::Float3Add(sphereB->GetGameObject()->GetWorldPosition(), sphereB->GetCenter());
 
-    //XMVECTOR v = (XMLoadFloat3(&centerA) + XMLoadFloat3(&positionA))
-    //    - (XMLoadFloat3(&centerB) + XMLoadFloat3(&positionB));
+    XMVECTOR cA = XMLoadFloat3(&spherePosA);
+    XMVECTOR cB = XMLoadFloat3(&spherePosB);
 
-    //if (XMVector3Length(v).m128_f32[0] <= sphereA->GetSize().x + sphereB->GetSize().x)
-    //{
-    //    return true;
-    //}
+    XMVECTOR diff = cB - cA;
+    XMVECTOR distVec = XMVector3Length(diff);
+    float distance = XMVectorGetX(distVec);
 
-    //return false;
+    float radiusA = sphereA->GetSize().x;
+    float radiusB = sphereB->GetSize().x;
+    float totalRadius = radiusA + radiusB;
 
-    //事前に計算済みなためここに入った時点でtrueを返す
-    return true;
+    if (distance <= totalRadius)
+    {
+        data.isHit = true;
+
+        //めり込み深度
+        data.penetrationDepth = totalRadius - distance;
+
+        //AからBに向かう法線
+        if (distance > 0.0001f)
+        {
+            XMVECTOR normalVec = diff / distance;
+            XMStoreFloat3(&data.normal, normalVec);
+        }
+        else
+        {
+            data.normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+        }
+
+        XMVECTOR contactVec = cA + (diff * (radiusA / totalRadius));
+        XMStoreFloat3(&data.contactPoint, contactVec);
+    }
 }
 
-bool CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere)
+void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, CollisionData& data)
 {
     //OBBのローカル座標変換用の行列を取得
     GameObject* obbObj = obb->GetGameObject();
@@ -221,33 +285,62 @@ bool CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere)
     XMVECTOR sphereLocalPos = XMVector3TransformCoord(sphereWorldPos, mInvWorld);
 
     XMFLOAT3 obbSize = obb->GetSize();
-    XMVECTOR halfSize = XMLoadFloat3(&obbSize) * 0.7f;
-    XMVECTOR obbMin = -halfSize;
-    XMVECTOR obbMax = halfSize;
+    XMVECTOR wideHalfSize = XMLoadFloat3(&obbSize) / 1.7f;
+    XMVECTOR wideMin = -wideHalfSize;
+    XMVECTOR wideMax = wideHalfSize;
 
     float radius = sphere->GetSize().x;
 
     //最近点を計算
-    XMVECTOR closestPoint = XMVectorClamp(sphereLocalPos, obbMin, obbMax);
+    XMVECTOR wideClosestPoint = XMVectorClamp(sphereLocalPos, wideMin, wideMax);
 
-    XMVECTOR diff = sphereLocalPos - closestPoint;
-    float distanceSq = 0.0f;
-    XMStoreFloat(&distanceSq, XMVector3LengthSq(diff));
+    XMVECTOR localDiff = sphereLocalPos - wideClosestPoint;
+    float wideDistSq= 0.0f;
+    XMStoreFloat(&wideDistSq, XMVector3LengthSq(localDiff));
 
-    if (distanceSq <= (radius * radius))
+    if (wideDistSq <= (radius * radius))
     {
-        return true;
+        data.isHit = true;
+
+        XMVECTOR trueHalfSize = XMLoadFloat3(&obbSize) * 0.5f;
+        XMVECTOR trueMin = - trueHalfSize;
+        XMVECTOR trueMax = trueHalfSize;
+
+        XMVECTOR trueClosestPoint = XMVectorClamp(sphereLocalPos, trueMin, trueMax);
+        XMVECTOR trueDiff = sphereLocalPos - trueClosestPoint;
+        float trueDistSq = 0.0f;
+        XMStoreFloat(&trueDistSq, XMVector3LengthSq(trueDiff));
+        float distance = sqrtf(trueDistSq);
+
+        data.penetrationDepth = radius - distance;
+
+        XMVECTOR localNormal = XMVectorZero();
+
+        if (distance > 0.0001f)
+        {
+            localNormal = XMVector3Normalize(trueDiff);
+        }
+        else
+        {
+            localNormal = XMVectorSet(0.0f, 1.0f, 0.0f,0.0f);
+            data.penetrationDepth = radius;
+        }
+
+        XMVECTOR worldNormal = XMVector3TransformNormal(localNormal, mWorld);
+        worldNormal = XMVector3Normalize(worldNormal);
+        XMStoreFloat3(&data.normal, worldNormal);
+
+        XMVECTOR worldContact = XMVector3TransformCoord(trueClosestPoint, mWorld);
+        XMStoreFloat3(&data.contactPoint, worldContact);
     }
-
-    return false;
 }
 
-bool CollisionManager::IsHitOBBVsBox(Collider* obb, Collider* box)
+void CollisionManager::IsHitOBBVsBox(Collider* obb, Collider* box, CollisionData& data)
 {
-    return IsHitOBBVsOBB(obb, box);
+    IsHitOBBVsOBB(obb, box, data);
 }
 
-bool CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB)
+void CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB, CollisionData& data)
 {
     GameObject* obbObjA = obbA->GetGameObject();
     GameObject* obbObjB = obbB->GetGameObject();
@@ -310,7 +403,7 @@ bool CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB)
             XMVectorGetY(eB) * fabsf(R[i][1]) +
             XMVectorGetZ(eB) * fabsf(R[i][2]);
 
-        if (fabsf(tA[i]) > rA + rB)return false;
+        if (fabsf(tA[i]) > rA + rB)return;
     }
 
     //ゼロ除算を防ぐ為の値
@@ -333,10 +426,10 @@ bool CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB)
             float det = 1.0f - fabsf(R[i][j]);
             if (det > EPSILON)
             {
-                if (t > rA + rB)return false;
+                if (t > rA + rB)return;
             }
         }
     }
 
-    return true;
+    data.isHit = true;
 }
