@@ -8,6 +8,7 @@
 namespace
 {
 	Obstacle* lastObstacle = nullptr;
+	TargetObject* target = nullptr;
 }
 
 //コンストラクタ
@@ -52,10 +53,10 @@ void TestScene::Initialize()
 		if (i + 1 == OBSTACLE_COUNT)
 		{
 			lastObstacle = obs;
-			TargetObject* target = Instantiate<TargetObject>(lastObstacle);
-			target->SetPosition(XMFLOAT3(0.0f, 0.0f, -2.0f));
-			//lastObstacle->SetRotate(0.0f, 0.0f, 0.0f);
-			//target->SetRotate(0.0f, 0.0f, 0.0f);
+			target = Instantiate<TargetObject>(obs);
+			target->SetPosition(XMFLOAT3(0.0f, 0.0f, -1.5f));
+			//lastObstacle->SetRotate(0.0f, 90.0f, 0.0f);
+			target->SetRotate(-90.0f, 0.0f, 0.0f);
 		}
 	}
 }

@@ -24,8 +24,6 @@ void TargetObject::Initialize()
 	hModel_ = Model::Load("Target.fbx");
 	assert(hModel_ >= 0);
 
-	transform_.rotate_.x = -90;
-
 	text_ = new Text();
 	text_->Initialize();
 }

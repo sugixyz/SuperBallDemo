@@ -29,8 +29,8 @@ void Fighter::Initialize()
 	assert(hModel_ >= 0);
 
 	uint32_t mask = LayerBit(CollisionLayer::DEFAULT);
-	CollisionFilter filter = CollisionFilter(CollisionLayer::FIGHTER,mask);
-	OBBCollider* col = new OBBCollider(COL_POS, COL_SIZE,filter);
+	//CollisionFilter filter = CollisionFilter(CollisionLayer::FIGHTER,mask);
+	OBBCollider* col = new OBBCollider(COL_POS, COL_SIZE);
 	AddCollider(col);
 
 	health_ = new HealthComponent();
