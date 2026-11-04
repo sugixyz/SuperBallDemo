@@ -2,6 +2,7 @@
 #include"../Engine/Model.h"
 #include"Ball.h"
 #include"../Engine/Text.h"
+#include"../Engine/SphereCollider.h"
 
 namespace
 {
@@ -29,6 +30,10 @@ void Gun::Initialize()
 
 	transform_.rotate_.x -= 30;
 	//transform_.rotate_.x -= 0;
+
+	XMFLOAT3 gunMuzzle = Model::GetBonePosition(hModel_, "muzzle");
+	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
+	AddCollider(col);
 
 	text->Initialize();
 }

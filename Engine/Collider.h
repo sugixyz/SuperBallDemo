@@ -7,6 +7,7 @@ using namespace DirectX;
 
 //クラスの前方宣言
 class GameObject;
+class Transform;
 
 //あたり判定のタイプ
 enum ColliderType
@@ -38,9 +39,8 @@ public:
 	virtual ~Collider();
 
 	//テスト表示用の枠を描画
-	//引数：position	オブジェクトの位置
-	//引数：rotation	オブジェクトの回転
-	void Draw(XMFLOAT3 position,XMFLOAT3 rotation);
+	//引数：transform	オブジェクトのトランスフォーム
+	void Draw(Transform transform);
 
 	//セッター
 	void SetGameObject(GameObject* gameObject) { pGameObject_ = gameObject; }

@@ -1,6 +1,7 @@
 ﻿#include "TargetObject.h"
 #include"../Engine/Model.h";
 #include"../Engine/BoxCollider.h"
+#include"../Engine/OBBCollider.h"
 #include"../Engine/Text.h"
 
 TargetObject::TargetObject(GameObject* parent)
@@ -17,7 +18,7 @@ TargetObject::~TargetObject()
 
 void TargetObject::Initialize()
 {
-	BoxCollider* col = new BoxCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), COL_SIZE);
+	OBBCollider* col = new OBBCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), COL_SIZE);
 	AddCollider(col);
 
 	hModel_ = Model::Load("Target.fbx");
@@ -56,23 +57,14 @@ void TargetObject::OnCollision(const CollisionData& data)
 
 	if (name == "Ball")
 	{
-		OnCollisionBall(other, col);
+		OnCollisionBall(data);
 	}
 }
 
-void TargetObject::OnCollisionBall(GameObject* ball, Collider* col)
+void TargetObject::OnCollisionBall(CollisionData data)
 {
-	XMFLOAT3 pos = transform_.position_;
-	XMVECTOR boxPos = XMLoadFloat3(&pos);
-	XMVECTOR boxMin = boxPos - (XMLoadFloat3(&COL_SIZE) * 2.0f);
-	XMVECTOR boxMax = boxPos + (XMLoadFloat3(&COL_SIZE) * 2.0f);
-
-	XMFLOAT3 sPos = ball->GetPosition();
-	float radius = col->GetSize().x;
-	XMVECTOR spherePos = XMLoadFloat3(&sPos);
-
-	XMVECTOR closestPoint = XMVectorClamp(spherePos, boxMin, boxMax);
-	XMVECTOR diff = boxPos - closestPoint;
+	XMFLOAT3 worldPos = this->GetWorldPosition();
+	XMVECTOR diff = XMLoadFloat3(&worldPos) - XMLoadFloat3(&data.contactPoint);
 	float distance = 0.0f;
 
 	XMStoreFloat(&distance, XMVector3Length(diff));

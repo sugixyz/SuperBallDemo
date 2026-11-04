@@ -86,7 +86,7 @@ void CollisionManager::DrawColliders()
     for (Collider* col : colliders_)
     {
         GameObject* obj = col->GetGameObject();
-        col->Draw(obj->GetWorldPosition(), obj->GetWorldRotate());
+        col->Draw(obj->GetTransform());
     }
 
     Direct3D::SetShader(Direct3D::SHADER_3D);

@@ -5,6 +5,11 @@
 #include"TargetObject.h"
 #include"Obstacle.h"
 
+namespace
+{
+	Obstacle* lastObstacle = nullptr;
+}
+
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
 	: GameObject(parent, "TestScene")
@@ -19,10 +24,6 @@ void TestScene::Initialize()
 
 	Fighter* ai = Instantiate<Fighter>(this);
 	ai->SetController(new AutoController());
-
-
-	TargetObject* target = Instantiate<TargetObject>(this);
-	target->SetPosition(XMFLOAT3(0.0f, 2.0f, 3.49f));
 
 	const int OBSTACLE_COUNT = 6;
 	XMFLOAT3 positions[OBSTACLE_COUNT] =
@@ -50,7 +51,11 @@ void TestScene::Initialize()
 		obs->SetObject(positions[i], scales[i]);
 		if (i + 1 == OBSTACLE_COUNT)
 		{
-			obs->SetRotate(XMFLOAT3(45, 0, 45));
+			lastObstacle = obs;
+			TargetObject* target = Instantiate<TargetObject>(lastObstacle);
+			target->SetPosition(XMFLOAT3(0.0f, 0.0f, -2.0f));
+			//lastObstacle->SetRotate(0.0f, 0.0f, 0.0f);
+			//target->SetRotate(0.0f, 0.0f, 0.0f);
 		}
 	}
 }
@@ -58,6 +63,9 @@ void TestScene::Initialize()
 //更新
 void TestScene::Update()
 {
+	static int rotate = 0;
+	rotate++;
+	lastObstacle->SetRotate(0, rotate, 0);
 }
 
 //描画
