@@ -46,7 +46,7 @@ void CollisionManager::UpdateCollisions()
             if ((filterB.mask & LayerBit(filterA.layer)) == 0)continue;
 
             //ブロードフェーズ
-            if (IsHitBroadPhase(colA, colB) == false)continue;
+            //if (IsHitBroadPhase(colA, colB) == false)continue;
 
             //接触判定
             CollisionData data = IsHit(colA, colB);
