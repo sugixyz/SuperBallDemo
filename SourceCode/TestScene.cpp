@@ -53,8 +53,8 @@ void TestScene::Initialize()
 		if (i + 1 == OBSTACLE_COUNT)
 		{
 			lastObstacle = obs;
-			target = Instantiate<TargetObject>(obs);
-			target->SetPosition(XMFLOAT3(0.0f, 0.0f, -1.5f));
+			target = Instantiate<TargetObject>(this);
+			target->SetPosition(XMFLOAT3(0.0f, 2.0f, -0.55));
 			//lastObstacle->SetRotate(0.0f, 90.0f, 0.0f);
 			target->SetRotate(-90.0f, 0.0f, 0.0f);
 		}
@@ -67,6 +67,8 @@ void TestScene::Update()
 	static int rotate = 0;
 	rotate++;
 	lastObstacle->SetRotate(0, rotate, 0);
+
+	//target->SetRotate(-90, rotate, 0);
 }
 
 //描画

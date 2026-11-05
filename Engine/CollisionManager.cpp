@@ -274,28 +274,36 @@ void CollisionManager::IsHitSphereVsSphere(Collider* sphereA, Collider* sphereB,
 
 void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, CollisionData& data)
 {
-    //OBBのローカル座標変換用の行列を取得
+    // OBBのローカル座標変換用の行列を取得
     GameObject* obbObj = obb->GetGameObject();
     XMMATRIX mWorld = obbObj->GetWorldMatrix();
     XMMATRIX mInvWorld = XMMatrixInverse(nullptr, mWorld);
 
-    //球の座標をOBBのローカル座標に変換
+    // 球の座標をOBBのローカル座標に変換
     XMFLOAT3 spherePos = Transform::Float3Add(sphere->GetGameObject()->GetWorldPosition(), sphere->GetCenter());
     XMVECTOR sphereWorldPos = XMLoadFloat3(&spherePos);
     XMVECTOR sphereLocalPos = XMVector3TransformCoord(sphereWorldPos, mInvWorld);
 
+    // ★修正：コライダーの Center（オフセット分）をローカル座標側から引くことで、
+    // コライダーの中心を基準にした正しいローカル座標に補正する
+    XMFLOAT3 obbCenter = obb->GetCenter();
+    XMVECTOR center = XMLoadFloat3(&obbCenter);
+    sphereLocalPos = sphereLocalPos - center;
+
     XMFLOAT3 obbSize = obb->GetSize();
+
+    // ボックス側は純粋な原点中心（-halfSize ~ +halfSize）で計算する
     XMVECTOR wideHalfSize = XMLoadFloat3(&obbSize) / 1.7f;
     XMVECTOR wideMin = -wideHalfSize;
     XMVECTOR wideMax = wideHalfSize;
 
     float radius = sphere->GetSize().x;
 
-    //最近点を計算
+    // 最近点を計算
     XMVECTOR wideClosestPoint = XMVectorClamp(sphereLocalPos, wideMin, wideMax);
 
     XMVECTOR localDiff = sphereLocalPos - wideClosestPoint;
-    float wideDistSq= 0.0f;
+    float wideDistSq = 0.0f;
     XMStoreFloat(&wideDistSq, XMVector3LengthSq(localDiff));
 
     if (wideDistSq <= (radius * radius))
@@ -303,7 +311,7 @@ void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, Collisi
         data.isHit = true;
 
         XMVECTOR trueHalfSize = XMLoadFloat3(&obbSize) * 0.5f;
-        XMVECTOR trueMin = - trueHalfSize;
+        XMVECTOR trueMin = -trueHalfSize;
         XMVECTOR trueMax = trueHalfSize;
 
         XMVECTOR trueClosestPoint = XMVectorClamp(sphereLocalPos, trueMin, trueMax);
@@ -322,7 +330,7 @@ void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, Collisi
         }
         else
         {
-            localNormal = XMVectorSet(0.0f, 1.0f, 0.0f,0.0f);
+            localNormal = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
             data.penetrationDepth = radius;
         }
 
@@ -330,7 +338,9 @@ void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, Collisi
         worldNormal = XMVector3Normalize(worldNormal);
         XMStoreFloat3(&data.normal, worldNormal);
 
-        XMVECTOR worldContact = XMVector3TransformCoord(trueClosestPoint, mWorld);
+        // 接触点をワールドに戻す際も、Center位置を戻してからワールド変換する
+        XMVECTOR contactWithCenter = trueClosestPoint + center;
+        XMVECTOR worldContact = XMVector3TransformCoord(contactWithCenter, mWorld);
         XMStoreFloat3(&data.contactPoint, worldContact);
     }
 }

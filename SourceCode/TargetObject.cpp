@@ -18,7 +18,7 @@ TargetObject::~TargetObject()
 
 void TargetObject::Initialize()
 {
-	OBBCollider* col = new OBBCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), COL_SIZE);
+	OBBCollider* col = new OBBCollider(XMFLOAT3(1.0f, 0.0f, 0.0f), COL_SIZE);
 	AddCollider(col);
 
 	hModel_ = Model::Load("Target.fbx");
