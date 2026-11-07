@@ -23,8 +23,8 @@ void TestScene::Initialize()
 	Fighter* fighter = Instantiate<Fighter>(this);
 	fighter->SetController(new PlayerController());
 
-	Fighter* ai = Instantiate<Fighter>(this);
-	ai->SetController(new AutoController());
+	//Fighter* ai = Instantiate<Fighter>(this);
+	//ai->SetController(new AutoController());
 
 	const int OBSTACLE_COUNT = 6;
 	XMFLOAT3 positions[OBSTACLE_COUNT] =

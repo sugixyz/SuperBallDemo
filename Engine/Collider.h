@@ -30,6 +30,7 @@ protected:
 	int				hDebugModel_;	//デバッグ表示用のモデルのID
 	CollisionFilter filter_;		//判定用のレイヤーフィルタ
 	float			boundingRadius_;//外接球の半径
+	XMFLOAT3		worldCenter_;	//オフセットを加味したワールド座標
 
 public:
 	//コンストラクタ
@@ -42,6 +43,9 @@ public:
 	//引数：transform	オブジェクトのトランスフォーム
 	void Draw(Transform transform);
 
+	//コライダーの中心座標を更新
+	void UpdateWorldCenter();
+
 	//セッター
 	void SetGameObject(GameObject* gameObject) { pGameObject_ = gameObject; }
 	void SetSize(const XMFLOAT3& size) { size_ = size; boundingRadius_ = CalculateBoundingRadius(size); }
@@ -53,6 +57,7 @@ public:
 	CollisionFilter GetCollisionFilter() { return filter_; }
 	ColliderType GetColliderType() { return type_; }
 	float GetBoundingRadius() { return boundingRadius_; }
+	XMFLOAT3 GetWorldCenter() { return worldCenter_; }
 private:
 	//外接球の半径の２乗を計算する
 	virtual float CalculateBoundingRadius(const XMFLOAT3& size) = 0;

@@ -24,3 +24,15 @@ void Collider::Draw(Transform transform)
 	Model::SetTransform(hDebugModel_, transform);
 	Model::Draw(hDebugModel_);
 }
+
+void Collider::UpdateWorldCenter()
+{
+	GameObject* obj = pGameObject_;
+	XMMATRIX mWorld = obj->GetWorldMatrix();
+	XMFLOAT3 objPos = obj->GetWorldPosition();
+	XMVECTOR pos = XMLoadFloat3(&objPos);
+	XMVECTOR localCenter = XMLoadFloat3(&center_);
+
+	XMVECTOR worldCenter = pos + XMVector3TransformNormal(localCenter, mWorld);
+	XMStoreFloat3(&worldCenter_, worldCenter);
+}

@@ -25,6 +25,9 @@ void CollisionManager::ClearCollider(Collider * col)
 
 void CollisionManager::UpdateCollisions()
 {
+    //全コライダーの中心座標を更新
+    for (auto col : colliders_)col->UpdateWorldCenter();
+
     //全組み合わせを検索
     for (int i = 0; i < colliders_.size(); i++)
     {
@@ -46,7 +49,7 @@ void CollisionManager::UpdateCollisions()
             if ((filterB.mask & LayerBit(filterA.layer)) == 0)continue;
 
             //ブロードフェーズ
-            //if (IsHitBroadPhase(colA, colB) == false)continue;
+            if (IsHitBroadPhase(colA, colB) == false)continue;
 
             //接触判定
             CollisionData data = IsHit(colA, colB);
@@ -118,10 +121,12 @@ bool CollisionManager::IsHitBroadPhase(Collider* a, Collider* b)
     float boundingRadiusB = b->GetBoundingRadius();
     float boundingRadius = boundingRadiusA + boundingRadiusB;
 
-    //２つの距離の２乗を計算
-    XMFLOAT3 aPos = a->GetGameObject()->GetWorldPosition();
-    XMFLOAT3 bPos = b->GetGameObject()->GetWorldPosition();
-    XMVECTOR diff = XMLoadFloat3(&aPos) - XMLoadFloat3(&bPos);
+    XMFLOAT3 worldCenterA = a->GetWorldCenter();
+    XMFLOAT3 worldCenterB = b->GetWorldCenter();
+    XMVECTOR posA = XMLoadFloat3(&worldCenterA);
+    XMVECTOR posB = XMLoadFloat3(&worldCenterB);
+
+    XMVECTOR diff = posA - posB;
     float distSq;
     XMStoreFloat(&distSq, XMVector3LengthSq(diff));
 
@@ -161,8 +166,9 @@ CollisionData CollisionManager::IsHit(Collider* a, Collider* b)
 
 void CollisionManager::IsHitBoxVsBox(Collider* boxA, Collider* boxB, CollisionData& data)
 {
-    XMFLOAT3 boxPosA = Transform::Float3Add(boxA->GetGameObject()->GetWorldPosition(), boxA->GetCenter());
-    XMFLOAT3 boxPosB = Transform::Float3Add(boxB->GetGameObject()->GetWorldPosition(), boxB->GetCenter());
+    XMFLOAT3 boxPosA = boxA->GetWorldCenter();
+    XMFLOAT3 boxPosB = boxB->GetWorldCenter();
+
     XMFLOAT3 boxSizeA = boxA->GetSize();
     XMFLOAT3 boxSizeB = boxB->GetSize();
 
@@ -179,8 +185,8 @@ void CollisionManager::IsHitBoxVsBox(Collider* boxA, Collider* boxB, CollisionDa
 
 void CollisionManager::IsHitBoxVsSphere(Collider* box, Collider* sphere, CollisionData& data)
 {
-    XMFLOAT3 spherePos = Transform::Float3Add(sphere->GetGameObject()->GetWorldPosition(), sphere->GetCenter());
-    XMFLOAT3 boxPos = Transform::Float3Add(box->GetGameObject()->GetWorldPosition(), box->GetCenter());
+    XMFLOAT3 spherePos = sphere->GetWorldCenter();
+    XMFLOAT3 boxPos = box->GetWorldCenter();
     
     float radius = sphere->GetSize().x;
     XMFLOAT3 boxSize = box->GetSize();
@@ -235,8 +241,8 @@ void CollisionManager::IsHitBoxVsSphere(Collider* box, Collider* sphere, Collisi
 
 void CollisionManager::IsHitSphereVsSphere(Collider* sphereA, Collider* sphereB, CollisionData& data)
 {
-    XMFLOAT3 spherePosA = Transform::Float3Add(sphereA->GetGameObject()->GetWorldPosition(), sphereA->GetCenter());
-    XMFLOAT3 spherePosB = Transform::Float3Add(sphereB->GetGameObject()->GetWorldPosition(), sphereB->GetCenter());
+    XMFLOAT3 spherePosA = sphereA->GetWorldCenter();
+    XMFLOAT3 spherePosB = sphereB->GetWorldCenter();
 
     XMVECTOR cA = XMLoadFloat3(&spherePosA);
     XMVECTOR cB = XMLoadFloat3(&spherePosB);
@@ -358,8 +364,8 @@ void CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB, CollisionDa
     XMMATRIX mWorldA = obbObjA->GetWorldMatrix();
     XMMATRIX mWorldB = obbObjB->GetWorldMatrix();
 
-    XMFLOAT3 obbPosA = Transform::Float3Add(obbObjA->GetWorldPosition(), obbA->GetCenter());
-    XMFLOAT3 obbPosB = Transform::Float3Add(obbObjB->GetWorldPosition(), obbB->GetCenter());
+    XMFLOAT3 obbPosA = obbA->GetWorldCenter();
+    XMFLOAT3 obbPosB = obbB->GetWorldCenter();
 
     XMVECTOR cA = XMLoadFloat3(&obbPosA);
     XMVECTOR cB = XMLoadFloat3(&obbPosB);
