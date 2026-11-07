@@ -21,7 +21,8 @@ void Ball::Initialize()
 	hModel_ = Model::Load("BulletDemo.fbx");
 	assert(hModel_ >= 0);
 
-	SphereCollider* col = new SphereCollider(COL_POS, COL_RADIUS);
+	CollisionFilter filter = CollisionFilter(CollisionLayer::BALL);
+	SphereCollider* col = new SphereCollider(COL_POS, COL_RADIUS,filter);
 	AddCollider(col);
 
 	move_ = new MoveComponent();
@@ -69,6 +70,7 @@ void Ball::OnCollision(const CollisionData& data)
 	else if (name == "Fighter")
 	{
 		//CollisionPlayer(other,col);
+		isColliding_ = false;
 		return;
 	}
 	else if (name == "Ball")

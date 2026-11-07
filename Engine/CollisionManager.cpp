@@ -168,19 +168,51 @@ void CollisionManager::IsHitBoxVsBox(Collider* boxA, Collider* boxB, CollisionDa
 {
     XMFLOAT3 boxPosA = boxA->GetWorldCenter();
     XMFLOAT3 boxPosB = boxB->GetWorldCenter();
-
     XMFLOAT3 boxSizeA = boxA->GetSize();
     XMFLOAT3 boxSizeB = boxB->GetSize();
 
-    if ((boxPosA.x + boxSizeA.x / 2) > (boxPosB.x - boxSizeB.x / 2) &&
-        (boxPosA.x - boxSizeA.x / 2) < (boxPosB.x + boxSizeB.x / 2) &&
-        (boxPosA.y + boxSizeA.y / 2) > (boxPosB.y - boxSizeB.y / 2) &&
-        (boxPosA.y - boxSizeA.y / 2) < (boxPosB.y + boxSizeB.y / 2) &&
-        (boxPosA.z + boxSizeA.z / 2) > (boxPosB.z - boxSizeB.z / 2) &&
-        (boxPosA.z - boxSizeA.z / 2) < (boxPosB.z + boxSizeB.z / 2))
+    XMVECTOR cA = XMLoadFloat3(&boxPosA);
+    XMVECTOR cB = XMLoadFloat3(&boxPosB);
+    XMVECTOR eA = XMLoadFloat3(&boxSizeA);
+    XMVECTOR eB = XMLoadFloat3(&boxSizeB);
+
+    XMVECTOR diff = cB - cA;
+    XMVECTOR absDiff = XMVectorAbs(diff);
+    XMVECTOR minDist = eA + eB;
+
+    //重なりチェック
+    XMVECTOR overlapVec = minDist - absDiff;
+    XMFLOAT3 overlap;
+    XMStoreFloat3(&overlap, overlapVec);
+
+    if (overlap.x <= 0.0f)return;
+    if (overlap.y <= 0.0f)return;
+    if (overlap.z <= 0.0f)return;
+
+    data.isHit = true;
+
+    //最も重なりが小さい軸を法線・深度として設定
+    float minOverlap = overlap.x;
+    XMVECTOR normal = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+    if (overlap.y < minOverlap)
     {
-        data.isHit = true;
+        minOverlap = overlap.y;
+        normal = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+        if (XMVectorGetY(diff) < 0.0f)normal = -normal;
     }
+    if (overlap.z < minOverlap)
+    {
+        minOverlap = overlap.z;
+        normal = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+        if (XMVectorGetZ(diff) < 0.0f)normal = -normal;
+    }
+
+    data.penetrationDepth = minOverlap;
+    XMStoreFloat3(&data.normal, normal);
+
+    //接触点は一旦2つの中間地点を設定
+    XMVECTOR contact = cA + diff * 0.5f;
+    XMStoreFloat3(&data.contactPoint, contact);
 }
 
 void CollisionManager::IsHitBoxVsSphere(Collider* box, Collider* sphere, CollisionData& data)
@@ -408,7 +440,10 @@ void CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB, CollisionDa
         XMStoreFloat(&tA[i], XMVector3Dot(T, uA[i]));
     }
 
-    //15軸でテスト
+    float minOverlap = FLT_MAX;
+    XMVECTOR bestAxis = XMVectorZero();
+
+    //Aの3軸でテスト
     for (int i = 0; i < 3; i++)
     {
         float tB = tA[0] * R[0][i] + tA[1] * R[1][i] + tA[2] * R[2][i];
@@ -419,16 +454,56 @@ void CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB, CollisionDa
             XMVectorGetY(eB) * fabsf(R[i][1]) +
             XMVectorGetZ(eB) * fabsf(R[i][2]);
 
-        if (fabsf(tA[i]) > rA + rB)return;
+        float distance = fabsf(tA[i]);
+        float overlap = (rA + rB) - distance;
+        if (overlap < 0.0f)return;
+
+        if (overlap < minOverlap)
+        {
+            minOverlap = overlap;
+            bestAxis = uA[i];
+            if (tA[i] < 0.0f)bestAxis = -bestAxis;
+        }
     }
 
     //ゼロ除算を防ぐ為の値
     const float EPSILON = 1e-5f;
 
+    //Bの3軸でテスト
+    for (int i = 0; i < 3; i++)
+    {
+        float tBVal = 0.0f;
+        XMStoreFloat(&tBVal, XMVector3Dot(T, uB[i]));
+
+        float rA = 
+            XMVectorGetX(eA) * fabsf(R[0][i]) +
+            XMVectorGetY(eA) * fabsf(R[1][i]) +
+            XMVectorGetZ(eA) * fabsf(R[2][i]);
+        float rB = XMVectorGetByIndex(eB, i);
+
+        float distance = fabsf(tBVal);
+        float overlap = (rA + rB) - distance;
+        if (overlap < 0.0f)return;
+
+        if (overlap < minOverlap)
+        {
+            minOverlap = overlap;
+            bestAxis = uB[i];
+            if (tBVal < 0.0f)bestAxis = -bestAxis;
+        }
+    }
+
+    //残りのクロス積の9軸でテスト
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
+            float dat = 1.0f - fabsf(R[i][j]);
+            if (dat <= EPSILON)continue;
+
+            //XMVECTOR axis = XMVector3Cross(uA[i], uB[j]);
+            //axis = XMVector3Normalize(axis);
+
             float rA =
                 XMVectorGetByIndex(eA, (i + 1) % 3) * fabsf(R[(i + 2) % 3][j]) +
                 XMVectorGetByIndex(eA, (i + 2) % 3) * fabsf(R[(i + 1) % 3][j]);
@@ -439,13 +514,26 @@ void CollisionManager::IsHitOBBVsOBB(Collider* obbA, Collider* obbB, CollisionDa
 
             float t = fabsf(tA[(i + 2) % 3] * R[(i + 1) % 3][j] - tA[(i + 1) % 3] * R[(i + 2) % 3][j]);
 
-            float det = 1.0f - fabsf(R[i][j]);
-            if (det > EPSILON)
-            {
-                if (t > rA + rB)return;
-            }
+            float overlap = (rA + rB) - t;
+            if (overlap < 0.0f)return;
+
+            //if (overlap < minOverlap)
+            //{
+            //    minOverlap = overlap;
+            //    bestAxis = axis;
+            //    if (XMVectorGetX(XMVector3Dot(T, bestAxis)) < 0.0f)
+            //    {
+            //        bestAxis = -bestAxis;
+            //    }
+            //}
         }
     }
 
     data.isHit = true;
+    data.penetrationDepth = minOverlap;
+    XMStoreFloat3(&data.normal, -bestAxis);
+
+    //接触点は一旦2つの中間地点を設定
+    XMVECTOR contact = cA + (T * 0.5f);
+    XMStoreFloat3(&data.contactPoint, contact);
 }

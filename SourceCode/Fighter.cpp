@@ -28,9 +28,8 @@ void Fighter::Initialize()
 	hModel_ = Model::Load("PlayerDemo.fbx");
 	assert(hModel_ >= 0);
 
-	uint32_t mask = LayerBit(CollisionLayer::DEFAULT);
-	//CollisionFilter filter = CollisionFilter(CollisionLayer::FIGHTER,mask);
-	OBBCollider* col = new OBBCollider(COL_POS, COL_SIZE);
+	CollisionFilter filter = CollisionFilter(CollisionLayer::FIGHTER);
+	OBBCollider* col = new OBBCollider(COL_POS, COL_SIZE,filter);
 	AddCollider(col);
 
 	health_ = new HealthComponent();
@@ -84,7 +83,14 @@ void Fighter::Release()
 }
 
 void Fighter::OnCollision(const CollisionData& data)
-{}
+{
+	std::string name = data.other->GetObjectName();
+
+	if (name == "Obstacle")
+	{
+		CollisionObstacle(data);
+	}
+}
 
 void Fighter::Move(const FighterInput& input)
 {
@@ -158,6 +164,15 @@ void Fighter::UpdateTpsCam(XMFLOAT3 camRot, float dist, XMVECTOR pos, XMVECTOR o
 
 void Fighter::UpdateFpsCam()
 {
+}
+
+void Fighter::CollisionObstacle(CollisionData data)
+{
+	//法線を取得
+	XMVECTOR normal = XMLoadFloat3(&data.normal);
+	XMVECTOR pushVec = normal * data.penetrationDepth;
+	XMVECTOR newPos = XMLoadFloat3(&transform_.position_) + pushVec;
+	XMStoreFloat3(&transform_.position_, newPos);
 }
 
 XMVECTOR Fighter::CalculateMoveDirection(XMFLOAT2 moveInput,XMVECTOR forward, XMVECTOR right)

@@ -18,7 +18,8 @@ TargetObject::~TargetObject()
 
 void TargetObject::Initialize()
 {
-	OBBCollider* col = new OBBCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), COL_SIZE);
+	CollisionFilter filter = CollisionFilter(CollisionLayer::TARGET);
+	OBBCollider* col = new OBBCollider(XMFLOAT3(0.0f, 0.0f, 0.0f), COL_SIZE,filter);
 	AddCollider(col);
 
 	hModel_ = Model::Load("Target.fbx");

@@ -44,6 +44,10 @@ private:
 	void UpdateTpsCam(XMFLOAT3 camRot, float dist,XMVECTOR pos, XMVECTOR offset);
 	//FPSカメラの更新
 	void UpdateFpsCam();
+
+	//障害物との接触
+	void CollisionObstacle(CollisionData data);
+
 	//速度を計算する関数
 	XMVECTOR CalculateMoveDirection(XMFLOAT2 moveInput,XMVECTOR forward, XMVECTOR right);
 	//正面ベクトルを計算する関数

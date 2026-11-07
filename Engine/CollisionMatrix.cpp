@@ -27,8 +27,12 @@ void CollisionMatrix::SetCollision(CollisionLayer layerA, CollisionLayer layerB,
 
 void CollisionMatrix::Initialize()
 {
-	SetCollision(CollisionLayer::DEFAULT, CollisionLayer::DEFAULT, true);
-	SetCollision(CollisionLayer::FIGHTER, CollisionLayer::DEFAULT, true);
+	//SetCollision(CollisionLayer::DEFAULT, CollisionLayer::DEFAULT, true);
+	SetCollision(CollisionLayer::FIGHTER, CollisionLayer::BALL, true);
+	SetCollision(CollisionLayer::FIGHTER, CollisionLayer::OBSTACLE, true);
+	SetCollision(CollisionLayer::BALL, CollisionLayer::TARGET, true);
+	SetCollision(CollisionLayer::BALL, CollisionLayer::OBSTACLE, true);
+	SetCollision(CollisionLayer::BALL, CollisionLayer::BALL, true);
 }
 
 bool CollisionMatrix::ShouldCollide(CollisionLayer layerA, CollisionLayer layerB)

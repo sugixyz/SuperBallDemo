@@ -38,8 +38,6 @@ void Obstacle::OnCollision(const CollisionData& data)
 	GameObject* other = data.other;
 	Collider* col = data.otherCollider;
 
-	BoxCollider* bCol = dynamic_cast<BoxCollider*>(col);
-
 	std::string name = other->GetObjectName();
 	if (name == "Ball")
 	{
@@ -47,7 +45,7 @@ void Obstacle::OnCollision(const CollisionData& data)
 	}
 	else if (name == "Fighter")
 	{
-		CollisionPlayer(other, col);
+		//CollisionPlayer(other, col);
 	}
 }
 void Obstacle::SetObject(XMFLOAT3 position, XMFLOAT3 scale)
@@ -56,7 +54,8 @@ void Obstacle::SetObject(XMFLOAT3 position, XMFLOAT3 scale)
 	transform_.scale_ = scale;
 
 	//BoxCollider* col = new BoxCollider(XMFLOAT3(0.0f,0.0f,0.0f), transform_.scale_);
-	OBBCollider* col = new OBBCollider(XMFLOAT3(0.0f,0.0f,0.0f), transform_.scale_);
+	CollisionFilter filter = CollisionFilter(CollisionLayer::OBSTACLE);
+	OBBCollider* col = new OBBCollider(XMFLOAT3(0.0f,0.0f,0.0f), transform_.scale_,filter);
 	AddCollider(col);
 }
 
