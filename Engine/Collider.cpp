@@ -27,9 +27,8 @@ void Collider::Draw(Transform transform)
 
 void Collider::UpdateWorldCenter()
 {
-	GameObject* obj = pGameObject_;
-	XMMATRIX mWorld = obj->GetWorldMatrix();
-	XMFLOAT3 objPos = obj->GetWorldPosition();
+	XMMATRIX mWorld = pGameObject_->GetWorldMatrix();
+	XMFLOAT3 objPos = pGameObject_->GetWorldPosition();
 	XMVECTOR pos = XMLoadFloat3(&objPos);
 	XMVECTOR localCenter = XMLoadFloat3(&center_);
 
