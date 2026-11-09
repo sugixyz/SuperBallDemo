@@ -12,6 +12,7 @@ OBBCollider::OBBCollider(XMFLOAT3 basePos, XMFLOAT3 size, CollisionFilter filter
 	SetSize(size);
 	type_ = COLLIDER_OBB;
 	filter_ = filter;
+	UpdateWorldCenter();
 
 	//リリース時は判定枠は表示しない
 #ifdef _DEBUG
