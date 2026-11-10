@@ -11,7 +11,6 @@ SphereCollider::SphereCollider(XMFLOAT3 center, float radius, CollisionFilter fi
 	SetSize(XMFLOAT3(radius, radius, radius));
 	type_ = COLLIDER_CIRCLE;
 	filter_ = filter;
-	UpdateWorldCenter();
 
 	//リリース時は判定枠は表示しない
 #ifdef _DEBUG

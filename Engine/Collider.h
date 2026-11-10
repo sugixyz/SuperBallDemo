@@ -44,6 +44,8 @@ public:
 	//引数：transform	オブジェクトのトランスフォーム
 	void Draw(Transform transform);
 
+	//コライダーの中心座標を初期化
+	void InitializeWorldCenter();
 	//コライダーの中心座標を更新
 	void UpdateWorldCenter();
 
@@ -67,5 +69,7 @@ public:
 private:
 	//外接球の半径の２乗を計算する
 	virtual float CalculateBoundingRadius(const XMFLOAT3& size) = 0;
+	//オフセットを加味したワールド座標を計算
+	XMFLOAT3 CalculateWorldCenter();
 };
 

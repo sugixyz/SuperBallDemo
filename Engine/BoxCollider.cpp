@@ -12,7 +12,6 @@ BoxCollider::BoxCollider(XMFLOAT3 basePos, XMFLOAT3 size, CollisionFilter filter
 	SetSize(size);
 	type_ = COLLIDER_BOX;
 	filter_ = filter;
-	UpdateWorldCenter();
 
 	//リリース時は判定枠は表示しない
 #ifdef _DEBUG

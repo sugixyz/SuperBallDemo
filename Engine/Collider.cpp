@@ -14,15 +14,6 @@ Collider::Collider() :
 	worldCenter_(0.0f, 0.0f, 0.0f),
 	isStatic(false)
 {
-	GameObject* pGameObject_;	//この判定をつけたゲームオブジェクト
-	ColliderType	type_;			//種類
-	XMFLOAT3		center_;		//中心位置（ゲームオブジェクトの原点から見た位置）
-	XMFLOAT3		size_;			//判定サイズ（幅、高さ、奥行き）
-	int				hDebugModel_;	//デバッグ表示用のモデルのID
-	CollisionFilter filter_;		//判定用のレイヤーフィルタ
-	float			boundingRadius_;//外接球の半径
-	XMFLOAT3		worldCenter_;	//オフセットを加味したワールド座標
-	bool			isMoving_;		//動くオブジェクトかどうか
 }
 
 //デストラクタ
@@ -42,16 +33,30 @@ void Collider::Draw(Transform transform)
 	Model::Draw(hDebugModel_);
 }
 
+void Collider::InitializeWorldCenter()
+{
+	//静的かどうか関係なく計算
+	worldCenter_ = CalculateWorldCenter();
+}
+
 void Collider::UpdateWorldCenter()
 {
-	//動かないオブジェクトなら計算しない
+	//静的オブジェクトなら再計算しない
 	if (isStatic)return;
 
+	worldCenter_ = CalculateWorldCenter();
+}
+
+XMFLOAT3 Collider::CalculateWorldCenter()
+{
 	XMMATRIX mWorld = pGameObject_->GetWorldMatrix();
 	XMFLOAT3 objPos = pGameObject_->GetWorldPosition();
 	XMVECTOR pos = XMLoadFloat3(&objPos);
 	XMVECTOR localCenter = XMLoadFloat3(&center_);
 
 	XMVECTOR worldCenter = pos + XMVector3TransformNormal(localCenter, mWorld);
-	XMStoreFloat3(&worldCenter_, worldCenter);
+	XMFLOAT3 result;
+	XMStoreFloat3(&result, worldCenter);
+
+	return result;
 }

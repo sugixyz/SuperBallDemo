@@ -15,6 +15,7 @@ void CollisionManager::Initialize()
 void CollisionManager::AddCollider(Collider* col)
 {
     colliders_.push_back(col);
+    col->InitializeWorldCenter();
 }
 
 void CollisionManager::ClearCollider(Collider * col)
