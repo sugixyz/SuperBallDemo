@@ -158,6 +158,8 @@
     <ClCompile Include="SourceCode\Gun.cpp" />
     <ClCompile Include="SourceCode\HealthComponent.cpp" />
     <ClCompile Include="SourceCode\MoveComponent.cpp" />
+    <ClCompile Include="SourceCode\ObjectLoader.cpp" />
+    <ClCompile Include="SourceCode\ObjectSpawner.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
     <ClCompile Include="SourceCode\PlayerController.cpp" />
     <ClCompile Include="SourceCode\TargetObject.cpp" />
@@ -204,6 +206,8 @@
     <ClInclude Include="SourceCode\Gun.h" />
     <ClInclude Include="SourceCode\HealthComponent.h" />
     <ClInclude Include="SourceCode\MoveComponent.h" />
+    <ClInclude Include="SourceCode\ObjectLoader.h" />
+    <ClInclude Include="SourceCode\ObjectSpawner.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\PlayerController.h" />
     <ClInclude Include="SourceCode\TargetObject.h" />

@@ -149,6 +149,8 @@
     <ClCompile Include="Engine\CollisionMatrix.cpp">
       <Filter>01Engine\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\ObjectLoader.cpp" />
+    <ClCompile Include="SourceCode\ObjectSpawner.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -281,6 +283,8 @@
     <ClInclude Include="Engine\CollisionData.h">
       <Filter>01Engine\Collider</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\ObjectLoader.h" />
+    <ClInclude Include="SourceCode\ObjectSpawner.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

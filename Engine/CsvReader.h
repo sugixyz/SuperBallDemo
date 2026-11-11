@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include<windows.h>
 
 //-----------------------------------------------------------
 //CSVファイルを扱うクラス
@@ -15,7 +16,7 @@ class CsvReader
 	//引数：data	もとの文字列データ
 	//引数：index	何文字目から調べるか
 	//戻値：なし
-	void GetToComma(std::string *result, std::string data, DWORD* index);
+	void GetToComma(std::string* result, std::string data, DWORD* index);
 
 public:
 	//コンストラクタ
@@ -50,4 +51,3 @@ public:
 	//戻値：行数
 	size_t GetHeight();
 };
-

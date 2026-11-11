@@ -4,6 +4,7 @@
 #include"AutoController.h"
 #include"TargetObject.h"
 #include"Obstacle.h"
+#include"ObjectSpawner.h"
 
 namespace
 {
@@ -59,6 +60,10 @@ void TestScene::Initialize()
 			target->SetRotate(-90.0f, 0.0f, 0.0f);
 		}
 	}
+
+	ObjectSpawner spawner = ObjectSpawner();
+	spawner.SetObjectParent(this);
+	spawner.SpawnObject();
 }
 
 //更新

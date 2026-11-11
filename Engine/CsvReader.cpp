@@ -89,10 +89,10 @@ bool CsvReader::Load(std::string fileName)
 }
 
 //「,」か「改行」までの文字列を取得
-void CsvReader::GetToComma(std::string *result, std::string data, DWORD* index)
+void CsvReader::GetToComma(std::string* result, std::string data, DWORD* index)
 {
 	//「,」まで一文字ずつresultに入れる
-	while (data[*index] != ',' && data[*index] != '\n'&& data[*index] != '\r')
+	while (data[*index] != ',' && data[*index] != '\n' && data[*index] != '\r')
 	{
 		*result += data[*index];
 		(*index)++;
