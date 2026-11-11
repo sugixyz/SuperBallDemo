@@ -1,4 +1,4 @@
-#include"ObjectLoader.h"
+﻿#include"ObjectLoader.h"
 #include"../Engine/CsvReader.h"
 
 enum ObjectColumData : int
@@ -39,6 +39,11 @@ std::vector<ObjectData> ObjectLoader::Load(std::string filename)
 
 	for (int y = 0;y < height; y++)
 	{
+		//コメントだったら抜ける
+		char str = csv.GetString(0, y).front();
+		if (str == '#')continue;
+		if (str == '/')continue;
+
 		ObjectData data;
 		data.modelName = csv.GetString(MODEL_NAME, y);
 		data.position.x = csv.GetValue(POSITION_X, y);
@@ -50,7 +55,8 @@ std::vector<ObjectData> ObjectLoader::Load(std::string filename)
 		data.scale.x = csv.GetValue(SCALE_X, y);
 		data.scale.y = csv.GetValue(SCALE_Y, y);
 		data.scale.z = csv.GetValue(SCALE_Z, y);
-		data.isStatic = static_cast<bool>(csv.GetValue(IS_STATIC, y));
+		std::string boolValue =  csv.GetString(IS_STATIC, y);
+		data.isStatic = (boolValue == "true" || boolValue == "TRUE") ? true : false;
 
 		list.push_back(data);
 	}

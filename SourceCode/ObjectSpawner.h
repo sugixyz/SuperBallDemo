@@ -1,4 +1,6 @@
-#pragma once
+﻿#pragma once
+
+class GameObject;
 
 class ObjectSpawner
 {

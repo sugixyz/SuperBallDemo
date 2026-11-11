@@ -2,15 +2,7 @@
 #include"Fighter.h"
 #include"PlayerController.h"
 #include"AutoController.h"
-#include"TargetObject.h"
-#include"Obstacle.h"
 #include"ObjectSpawner.h"
-
-namespace
-{
-	Obstacle* lastObstacle = nullptr;
-	TargetObject* target = nullptr;
-}
 
 //コンストラクタ
 TestScene::TestScene(GameObject * parent)
@@ -27,40 +19,6 @@ void TestScene::Initialize()
 	//Fighter* ai = Instantiate<Fighter>(this);
 	//ai->SetController(new AutoController());
 
-	const int OBSTACLE_COUNT = 6;
-	XMFLOAT3 positions[OBSTACLE_COUNT] =
-	{
-		{0,0,0},
-		{-8,2,0},
-		{8,2,0},
-		{0,2,8},
-		{0,2,-8},
-		{0,2,4}
-	};
-	XMFLOAT3 scales[OBSTACLE_COUNT]
-	{
-		{16,1,16},
-		{1,4,16},
-		{1,4,16},
-		{16,4,1},
-		{16,4,1},
-		{1,1,1}
-	};
-
-	for (int i = 0;i < OBSTACLE_COUNT;i++)
-	{
-		Obstacle* obs = Instantiate<Obstacle>(this);
-		obs->SetObject(positions[i], scales[i]);
-		if (i + 1 == OBSTACLE_COUNT)
-		{
-			lastObstacle = obs;
-			target = Instantiate<TargetObject>(obs);
-			target->SetPosition(XMFLOAT3(0.0f, 0.0f, -0.55));
-			//lastObstacle->SetRotate(0.0f, 90.0f, 0.0f);
-			target->SetRotate(-90.0f, 0.0f, 0.0f);
-		}
-	}
-
 	ObjectSpawner spawner = ObjectSpawner();
 	spawner.SetObjectParent(this);
 	spawner.SpawnObject();
@@ -69,11 +27,6 @@ void TestScene::Initialize()
 //更新
 void TestScene::Update()
 {
-	static int rotate = 0;
-	rotate++;
-	lastObstacle->SetRotate(0, rotate, rotate);
-
-	//target->SetRotate(-90, rotate, 0);
 }
 
 //描画

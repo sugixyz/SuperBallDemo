@@ -225,7 +225,7 @@ void CollisionManager::IsHitBoxVsSphere(Collider* box, Collider* sphere, Collisi
     XMFLOAT3 boxSize = box->GetSize();
 
     XMVECTOR cBox = XMLoadFloat3(&boxPos);
-    XMVECTOR wideHalfSize = XMLoadFloat3(&boxSize) / 1.8f;
+    XMVECTOR wideHalfSize = XMLoadFloat3(&boxSize) / 1.7f;
 
     XMVECTOR wideMin = cBox - wideHalfSize;
     XMVECTOR wideMax = cBox + wideHalfSize;

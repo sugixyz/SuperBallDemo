@@ -1,4 +1,4 @@
-#include "ObjectSpawner.h"
+﻿#include "ObjectSpawner.h"
 #include"ObjectLoader.h"
 #include"Obstacle.h"
 #include<string>
@@ -19,12 +19,12 @@ bool ObjectSpawner::SpawnObject()
     
     for (auto data : spawnDatas)
     {
-        Obstacle obs = Instantiate<Obstacle>(parent_);
-        obs.SetPosition(data.position);
-        obs.SetRotate(data.rotate);
-        obs.SetScale(data.scale);
-
-        obs.SetObject(data.position, data.scale);
+        Obstacle* obs = Instantiate<Obstacle>(parent_);
+        Transform transform;
+        transform.position_ = data.position;
+        transform.rotate_ = data.rotate;
+        transform.scale_ = data.scale;
+        obs->SetObject(transform);
     }
 
     return true;

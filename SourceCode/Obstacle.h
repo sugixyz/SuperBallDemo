@@ -1,9 +1,6 @@
 ﻿#pragma once
 #include"../Engine/GameObject.h"
 
-class BoxCollider;
-class SphereCollider;
-
 class Obstacle : public GameObject
 {
 public:
@@ -17,16 +14,12 @@ public:
 	void OnCollision(const CollisionData& data);
 
 	/// <summary>
-	/// オブジェクトの初期設定
+	/// 障害物の初期化
 	/// </summary>
-	/// <param name="position">座標</param>
-	/// <param name="scale">スケール</param>
-	void SetObject(XMFLOAT3 position, XMFLOAT3 scale);
-private:
-	//障害物に接触したときの処理
-	void CollisionBall(GameObject* ball, Collider* col);
-	//プレイヤーに接触したときの処理
-	void CollisionPlayer(GameObject* player, Collider* col);
+	/// <param name="transform">設定するトランスフォーム</param>
+	void SetObject(Transform transform);
 private:
 	int hModel_;
+private:
+	static constexpr XMFLOAT3 COL_OFFSET = { 0.0f,0.0f,0.0f };
 };
