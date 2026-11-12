@@ -1,8 +1,9 @@
-#モデル名,座標X,座標Y,座標Z,回転X,回転Y,回転Z,スケールX,スケールY,スケールZ,Staticか
-Obstacle,-2,2,0,45,0,0,1,1,1,true
-Obstacle,0,0,0,0,0,0,16,1,16,true
-Obstacle,-8,2,0,0,0,0,1,4,16,true
-Obstacle,8,2,0,0,0,0,1,4,16,true
-Obstacle,0,2,8,0,0,0,16,4,1,true
-Obstacle,0,2,-8,0,0,0,16,4,1,true
-Obstacle,0,2,4,0,0,0,1,1,1,true
+#モチE��吁E座標X,座標Y,座標Z,回転X,回転Y,回転Z,スケールX,スケールY,スケールZ,StaticぁE,
+Obstacle,2,0,0,45,0,0,1,1,1,TRUE
+Obstacle,-2,0.5,0,45,0,0,1,1,1,TRUE
+Obstacle,0,0,0,0,0,0,16,1,16,TRUE
+Obstacle,-8,2,0,0,0,0,1,4,16,TRUE
+Obstacle,8,2,0,0,0,0,1,4,16,TRUE
+Obstacle,0,2,8,0,0,0,16,4,1,TRUE
+Obstacle,0,2,-8,0,0,0,16,4,1,TRUE
+Obstacle,0,2,4,0,0,0,1,1,1,TRUE

@@ -46,15 +46,15 @@ std::vector<ObjectData> ObjectLoader::Load(std::string filename)
 
 		ObjectData data;
 		data.modelName = csv.GetString(MODEL_NAME, y);
-		data.position.x = csv.GetValue(POSITION_X, y);
-		data.position.y = csv.GetValue(POSITION_Y, y);
-		data.position.z = csv.GetValue(POSITION_Z, y);
-		data.rotate.x = csv.GetValue(ROTATE_X, y);
-		data.rotate.y = csv.GetValue(ROTATE_Y, y);
-		data.rotate.z = csv.GetValue(ROTATE_Z, y);
-		data.scale.x = csv.GetValue(SCALE_X, y);
-		data.scale.y = csv.GetValue(SCALE_Y, y);
-		data.scale.z = csv.GetValue(SCALE_Z, y);
+		data.position.x = csv.GetFloatValue(POSITION_X, y);
+		data.position.y = csv.GetFloatValue(POSITION_Y, y);
+		data.position.z = csv.GetFloatValue(POSITION_Z, y);
+		data.rotate.x = csv.GetFloatValue(ROTATE_X, y);
+		data.rotate.y = csv.GetFloatValue(ROTATE_Y, y);
+		data.rotate.z = csv.GetFloatValue(ROTATE_Z, y);
+		data.scale.x = csv.GetFloatValue(SCALE_X, y);
+		data.scale.y = csv.GetFloatValue(SCALE_Y, y);
+		data.scale.z = csv.GetFloatValue(SCALE_Z, y);
 		std::string boolValue =  csv.GetString(IS_STATIC, y);
 		data.isStatic = (boolValue == "true" || boolValue == "TRUE") ? true : false;
 
