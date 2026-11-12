@@ -316,23 +316,44 @@ void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, Collisi
     // OBBのローカル座標変換用の行列を取得
     GameObject* obbObj = obb->GetGameObject();
     XMMATRIX mWorld = obbObj->GetWorldMatrix();
-    XMMATRIX mInvWorld = XMMatrixInverse(nullptr, mWorld);
+
+    XMVECTOR axisX = XMVector3Normalize(mWorld.r[0]);
+    XMVECTOR axisY = XMVector3Normalize(mWorld.r[1]);
+    XMVECTOR axisZ = XMVector3Normalize(mWorld.r[2]);
+
+    XMMATRIX mRotOnly = XMMATRIX(
+        axisX,
+        axisY,
+        axisZ,
+        mWorld.r[3] // 平行移動成分はそのまま
+    );
+
+    // スケールを除いた逆行列を作る
+    XMMATRIX mInvRot = XMMatrixInverse(nullptr, mRotOnly);
+    //XMMATRIX mInvWorld = XMMatrixInverse(nullptr, mWorld);
+
 
     // 球の座標をOBBのローカル座標に変換
-    XMFLOAT3 spherePos = Transform::Float3Add(sphere->GetGameObject()->GetWorldPosition(), sphere->GetCenter());
+    XMFLOAT3 spherePos = sphere->GetWorldCenter();
     XMVECTOR sphereWorldPos = XMLoadFloat3(&spherePos);
-    XMVECTOR sphereLocalPos = XMVector3TransformCoord(sphereWorldPos, mInvWorld);
+    XMVECTOR sphereLocalPos = XMVector3TransformCoord(sphereWorldPos, mInvRot);
 
-    // ★修正：コライダーの Center（オフセット分）をローカル座標側から引くことで、
     // コライダーの中心を基準にした正しいローカル座標に補正する
     XMFLOAT3 obbCenter = obb->GetCenter();
     XMVECTOR center = XMLoadFloat3(&obbCenter);
     sphereLocalPos = sphereLocalPos - center;
 
     XMFLOAT3 obbSize = obb->GetSize();
+    //XMVECTOR vScale = XMVectorSet(
+    //    XMVectorGetX(XMVector3Length(mWorld.r[0])),
+    //    XMVectorGetX(XMVector3Length(mWorld.r[1])),
+    //    XMVectorGetX(XMVector3Length(mWorld.r[2])),
+    //    1.0f
+    //);
 
     // ボックス側は純粋な原点中心（-halfSize ~ +halfSize）で計算する
-    XMVECTOR wideHalfSize = XMLoadFloat3(&obbSize) / 1.7f;
+    XMVECTOR scaledHalfSize = XMLoadFloat3(&obbSize);
+    XMVECTOR wideHalfSize = scaledHalfSize / 1.7f;
     XMVECTOR wideMin = -wideHalfSize;
     XMVECTOR wideMax = wideHalfSize;
 
@@ -373,7 +394,7 @@ void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, Collisi
             data.penetrationDepth = radius;
         }
 
-        XMVECTOR worldNormal = XMVector3TransformNormal(localNormal, mWorld);
+        XMVECTOR worldNormal = XMVector3TransformNormal(localNormal, mRotOnly);
         worldNormal = XMVector3Normalize(worldNormal);
         XMStoreFloat3(&data.normal, worldNormal);
 

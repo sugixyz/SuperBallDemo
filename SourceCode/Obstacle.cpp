@@ -46,6 +46,7 @@ void Obstacle::SetObject(Transform transform, bool isStatic)
 	CollisionFilter filter = CollisionFilter(CollisionLayer::OBSTACLE);
 	if (transform.rotate_.x == 0.0f && transform.rotate_.y == 0.0f && transform.rotate_.z == 0.0f)
 	{
+		//OBBCollider* col = new OBBCollider(COL_OFFSET, transform_.scale_, filter);
 		BoxCollider* col = new BoxCollider(COL_OFFSET, transform_.scale_, filter);
 		AddCollider(col);
 	}
