@@ -137,6 +137,10 @@ public:
 	//RootJobを取得
 	GameObject* GetRootJob();
 
+	//動的か静的かを指定
+	void SetDynamic() { isStaticObject_ = false; }
+	void SetStatic() { isStaticObject_ = true; }
+
 
 	//各アクセス関数
 	Transform GetTransform() { return transform_; }
@@ -146,6 +150,7 @@ public:
 	XMFLOAT3 GetWorldPosition() { return Transform::Float3Add(GetParent()->transform_.position_ , transform_.position_); }
 	XMFLOAT3 GetWorldRotate() { return Transform::Float3Add(GetParent()->transform_.rotate_, transform_.rotate_); }
 	XMFLOAT3 GetWorldScale() { return Transform::Float3Add(GetParent()->transform_.scale_, transform_.scale_); }
+	bool GetIsStaticObject() { return isStaticObject_; }
 	void SetPosition(XMFLOAT3 position) { transform_.position_ = position; }
 	void SetPosition(float x, float y, float z) { SetPosition(XMFLOAT3( x, y, z )); }
 	void SetRotate(XMFLOAT3 rotate) { transform_.rotate_ = rotate; }
@@ -180,6 +185,9 @@ private:
 
 	//子オブジェクトリスト
 	std::list<GameObject*> childList_;
+
+	//静的オブジェクトかどうか
+	bool isStaticObject_;
 };
 
 

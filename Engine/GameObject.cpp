@@ -19,9 +19,7 @@ GameObject::GameObject(GameObject * parent) :
 //コンストラクタ（標準）
 GameObject::GameObject(GameObject * parent, const std::string& name)
 	: pParent_(parent),
-
-
-
+	isStaticObject_(false),
 	objectName_(name)
 {
 	childList_.clear();
@@ -219,6 +217,8 @@ void GameObject::KillObjectSub(GameObject * obj)
 void GameObject::AddCollider(Collider* collider)
 {
 	collider->SetGameObject(this);
+	if (this->isStaticObject_)collider->SetStatic();
+	else collider->SetDynamic();
 	colliderList_.push_back(collider);
 	Collision::AddCollider(collider);
 }

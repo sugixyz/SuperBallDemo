@@ -37,9 +37,11 @@ void Obstacle::OnCollision(const CollisionData& data)
 {
 }
 
-void Obstacle::SetObject(Transform transform)
+void Obstacle::SetObject(Transform transform, bool isStatic)
 {
 	transform_ = transform;
+	if (isStatic)SetStatic();
+	else SetDynamic();
 
 	CollisionFilter filter = CollisionFilter(CollisionLayer::OBSTACLE);
 	if (transform.rotate_.x == 0.0f && transform.rotate_.y == 0.0f && transform.rotate_.z == 0.0f)

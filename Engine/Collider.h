@@ -31,7 +31,7 @@ protected:
 	CollisionFilter filter_;		//判定用のレイヤーフィルタ
 	float			boundingRadius_;//外接球の半径
 	XMFLOAT3		worldCenter_;	//オフセットを加味したワールド座標
-	bool			isStatic;		//動かないオブジェクトかどうか
+	bool			isStatic;		//静的かどうか
 
 public:
 	//コンストラクタ

@@ -24,7 +24,7 @@ bool ObjectSpawner::SpawnObject()
         transform.position_ = data.position;
         transform.rotate_ = data.rotate;
         transform.scale_ = data.scale;
-        obs->SetObject(transform);
+        obs->SetObject(transform,data.isStatic);
     }
 
     return true;

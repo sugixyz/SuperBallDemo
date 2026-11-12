@@ -17,7 +17,8 @@ public:
 	/// 障害物の初期化
 	/// </summary>
 	/// <param name="transform">設定するトランスフォーム</param>
-	void SetObject(Transform transform);
+	/// <param name="isStatic">静的オブジェクトかどうか</param>
+	void SetObject(Transform transform,bool isStatic);
 private:
 	int hModel_;
 private:
