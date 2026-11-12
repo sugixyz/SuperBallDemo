@@ -30,6 +30,8 @@ void Gun::Initialize()
 	transform_.rotate_.x -= 30;
 	//transform_.rotate_.x -= 0;
 
+	SetDynamic();
+
 	text->Initialize();
 }
 

@@ -42,6 +42,8 @@ void Fighter::Initialize()
 	move_->SetSpeed(MOVE_SPEED);
 	move_->ResetVelocity();
 
+	SetDynamic();
+
 	gun_ = Instantiate<Gun>(this);
 
 	camPitch_ = TPS_CAM_PITCH;

@@ -28,6 +28,8 @@ void Ball::Initialize()
 	move_ = new MoveComponent();
 	assert(move_ != nullptr);
 
+	SetDynamic();
+
 	move_->SetSpeed(MOVE_SPEED);
 	move_->EnableGravity();
 }	
