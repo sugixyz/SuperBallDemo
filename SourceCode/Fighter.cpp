@@ -25,6 +25,8 @@ Fighter::~Fighter()
 
 void Fighter::Initialize()
 {
+	transform_.position_.y = 1.0f;
+
 	hModel_ = Model::Load("PlayerDemo.fbx");
 	assert(hModel_ >= 0);
 
@@ -41,6 +43,7 @@ void Fighter::Initialize()
 
 	move_->SetSpeed(MOVE_SPEED);
 	move_->ResetVelocity();
+	move_->EnableGravity();
 
 	SetDynamic();
 
@@ -91,6 +94,7 @@ void Fighter::OnCollision(const CollisionData& data)
 	if (name == "Obstacle")
 	{
 		CollisionObstacle(data);
+		move_->ResetGravity();
 	}
 }
 
