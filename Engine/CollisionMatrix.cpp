@@ -33,6 +33,7 @@ void CollisionMatrix::Initialize()
 	SetCollision(CollisionLayer::BALL, CollisionLayer::TARGET, true);
 	SetCollision(CollisionLayer::BALL, CollisionLayer::OBSTACLE, true);
 	SetCollision(CollisionLayer::BALL, CollisionLayer::BALL, true);
+	SetCollision(CollisionLayer::BALLOON, CollisionLayer::BALL, true);
 }
 
 bool CollisionMatrix::ShouldCollide(CollisionLayer layerA, CollisionLayer layerB)

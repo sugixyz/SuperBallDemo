@@ -75,6 +75,11 @@ void Ball::OnCollision(const CollisionData& data)
 		isColliding_ = false;
 		return;
 	}
+	else if (name == "Balloon")
+	{
+		isColliding_ = false;
+		return;
+	}
 	else if (name == "Ball")
 	{
 		CollisionBall(data);

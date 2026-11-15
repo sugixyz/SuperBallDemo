@@ -151,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\ObjectLoader.cpp" />
     <ClCompile Include="SourceCode\ObjectSpawner.cpp" />
+    <ClCompile Include="SourceCode\Balloon.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -285,6 +288,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\ObjectLoader.h" />
     <ClInclude Include="SourceCode\ObjectSpawner.h" />
+    <ClInclude Include="SourceCode\Balloon.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

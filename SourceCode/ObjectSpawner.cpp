@@ -1,6 +1,7 @@
 ﻿#include "ObjectSpawner.h"
 #include"ObjectLoader.h"
 #include"Obstacle.h"
+#include"Balloon.h"
 #include<string>
 
 ObjectSpawner::ObjectSpawner()
@@ -26,6 +27,8 @@ bool ObjectSpawner::SpawnObject()
         transform.scale_ = data.scale;
         obs->SetObject(transform,data.isStatic);
     }
+
+    Instantiate<Balloon>(parent_);
 
     return true;
 }

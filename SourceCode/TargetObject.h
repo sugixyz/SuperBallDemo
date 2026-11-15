@@ -12,6 +12,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
 	void OnCollision(const CollisionData& data) override;
 private:
 	void OnCollisionBall(CollisionData data);

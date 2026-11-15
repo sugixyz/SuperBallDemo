@@ -154,6 +154,7 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="SourceCode\AutoController.cpp" />
     <ClCompile Include="SourceCode\Ball.cpp" />
+    <ClCompile Include="SourceCode\Balloon.cpp" />
     <ClCompile Include="SourceCode\Fighter.cpp" />
     <ClCompile Include="SourceCode\Gun.cpp" />
     <ClCompile Include="SourceCode\HealthComponent.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="SourceCode\AutoController.h" />
     <ClInclude Include="SourceCode\Ball.h" />
+    <ClInclude Include="SourceCode\Balloon.h" />
     <ClInclude Include="SourceCode\Component.h" />
     <ClInclude Include="SourceCode\Controller.h" />
     <ClInclude Include="SourceCode\Fighter.h" />

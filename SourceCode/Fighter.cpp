@@ -25,7 +25,7 @@ Fighter::~Fighter()
 
 void Fighter::Initialize()
 {
-	transform_.position_.y = 1.0f;
+	transform_.position_.y = 2.0f;
 
 	hModel_ = Model::Load("PlayerDemo.fbx");
 	assert(hModel_ >= 0);

@@ -9,6 +9,7 @@ enum class CollisionLayer : uint32_t
 	BALL,
 	OBSTACLE,
 	TARGET,
+	BALLOON,
 	SIZE
 };
 

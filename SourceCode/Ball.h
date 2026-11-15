@@ -5,7 +5,7 @@ class Ball : public GameObject
 {
 public:
 	Ball(GameObject* parent);
-	~Ball();
+	~Ball() override;
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
