@@ -49,6 +49,16 @@ void Balloon::OnCollision(const CollisionData & data)
 	}
 }
 
+void Balloon::SetObject(const ObjectData& data)
+{
+	transform_.position_ = data.position;
+	transform_.rotate_ = data.rotate;
+	transform_.scale_ = data.scale;
+
+	if (data.isStatic)SetStatic();
+	else SetDynamic();
+}
+
 void Balloon::OnCollisionBall(const CollisionData& data)
 {
 	KillMe();

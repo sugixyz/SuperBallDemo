@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include"../Engine/GameObject.h"
+#include"ObjectData.h"
 
 class Balloon : public GameObject
 {
@@ -13,6 +14,8 @@ public:
 	void Release() override;
 
 	void OnCollision(const CollisionData& data);
+
+	void SetObject(const ObjectData& data);
 private:
 	//ボールに接触したときの処理
 	void OnCollisionBall(const CollisionData& data);

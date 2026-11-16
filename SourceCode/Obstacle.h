@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include"../Engine/GameObject.h"
+#include"ObjectData.h"
 
 class Obstacle : public GameObject
 {
@@ -14,11 +15,10 @@ public:
 	void OnCollision(const CollisionData& data);
 
 	/// <summary>
-	/// 障害物の初期化
+	/// オブジェクトの設定
 	/// </summary>
-	/// <param name="transform">設定するトランスフォーム</param>
-	/// <param name="isStatic">静的オブジェクトかどうか</param>
-	void SetObject(Transform transform,bool isStatic);
+	/// <param name="data">オブジェクトの初期化用データ</param>
+	void SetObject(const ObjectData& data);
 private:
 	int hModel_;
 private:

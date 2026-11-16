@@ -3,7 +3,8 @@
 
 enum ObjectColumData : int
 {
-	MODEL_NAME,
+	NAME,
+	COLOR,
 	POSITION_X,
 	POSITION_Y,
 	POSITION_Z,
@@ -45,7 +46,8 @@ std::vector<ObjectData> ObjectLoader::Load(std::string filename)
 		if (str == '/')continue;
 
 		ObjectData data;
-		data.modelName = csv.GetString(MODEL_NAME, y);
+		data.name = csv.GetString(NAME, y);
+		data.color = csv.GetString(COLOR, y);
 		data.position.x = csv.GetFloatValue(POSITION_X, y);
 		data.position.y = csv.GetFloatValue(POSITION_Y, y);
 		data.position.z = csv.GetFloatValue(POSITION_Z, y);

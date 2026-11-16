@@ -20,15 +20,17 @@ bool ObjectSpawner::SpawnObject()
     
     for (auto data : spawnDatas)
     {
-        Obstacle* obs = Instantiate<Obstacle>(parent_);
-        Transform transform;
-        transform.position_ = data.position;
-        transform.rotate_ = data.rotate;
-        transform.scale_ = data.scale;
-        obs->SetObject(transform,data.isStatic);
+        if (data.name == "Obstacle")
+        {
+            Obstacle* obs = Instantiate<Obstacle>(parent_);
+            obs->SetObject(data);
+        }
+        else if (data.name == "Balloon")
+        {
+            Balloon* bln = Instantiate<Balloon>(parent_);
+            bln->SetObject(data);
+        }
     }
-
-    Instantiate<Balloon>(parent_);
 
     return true;
 }

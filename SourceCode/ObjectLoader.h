@@ -1,19 +1,6 @@
 #pragma once
-#include<string>
 #include<vector>
-#include<DirectXMath.h>
-
-using namespace DirectX;
-
-struct ObjectData
-{
-	std::string modelName;
-	XMFLOAT3 position;
-	XMFLOAT3 rotate;
-	XMFLOAT3 scale;
-	bool isStatic;
-};
-
+#include"ObjectData.h"
 class ObjectLoader
 {
 public:
