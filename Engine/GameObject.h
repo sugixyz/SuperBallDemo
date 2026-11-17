@@ -88,6 +88,9 @@ public:
 	bool IsEntered();		// Update実行していいか
 	bool IsVisibled();		// Draw実行していいか
 
+	bool IsEnable();
+	bool IsDisable();
+
 
 	//子オブジェクトリストを取得
 	//戻値：子オブジェクトリスト
@@ -141,6 +144,10 @@ public:
 	void SetDynamic() { isStaticObject_ = false; }
 	void SetStatic() { isStaticObject_ = true; }
 
+	//有効なオブジェクトかどうかを指定
+	void Enable() { isActive_ = true; }
+	void Disable() { isActive_ = false; }
+
 
 	//各アクセス関数
 	Transform GetTransform() { return transform_; }
@@ -188,6 +195,8 @@ private:
 
 	//静的オブジェクトかどうか
 	bool isStaticObject_;
+	//有効かどうか
+	bool isActive_;
 };
 
 

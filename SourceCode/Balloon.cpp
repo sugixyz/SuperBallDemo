@@ -12,6 +12,8 @@ Balloon::~Balloon()
 
 void Balloon::Initialize()
 {
+	Disable();
+
 	CollisionFilter filter = CollisionFilter(CollisionLayer::BALLOON);
 	SphereCollider* col = new SphereCollider(COL_OFFSET, COL_RADIUS, filter);
 	AddCollider(col);

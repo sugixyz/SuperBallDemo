@@ -20,7 +20,8 @@ GameObject::GameObject(GameObject * parent) :
 GameObject::GameObject(GameObject * parent, const std::string& name)
 	: pParent_(parent),
 	isStaticObject_(false),
-	objectName_(name)
+	objectName_(name),
+	isActive_(true)
 {
 	childList_.clear();
 	state_ = { 0, 1, 1, 0 };
@@ -99,6 +100,16 @@ bool GameObject::IsEntered()
 bool GameObject::IsVisibled()
 {
 	return (state_.visible != 0);
+}
+
+bool GameObject::IsEnable()
+{
+	return isActive_ == true;
+}
+
+bool GameObject::IsDisable()
+{
+	return isActive_ == false;
 }
 
 //子オブジェクトリストを取得
@@ -249,11 +260,13 @@ GameObject * GameObject::GetRootJob()
 
 void GameObject::UpdateSub()
 {
+	if (IsDisable())return;
 	Update();
 	Transform();
 
 	for (auto it = childList_.begin(); it != childList_.end(); it++)
 	{
+		if ((*it)->IsDisable())continue;
 		(*it)->UpdateSub();
 	}
 
@@ -274,6 +287,7 @@ void GameObject::UpdateSub()
 
 void GameObject::DrawSub()
 {
+	if (IsDisable())return;
 	Draw();
 
 
@@ -285,6 +299,7 @@ void GameObject::DrawSub()
 	//その子オブジェクトの描画処理
 	for (auto it = childList_.begin(); it != childList_.end(); it++)
 	{
+		if ((*it)->IsDisable())continue;
 		(*it)->DrawSub();
 	}
 }

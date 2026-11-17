@@ -26,18 +26,26 @@ void CollisionManager::ClearCollider(Collider * col)
 
 void CollisionManager::UpdateCollisions()
 {
+    std::vector<Collider*> colliders;
+
     //全コライダーの中心座標を更新
-    for (auto col : colliders_)col->UpdateWorldCenter();
+    for (auto col : colliders_)
+    {
+        GameObject* obj = col->GetGameObject();
+        if (obj->IsDisable())continue;
+        col->UpdateWorldCenter();
+        colliders.push_back(col);
+    }
 
     //全組み合わせを検索
-    for (int i = 0; i < colliders_.size(); i++)
+    for (int i = 0; i < colliders.size(); i++)
     {
         //コライダーを取得
-        Collider* colA = colliders_[i];
-        for (int j = i + 1; j < colliders_.size(); j++)
+        Collider* colA = colliders[i];
+        for (int j = i + 1; j < colliders.size(); j++)
         {
             //コライダーを取得
-            Collider* colB = colliders_[j];
+            Collider* colB = colliders[j];
 
             CollisionFilter filterA = colA->GetCollisionFilter();
             CollisionFilter filterB = colB->GetCollisionFilter();
@@ -90,6 +98,7 @@ void CollisionManager::DrawColliders()
     for (Collider* col : colliders_)
     {
         GameObject* obj = col->GetGameObject();
+        if (obj->IsDisable())continue;
         col->Draw(obj->GetTransform());
     }
 
