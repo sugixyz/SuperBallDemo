@@ -160,6 +160,7 @@
     <ClCompile Include="SourceCode\HealthComponent.cpp" />
     <ClCompile Include="SourceCode\MoveComponent.cpp" />
     <ClCompile Include="SourceCode\ObjectLoader.cpp" />
+    <ClCompile Include="SourceCode\ObjectPool.cpp" />
     <ClCompile Include="SourceCode\ObjectSpawner.cpp" />
     <ClCompile Include="SourceCode\Obstacle.cpp" />
     <ClCompile Include="SourceCode\PlayerController.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="SourceCode\MoveComponent.h" />
     <ClInclude Include="SourceCode\ObjectData.h" />
     <ClInclude Include="SourceCode\ObjectLoader.h" />
+    <ClInclude Include="SourceCode\ObjectPool.h" />
     <ClInclude Include="SourceCode\ObjectSpawner.h" />
     <ClInclude Include="SourceCode\Obstacle.h" />
     <ClInclude Include="SourceCode\PlayerController.h" />

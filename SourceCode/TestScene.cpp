@@ -13,15 +13,16 @@ TestScene::TestScene(GameObject * parent)
 //初期化
 void TestScene::Initialize()
 {
+	ObjectSpawner spawner = ObjectSpawner();
+	spawner.SetObjectParent(this);
+	spawner.SpawnObject();
+
 	Fighter* fighter = Instantiate<Fighter>(this);
 	fighter->SetController(new PlayerController());
 
 	//Fighter* ai = Instantiate<Fighter>(this);
 	//ai->SetController(new AutoController());
 
-	ObjectSpawner spawner = ObjectSpawner();
-	spawner.SetObjectParent(this);
-	spawner.SpawnObject();
 }
 
 //更新

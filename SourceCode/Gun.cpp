@@ -11,7 +11,8 @@ namespace
 
 Gun::Gun(GameObject* parent)
 	:GameObject(parent,"Gun"),
-	hModel_(-1)
+	hModel_(-1),
+	ballPool_()
 {
 }
 
@@ -33,6 +34,8 @@ void Gun::Initialize()
 	SetDynamic();
 
 	text->Initialize();
+
+	ballPool_.InitializePool<Ball>(this, BALL_COUNT);
 }
 
 void Gun::Update()
@@ -53,6 +56,9 @@ void Gun::Release()
 
 void Gun::ShootBullet()
 {
+	Ball* ball = static_cast<Ball*>(ballPool_.GetPoolObject());
+	if (ball == nullptr)return;
+
 	//ボーンを取得
 	XMFLOAT3 gunMuzzle = Model::GetBonePosition(hModel_, "muzzle");
 	XMFLOAT3 gunBarrel = Model::GetBonePosition(hModel_, "barrel");
@@ -60,10 +66,20 @@ void Gun::ShootBullet()
 	XMVECTOR barrel = XMLoadFloat3(&gunBarrel);
 	XMVECTOR vMove = muzzle - barrel;
 	
-	//弾生成
-	Ball* ball = Instantiate<Ball>(this->GetParent()->GetParent());
+	//座標と移動方向を指定
 	ball->SetPosition(gunMuzzle);
 	ball->SetMoveDirection(vMove);
 
 	count++;
+}
+
+void Gun::Reload()
+{
+	ballPool_.Reset();
+}
+
+void Gun::RefillBall(GameObject* obj)
+{
+	//無効化すればプールから取り出せるように
+	obj->Disable();
 }
