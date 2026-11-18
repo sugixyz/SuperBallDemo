@@ -34,6 +34,12 @@ void Ball::Initialize()
 	move_->EnableGravity();
 }	
 
+void Ball::OnEnable()
+{
+	move_->SetSpeed(MOVE_SPEED);
+	move_->EnableGravity();
+}
+
 void Ball::Update()
 {
 	transform_.position_ = move_->Move(transform_);
@@ -54,6 +60,7 @@ void Ball::Draw()
 void Ball::Release()
 {
 }
+
 
 void Ball::OnCollision(const CollisionData& data)
 {

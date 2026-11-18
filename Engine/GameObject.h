@@ -48,6 +48,10 @@ public:
 	virtual void Draw() = 0;
 	virtual void Release(void) = 0;
 
+	//有効化・無効化したときに呼び出す関数
+	virtual void OnEnable() {}
+	virtual void OnDisable() {}
+
 	//コンポーネント取得用関数
 	/// <summary>
 	///	Healthコンポーネント取得用関数
@@ -145,8 +149,8 @@ public:
 	void SetStatic() { isStaticObject_ = true; }
 
 	//有効なオブジェクトかどうかを指定
-	void Enable() { isActive_ = true; }
-	void Disable() { isActive_ = false; }
+	void Enable() { isActive_ = true; OnEnable(); }
+	void Disable() { isActive_ = false; OnDisable(); }
 
 
 	//各アクセス関数

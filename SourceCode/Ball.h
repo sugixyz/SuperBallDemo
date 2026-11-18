@@ -7,9 +7,11 @@ public:
 	Ball(GameObject* parent);
 	~Ball() override;
 	void Initialize() override;
+	void OnEnable() override;
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
 
 	void OnCollision(const CollisionData& data)override;
 
