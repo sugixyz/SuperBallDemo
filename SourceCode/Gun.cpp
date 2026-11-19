@@ -56,7 +56,7 @@ void Gun::Release()
 
 void Gun::ShootBullet()
 {
-	Ball* ball = static_cast<Ball*>(ballPool_.GetPoolObject());
+	Ball* ball = static_cast<Ball*>(ballPool_.AcquiredNext());
 	if (ball == nullptr)return;
 
 	//ボーンを取得

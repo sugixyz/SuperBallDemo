@@ -31,5 +31,5 @@ private:
 	//ボールのオブジェクトプール
 	ObjectPool ballPool_;
 private:
-	static constexpr int BALL_COUNT = 20;
+	static constexpr int BALL_COUNT = 200;
 };
