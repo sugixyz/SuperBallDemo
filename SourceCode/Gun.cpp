@@ -28,7 +28,7 @@ void Gun::Initialize()
 	transform_.position_.x -= 0.1f;
 	transform_.position_.z += 0.4f;
 
-	transform_.rotate_.x -= 30;
+	transform_.rotate_.x -= 20;
 	//transform_.rotate_.x -= 0;
 
 	SetDynamic();

@@ -5,6 +5,12 @@
 #include"Direct3D.h"
 #include"Global.h"
 
+namespace
+{
+    const float MARGIN_VALUE = 0.1f;
+    const XMVECTOR BOX_MARGIN = XMVectorSet(MARGIN_VALUE, MARGIN_VALUE, MARGIN_VALUE, MARGIN_VALUE);
+}
+
 void CollisionManager::Initialize()
 {
     //マトリックスの初期化
@@ -234,7 +240,7 @@ void CollisionManager::IsHitBoxVsSphere(Collider* box, Collider* sphere, Collisi
     XMFLOAT3 boxSize = box->GetSize();
 
     XMVECTOR cBox = XMLoadFloat3(&boxPos);
-    XMVECTOR wideHalfSize = XMLoadFloat3(&boxSize) / 1.7f;
+    XMVECTOR wideHalfSize = XMLoadFloat3(&boxSize) * 0.5f + BOX_MARGIN;
 
     XMVECTOR wideMin = cBox - wideHalfSize;
     XMVECTOR wideMax = cBox + wideHalfSize;
@@ -362,7 +368,7 @@ void CollisionManager::IsHitOBBVsSphere(Collider* obb, Collider* sphere, Collisi
 
     // ボックス側は純粋な原点中心（-halfSize ~ +halfSize）で計算する
     XMVECTOR scaledHalfSize = XMLoadFloat3(&obbSize);
-    XMVECTOR wideHalfSize = scaledHalfSize / 1.7f;
+    XMVECTOR wideHalfSize = scaledHalfSize * 0.5f;
     XMVECTOR wideMin = -wideHalfSize;
     XMVECTOR wideMax = wideHalfSize;
 

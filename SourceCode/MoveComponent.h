@@ -76,5 +76,5 @@ private:
 	XMVECTOR velocity_;
 	bool useGravity_;
 private:
-	static constexpr float GRAVITY = -9.8f;
+	static constexpr float GRAVITY = -9.8f * 0.5f;
 };

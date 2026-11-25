@@ -48,7 +48,7 @@ private:
 	//コライダーのサイズ
 	static constexpr float COL_RADIUS = 0.04f;
 	//移動速度
-	static constexpr float MOVE_SPEED = 8.0f;
+	static constexpr float MOVE_SPEED = 6.0f;
 	//反発係数
 	static constexpr float RESTITUTION = 0.9f;
 	//与えるダメージ
