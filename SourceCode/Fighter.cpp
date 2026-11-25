@@ -161,11 +161,26 @@ void Fighter::UpdateTpsCam(XMFLOAT3 camRot, float dist, XMVECTOR pos, XMVECTOR o
 	XMVECTOR vMove = XMVector3TransformCoord(FRONT, mRotZ * mRotX * mRotY);
 
 	XMFLOAT3 camTarget;
-	XMStoreFloat3(&camTarget, pos + offset + vMove);
+	XMStoreFloat3(&camTarget, pos + offset);
 	Camera::SetTarget(camTarget);
 
-	XMVECTOR vCam = XMVectorSet(0.0f, 0.0f, -dist, 0.0f);
+	XMVECTOR vCam = XMVectorSet(0.0f, 0.0f, -1, 0.0f);
 	vCam = XMVector3TransformCoord(vCam, mRotX * mRotY);
+	//vCam = XMVector3Normalize(vCam);
+
+	RayCastData data;
+	data.start = camTarget;
+	XMFLOAT3 direction;
+	XMStoreFloat3(&direction, vCam);
+	data.dir = direction;
+
+	Model::RayCast(hModel_, &data);
+	if (data.hit)
+	{
+		XMVECTOR vCam = XMVectorSet(0.0f, 0.0f, -data.dist, 0.0f);
+		vCam = XMVector3TransformCoord(vCam, mRotX * mRotY);
+		vCam = XMVector3Normalize(vCam);
+	}
 
 	XMFLOAT3 camPos;
 	XMStoreFloat3(&camPos, pos + offset + vCam);
