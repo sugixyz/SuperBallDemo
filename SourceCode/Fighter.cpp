@@ -94,13 +94,6 @@ void Fighter::Release()
 void Fighter::OnCollision(const CollisionData& data)
 {
 	std::string name = data.other->GetObjectName();
-
-	if (name == "Ground")
-	{
-		CollisionObstacle(data);
-		move_->ResetGravity();
-		move_->SetGrounded(true);
-	}
 	if (name == "Obstacle")
 	{
 		CollisionObstacle(data);
@@ -120,7 +113,9 @@ void Fighter::Move(const FighterInput& input)
 
 	if (input.isJumpPressed)move_->Jump(JUMP_SPEED);
 
-	move_->SetDirection(moveDirection);
+	XMFLOAT3 direction;
+	XMStoreFloat3(&direction, XMVector3Normalize(moveDirection));
+	move_->SetDirection(direction);
 	transform_.position_ = move_->Move(transform_);
 }
 
@@ -208,6 +203,11 @@ void Fighter::CollisionObstacle(CollisionData data)
 	XMVECTOR normal = XMLoadFloat3(&data.normal);
 
 	if (XMVectorGetY(normal) < 0)move_->OnCelingHit();
+	else if (XMVectorGetY(normal) > 0)
+	{
+		move_->ResetGravity();
+		move_->SetGrounded(true);
+	}
 
 	XMVECTOR pushVec = normal * data.penetrationDepth;
 	XMVECTOR newPos = XMLoadFloat3(&transform_.position_) + pushVec;

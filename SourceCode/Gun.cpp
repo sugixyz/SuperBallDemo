@@ -68,7 +68,10 @@ void Gun::ShootBullet()
 	
 	//座標と移動方向を指定
 	ball->SetPosition(gunMuzzle);
-	ball->SetMoveDirection(vMove);
+
+	XMFLOAT3 dir;
+	XMStoreFloat3(&dir, XMVector3Normalize(vMove));
+	ball->SetMoveDirection(dir);
 
 	count++;
 }

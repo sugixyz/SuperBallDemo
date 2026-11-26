@@ -36,10 +36,10 @@ public:
 	void SetSpeed(float speed) { speed_ = speed; }
 	float GetSpeed() { return speed_; }
 
-	void SetDirection(XMVECTOR direction) { direction_ = XMVector3Normalize(direction); }
-	XMVECTOR GetDirection() { return direction_; }
+	void SetDirection(XMFLOAT3 direction) { direction; }
+	XMFLOAT3 GetDirection() { return direction_; }
 
-	XMVECTOR GetVelocity() { return velocity_; }
+	XMFLOAT3 GetVelocity() { return velocity_; }
 
 	void SetUseGravity(bool useGravity) { useGravity_ = useGravity; }
 	bool IsUseGravity() { return useGravity_; }
@@ -62,8 +62,8 @@ public:
 	void ResetVelocity();
 private:
 	float speed_;
-	XMVECTOR direction_;
-	XMVECTOR velocity_;
+	XMFLOAT3 direction_;
+	XMFLOAT3 velocity_;
 	bool useGravity_;
 	bool isGrounded_;
 private:

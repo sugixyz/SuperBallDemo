@@ -100,7 +100,7 @@ void Ball::OnCollision(const CollisionData& data)
 
 }
 
-void Ball::SetMoveDirection(XMVECTOR direction)
+void Ball::SetMoveDirection(XMFLOAT3 direction)
 {
 	move_->SetDirection(direction);
 	move_->ResetVelocity();
@@ -120,12 +120,15 @@ void Ball::CollisionObstacle(CollisionData data)
 	XMVECTOR newPos = XMLoadFloat3(&transform_.position_) + pushVec;
 	XMStoreFloat3(&transform_.position_, newPos);
 
-	XMVECTOR velocity = move_->GetVelocity();
+	XMFLOAT3 vel = move_->GetVelocity();
+	XMVECTOR velocity = XMLoadFloat3(&vel);
 
 	//反射速度の計算
 	XMVECTOR dotVal = XMVector3Dot(velocity, normal);
 	XMVECTOR reflectionVelocity = velocity - 2.0f * dotVal * normal;
-	move_->SetDirection(reflectionVelocity);
+	XMFLOAT3 reflection;
+	XMStoreFloat3(&reflection, reflectionVelocity);
+	move_->SetDirection(reflection);
 
 	if (speed < 0.05f)
 	{
@@ -156,10 +159,14 @@ void Ball::CollisionBall(CollisionData data)
 	XMVECTOR normal = XMLoadFloat3(&data.normal);
 	XMVECTOR tangentLine = CalculateSphereCollisionTangentLine(normal);
 
-	XMVECTOR directionA = XMVector3Normalize(move_->GetVelocity());
+	XMFLOAT3 vel;
+	vel = move_->GetVelocity();
+	XMVECTOR directionA = XMVector3Normalize(XMLoadFloat3(&vel));
+
 	MoveComponent* moveB = other->GetMoveComponent();
 	if (moveB == nullptr)return;
-	XMVECTOR directionB = XMVector3Normalize(moveB->GetVelocity());
+	vel = moveB->GetVelocity();
+	XMVECTOR directionB = XMVector3Normalize(XMLoadFloat3(&vel));
 
 	XMVECTOR nA = XMVector3Dot(directionA, normal);
 	XMVECTOR nB = XMVector3Dot(directionB, normal);
@@ -168,7 +175,9 @@ void Ball::CollisionBall(CollisionData data)
 	XMVECTOR tB = directionB - nB;
 
 	XMVECTOR direction = nB * normal + tA;
-	move_->SetDirection(direction);
+	XMFLOAT3 dir;
+	XMStoreFloat3(&dir, direction);
+	move_->SetDirection(dir);
 
 	float speed = moveB->GetSpeed();
 	move_->SetSpeed(speed);
