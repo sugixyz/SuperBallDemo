@@ -16,7 +16,8 @@ Fighter::Fighter(GameObject* parent)
 	move_(nullptr),
 	gun_(nullptr),
 	camType_(CamType::TPS),
-	camPitch_(0.0f)
+	camPitch_(0.0f),
+	hWall_(-1)
 {}
 
 Fighter::~Fighter()
@@ -29,6 +30,9 @@ void Fighter::Initialize()
 
 	hModel_ = Model::Load("PlayerDemo.fbx");
 	assert(hModel_ >= 0);
+
+	hWall_ = Model::Load("WallPrefabDemo.fbx");
+	assert(hWall_ >= 0);
 
 	CollisionFilter filter = CollisionFilter(CollisionLayer::FIGHTER);
 	OBBCollider* col = new OBBCollider(COL_POS, COL_SIZE,filter);
@@ -91,10 +95,15 @@ void Fighter::OnCollision(const CollisionData& data)
 {
 	std::string name = data.other->GetObjectName();
 
-	if (name == "Obstacle")
+	if (name == "Ground")
 	{
 		CollisionObstacle(data);
 		move_->ResetGravity();
+		move_->SetGrounded(true);
+	}
+	if (name == "Obstacle")
+	{
+		CollisionObstacle(data);
 	}
 	if (name == "Ball")
 	{
@@ -108,6 +117,8 @@ void Fighter::Move(const FighterInput& input)
 	XMVECTOR forward = CalculateForwardVector(transform_.rotate_.y);
 	XMVECTOR right = CalculateRightVector(forward);
 	XMVECTOR moveDirection = CalculateMoveDirection(input.moveInput, forward, right);
+
+	if (input.isJumpPressed)move_->Jump(JUMP_SPEED);
 
 	move_->SetDirection(moveDirection);
 	transform_.position_ = move_->Move(transform_);
@@ -164,23 +175,23 @@ void Fighter::UpdateTpsCam(XMFLOAT3 camRot, float dist, XMVECTOR pos, XMVECTOR o
 	XMStoreFloat3(&camTarget, pos + offset);
 	Camera::SetTarget(camTarget);
 
-	XMVECTOR vCam = XMVectorSet(0.0f, 0.0f, -1, 0.0f);
+	XMVECTOR vCam = XMVectorSet(0.0f, 0.0f, -dist, 0.0f);
 	vCam = XMVector3TransformCoord(vCam, mRotX * mRotY);
 	//vCam = XMVector3Normalize(vCam);
 
+	/*
 	RayCastData data;
-	data.start = camTarget;
+	XMStoreFloat3(&data.start, pos + offset);
 	XMFLOAT3 direction;
-	XMStoreFloat3(&direction, vCam);
-	data.dir = direction;
+	XMStoreFloat3(&data.dir, XMVector3Normalize(vCam));
 
-	Model::RayCast(hModel_, &data);
+	Model::RayCast(hWall_, &data);
 	if (data.hit)
 	{
-		XMVECTOR vCam = XMVectorSet(0.0f, 0.0f, -data.dist, 0.0f);
+		vCam = XMVectorSet(0.0f, 0.0f, -data.dist, 0.0f);
 		vCam = XMVector3TransformCoord(vCam, mRotX * mRotY);
-		vCam = XMVector3Normalize(vCam);
 	}
+	*/
 
 	XMFLOAT3 camPos;
 	XMStoreFloat3(&camPos, pos + offset + vCam);
@@ -195,6 +206,9 @@ void Fighter::CollisionObstacle(CollisionData data)
 {
 	//法線を取得
 	XMVECTOR normal = XMLoadFloat3(&data.normal);
+
+	if (XMVectorGetY(normal) < 0)move_->OnCelingHit();
+
 	XMVECTOR pushVec = normal * data.penetrationDepth;
 	XMVECTOR newPos = XMLoadFloat3(&transform_.position_) + pushVec;
 	XMStoreFloat3(&transform_.position_, newPos);

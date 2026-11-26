@@ -19,6 +19,11 @@ public:
 	/// </summary>
 	/// <param name="data">オブジェクトの初期化用データ</param>
 	void SetObject(const ObjectData& data);
+
+	/// <summary>
+	/// 地面として登録
+	/// </summary>
+	void SetGround();
 private:
 	int hModel_;
 private:

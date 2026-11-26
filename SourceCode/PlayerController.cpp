@@ -29,15 +29,21 @@ void PlayerController::Update()
 	if (Input::IsKey(DIK_UP))fighterInput_.cameraInput.y = 1.0f;
 	else if (Input::IsKey(DIK_DOWN))fighterInput_.cameraInput.y = -1.0f;
 
-	if (Input::IsKeyDown(DIK_SPACE))fighterInput_.isShootPressed = true;
-	else if (Input::IsKey(DIK_SPACE))
+	static float timer = 0.0f;
+	if (Input::IsKeyDown(DIK_F))fighterInput_.isShootPressed = true;
+	else if (Input::IsKey(DIK_F))
 	{
-		static float timer = 0.0f;
 		timer += Timer::GetDeltaTime();
-		if (timer >= 0.1f)
+		if (timer >= 0.2f)
 		{
 			fighterInput_.isShootPressed = true;
 			timer = 0.0f;
 		}
 	}
+	else
+	{
+		timer = 0.0f;
+	}
+
+	if (Input::IsKeyDown(DIK_SPACE))fighterInput_.isJumpPressed = true;
 }

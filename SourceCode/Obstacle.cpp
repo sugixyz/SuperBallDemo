@@ -59,3 +59,8 @@ void Obstacle::SetObject(const ObjectData& data)
 		AddCollider(col);
 	}
 }
+
+void Obstacle::SetGround()
+{
+	this->objectName_ = "Ground";
+}

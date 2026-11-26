@@ -6,7 +6,8 @@ MoveComponent::MoveComponent()
     :speed_(0.0f),
     direction_(XMVectorSet(0.0f,0.0f,0.0f,0.0f)),
     velocity_(XMVectorSet(0.0f,0.0f,0.0f,0.0f)),
-    useGravity_(false)
+    useGravity_(false),
+    isGrounded_(false)
 {
 }
 
@@ -35,7 +36,18 @@ XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
             0.0f
         );
     }
-    else
+    else if (isGrounded_)
+    {
+        verticalVelocity = 0.0f;
+
+        velocity_ = XMVectorSet(
+            XMVectorGetX(horizontalVelocity),
+            verticalVelocity,
+            XMVectorGetZ(horizontalVelocity),
+            0.0f
+        );
+    }
+    else    
     {
         velocity_ = horizontalVelocity;
     }
@@ -46,6 +58,49 @@ XMFLOAT3 MoveComponent::Move(Transform ownerTransform)
     XMFLOAT3 newPos;
     XMStoreFloat3(&newPos, pos);
     return newPos;
+}
+
+void MoveComponent::Jump(float jumpSpeed)
+{
+    //地面に触れていないなら抜ける
+    if (!isGrounded_)return;
+
+    velocity_ = XMVectorSet(
+        XMVectorGetX(velocity_),
+        jumpSpeed,
+        XMVectorGetZ(velocity_),
+        0.0f
+    );
+    isGrounded_ = false;
+    useGravity_ = true;
+}
+
+void MoveComponent::OnCelingHit()
+{
+    if (XMVectorGetY(velocity_) > 0.0f)
+    {
+        velocity_ = XMVectorSet(
+            XMVectorGetX(velocity_),
+            0.0f,
+            XMVectorGetZ(velocity_),
+            0.0f
+        );
+    }
+}
+
+void MoveComponent::SetGrounded(bool isGrounded)
+{
+    isGrounded_ = isGrounded;
+
+    if (isGrounded_ && XMVectorGetY(velocity_) < 0.0f)
+    {
+        velocity_ = XMVectorSet(
+            XMVectorGetX(velocity_),
+            0.0f,
+            XMVectorGetZ(velocity_),
+            0.0f
+        );
+    }
 }
 
 void MoveComponent::ResetGravity()

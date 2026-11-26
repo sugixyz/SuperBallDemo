@@ -12,6 +12,7 @@ struct FighterInput
 		:moveInput(0.0f, 0.0f),
 		isShootPressed(false),
 		rotateInput(0.0f, 0.0f),
+		isJumpPressed(false),
 		isCameraOwner(false),
 		cameraInput(0.0f,0.0f)
 	{}
@@ -21,6 +22,7 @@ struct FighterInput
 		moveInput = XMFLOAT2(0.0f, 0.0f);
 		isShootPressed = false;
 		rotateInput = XMFLOAT2(0.0f, 0.0f);
+		isJumpPressed = false;
 		isCameraOwner = false;
 		cameraInput = XMFLOAT2(0.0f, 0.0f);
 	}
@@ -31,6 +33,8 @@ struct FighterInput
 	bool isShootPressed;
 	//プレイヤーを回転させる2次元ベクトル
 	XMFLOAT2 rotateInput;
+	//ジャンプボタンが押されたか
+	bool isJumpPressed;
 	//カメラのオーナーかどうか
 	bool isCameraOwner;
 	//カメラを移動（回転）させる2次元ベクトル

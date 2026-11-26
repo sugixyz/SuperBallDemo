@@ -20,40 +20,30 @@ public:
 	XMFLOAT3 Move(Transform ownerTransform);
 
 	/// <summary>
-	/// 移動速度を設定する関数
+	/// ジャンプさせる
 	/// </summary>
-	/// <param name="speed">移動速度</param>
+	/// <param name="jumpSpeed">ジャンプの初速</param>
+	void Jump(float jumpSpeed);
+
+	/// <summary>
+	/// 天井に接触した時の処理
+	/// </summary>
+	void OnCelingHit();
+
+	void SetGrounded(bool isGrounded);
+	bool IsGrounded() { return isGrounded_; }
+
 	void SetSpeed(float speed) { speed_ = speed; }
-	/// <summary>
-	/// 現在の移動速度を取得する関数
-	/// </summary>
-	/// <returns>現在の移動速度</returns>
 	float GetSpeed() { return speed_; }
-	/// <summary>
-	/// 移動方向を設定する関数
-	/// </summary>
-	/// <param name="direction">移動方向（3次元）</param>
+
 	void SetDirection(XMVECTOR direction) { direction_ = XMVector3Normalize(direction); }
-	/// <summary>
-	/// 現在の移動方向を取得する関数
-	/// </summary>
-	/// <returns>現在の移動方向</returns>
 	XMVECTOR GetDirection() { return direction_; }
-	/// <summary>
-	/// 現在の速度を取得する関数
-	/// </summary>
-	/// <returns>現在の移動速度</returns>
+
 	XMVECTOR GetVelocity() { return velocity_; }
-	/// <summary>
-	/// 重力を使用するかどうかを設定
-	/// </summary>
-	/// <param name="useGravity">重力を使用するかどうか</param>
+
 	void SetUseGravity(bool useGravity) { useGravity_ = useGravity; }
-	/// <summary>
-	/// 現在重力を使用しているかどうか
-	/// </summary>
-	/// <returns>使用していればtrueを返す</returns>
-	bool GetUseGravity() { return useGravity_; }
+	bool IsUseGravity() { return useGravity_; }
+
 	/// <summary>
 	/// 重力を有効化する関数
 	/// </summary>
@@ -75,6 +65,7 @@ private:
 	XMVECTOR direction_;
 	XMVECTOR velocity_;
 	bool useGravity_;
+	bool isGrounded_;
 private:
-	static constexpr float GRAVITY = -9.8f * 0.5f;
+	static constexpr float GRAVITY = -9.8f;
 };

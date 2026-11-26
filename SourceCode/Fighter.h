@@ -71,6 +71,8 @@ private:
 	CamType camType_;
 	//カメラのピッチ
 	float camPitch_;
+	//壁のモデルハンドル
+	int hWall_;
 private:
 	//コライダーの中心位置
 	static constexpr XMFLOAT3 COL_POS = { 0.0f,0.5f,0.0f };
@@ -79,6 +81,8 @@ private:
 
 	//移動速度
 	static constexpr float MOVE_SPEED = 4.5f;
+	//ジャンプ速度
+	static constexpr float JUMP_SPEED = 6.0f;
 	//最大HP
 	static constexpr float MAX_HP = 100.0f;
 	//前方ベクトル

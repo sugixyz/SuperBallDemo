@@ -70,10 +70,15 @@ void Ball::OnCollision(const CollisionData& data)
 	std::string name = other->GetObjectName();
 	isColliding_ = true;
 
-	if (name == "Obstacle")
+	if (name == "Ground")
 	{
 		CollisionObstacle(data);
 		move_->ResetGravity();
+		return;
+	}
+	else if (name == "Obstacle")
+	{
+		CollisionObstacle(data);
 		return;
 	}
 	else if (name == "Fighter")

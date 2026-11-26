@@ -36,6 +36,9 @@
     <Filter Include="Controller">
       <UniqueIdentifier>{a8f7a42d-21d6-4217-b2b3-2e229798dae9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Other">
+      <UniqueIdentifier>{3c6cf803-88c7-4605-a089-0e137de3156e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -149,10 +152,17 @@
     <ClCompile Include="Engine\CollisionMatrix.cpp">
       <Filter>01Engine\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\ObjectLoader.cpp" />
-    <ClCompile Include="SourceCode\ObjectSpawner.cpp" />
     <ClCompile Include="SourceCode\Balloon.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ObjectLoader.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ObjectPool.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ObjectSpawner.cpp">
+      <Filter>Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,7 +241,6 @@
     <ClInclude Include="Engine\Timer.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\FighterInput.h" />
     <ClInclude Include="SourceCode\AutoController.h">
       <Filter>Controller</Filter>
     </ClInclude>
@@ -286,10 +295,23 @@
     <ClInclude Include="Engine\CollisionData.h">
       <Filter>01Engine\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="SourceCode\ObjectLoader.h" />
-    <ClInclude Include="SourceCode\ObjectSpawner.h" />
     <ClInclude Include="SourceCode\Balloon.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FighterInput.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ObjectData.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ObjectLoader.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ObjectPool.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ObjectSpawner.h">
+      <Filter>Other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

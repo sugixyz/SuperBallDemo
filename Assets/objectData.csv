@@ -1,5 +1,5 @@
 #name,color,posX,posY,posZ,rotX,rotY,rotZ,scaleX,scaleY,scaleZ,isStatic
-Obstacle,a,0,-2,0,0,0,0,20,1,30,TRUE
+Ground,a,0,-2,0,0,0,0,20,1,30,TRUE
 Obstacle,a,-10.5,2.5,0,0,0,0,1,8,30,TRUE
 Obstacle,a,10.5,2.5,0,0,0,0,1,8,30,TRUE
 Obstacle,a,0,2.5,15.5,0,0,0,20,8,1,TRUE

@@ -20,7 +20,13 @@ bool ObjectSpawner::SpawnObject()
     
     for (auto data : spawnDatas)
     {
-        if (data.name == "Obstacle")
+        if (data.name == "Ground")
+        {
+            Obstacle* obs = Instantiate<Obstacle>(parent_);
+            obs->SetObject(data);
+            obs->SetGround();
+        }
+        else if (data.name == "Obstacle")
         {
             Obstacle* obs = Instantiate<Obstacle>(parent_);
             obs->SetObject(data);
