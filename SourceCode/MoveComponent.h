@@ -36,7 +36,7 @@ public:
 	void SetSpeed(float speed) { speed_ = speed; }
 	float GetSpeed() { return speed_; }
 
-	void SetDirection(XMFLOAT3 direction) { direction; }
+	void SetDirection(XMFLOAT3 direction) { direction_ = direction; }
 	XMFLOAT3 GetDirection() { return direction_; }
 
 	XMFLOAT3 GetVelocity() { return velocity_; }

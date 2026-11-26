@@ -70,15 +70,10 @@ void Ball::OnCollision(const CollisionData& data)
 	std::string name = other->GetObjectName();
 	isColliding_ = true;
 
-	if (name == "Ground")
+	if (name == "Obstacle")
 	{
 		CollisionObstacle(data);
 		move_->ResetGravity();
-		return;
-	}
-	else if (name == "Obstacle")
-	{
-		CollisionObstacle(data);
 		return;
 	}
 	else if (name == "Fighter")
@@ -127,7 +122,7 @@ void Ball::CollisionObstacle(CollisionData data)
 	XMVECTOR dotVal = XMVector3Dot(velocity, normal);
 	XMVECTOR reflectionVelocity = velocity - 2.0f * dotVal * normal;
 	XMFLOAT3 reflection;
-	XMStoreFloat3(&reflection, reflectionVelocity);
+	XMStoreFloat3(&reflection, XMVector3Normalize(reflectionVelocity));
 	move_->SetDirection(reflection);
 
 	if (speed < 0.05f)
